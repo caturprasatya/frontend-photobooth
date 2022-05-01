@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import Shots from "../components/Shots"
+import Background from "../assets/images/bg-payment.png";
 
 const Capture = (props) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const shotsArray = useRef([]);
+  const [shotsArray, setShotsArray] = useState([]);
 
   const [videoheight, setVideoheight] = useState(576);
   const [videowidth, setVideowidth] = useState(1024);
@@ -30,49 +31,48 @@ const Capture = (props) => {
     let i = 0;
     let video = videoRef.current;
     let canvas = canvasRef.current;
-    let shots = shotsArray.current;
 
-    const width = video.videoWidth;
-    const height = video.videoHeight;
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight
 
     let interval = setInterval(() => {
       if (i<n){
         canvas.getContext('2d').drawImage(video, 0, 0);
         let photo = canvas.toDataURL("image/png");
-        shots.push({key : i,url : photo});
+        setShotsArray(prevShotsArray => {
+          return [...prevShotsArray, photo];
+        });
         i++;
-        console.log(shots);
       } else {
         clearInterval(interval);
       }
     },1000);
   };
 
-  const createShots = (shot) => {
-    return(
-      <Shots 
-        key = {shot.key}
-        url = {shot.url}
-      />
-    )
-  }
-
 
   return (
-    <div>
+    <div style={{
+      backgroundImage: `url(${Background}`,
+    }}
+    >
       <h1>Click Capture Button to Begin Countdown</h1>
       <div>
         <video width={videowidth} height={videoheight} ref={videoRef}/>
 	    </div>
 	    <div>
 		    <button onClick={() => takePhoto(4)}>Capture</button>
-		    <button>Save</button>
+		    <button>Next</button>
 	    </div>
 	    <div>
         <canvas ref={canvasRef} style={{display:"none"}}></canvas>
-
+        {shotsArray.map((shots, index) => {
+        return (
+          <Shots
+            key={index}
+            url={shots}
+          />
+          );
+        })}
       </div>
     </div>
   );
