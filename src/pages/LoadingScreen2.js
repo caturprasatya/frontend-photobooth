@@ -31,6 +31,11 @@ const LoadingScreen2 = () => {
           console.log(response.data)
           // navigate
         } 
+        // else {
+        //   navigate('/payment', {
+        //     state: response.data
+        //   })
+        // }
       }
     )
   }
@@ -44,7 +49,6 @@ const LoadingScreen2 = () => {
         verifyTransaction(state.id);
         break;
     }
-    
   }, []);
 
   return (

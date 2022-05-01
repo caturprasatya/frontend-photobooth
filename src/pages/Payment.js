@@ -45,14 +45,14 @@ const Payment = () => {
         <h5 className='text-center'>
           Available for all your payment methods!
         </h5>
-        <Link to={{
-          path: "/load",
-          state: {
+        <Link 
+          to="/load2" 
+          state={{
             action: 'verify',
             id: state.id
-          }
-        }} className='text-center'>
-          <h3 className='fw-bold'>
+          }}
+        >
+          <h3 className='fw-bold text-center'>
             Verify Your Transaction!
           </h3>
         </Link>
