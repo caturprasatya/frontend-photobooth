@@ -7,6 +7,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import './styles/MainStyles.css';
 import Payment from './pages/Payment';
 import Home from './pages/Home';
+import Footer from './components/Footer';
 import LoadingScreen from "./pages/LoadingScreen";
 import LoadingScreen2 from "./pages/LoadingScreen2";
 
@@ -14,7 +15,7 @@ function App() {
   return (
     <Router>
     <Routes>
-      {/* <Route path="/" element={<Home />} /> */}
+      <Route path="/" element={<Home />} />
       <Route path="/payment" element={<Payment />} />
       <Route path="/load" element={<LoadingScreen />} />
       <Route path="/load2" element={<LoadingScreen2 />} />
@@ -23,6 +24,7 @@ function App() {
       {/* <Route path="/frame" element={<Frame />}/> */}
       {/* <Route path="/email" element={<Email />}/> */}
     </Routes>
+    {/* <Footer /> */}
   </Router>
   );
 }
