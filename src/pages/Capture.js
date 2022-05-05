@@ -1,13 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
 import Shots from "../components/Shots"
+import Background from "../assets/images/bg-payment.png";
+import Header from '../components/Header';
+import Footer from '../components/Footer'
+import OverlayCountdown from "../components/OverlayCountdown";
+import OverlayPreview from "../components/OverlayPreview";
 
 const Capture = (props) => {
+  const numberShots = useRef(4);
+  const { state } = useLocation();
+  const timer = 5;
+  if(state){
+    numberShots.current = state.number;
+  }
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const shotsArray = useRef([]);
+  const [shotsArray, setShotsArray] = useState([]);
+  const [isDone, setIsDone] = useState(false);  //Check if Capture's done
+  const [isNext, setIsNext] = useState(true);   //Check if next button available
+  const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay active
+  const [countdown, setCountdown] = useState(timer+1);  //Countdown
 
-  const [videoheight, setVideoheight] = useState(576);
-  const [videowidth, setVideowidth] = useState(1024);
+  const videowidth = useRef(512);
 
   useEffect(() => {
     getVideo();
@@ -19,7 +34,6 @@ const Capture = (props) => {
       .then(stream => {
         let video = videoRef.current;
         video.srcObject = stream;
-        video.play();
       })
       .catch(err => {
         console.error("error:", err);
@@ -27,53 +41,94 @@ const Capture = (props) => {
   };
 
   const takePhoto = (n) => {
+    setShotsArray([]);
+    setIsDone(true);
+    setIsNext(true);
+
     let i = 0;
     let video = videoRef.current;
     let canvas = canvasRef.current;
-    let shots = shotsArray.current;
 
-    const width = video.videoWidth;
-    const height = video.videoHeight;
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
 
-    let interval = setInterval(() => {
-      if (i<n){
-        canvas.getContext('2d').drawImage(video, 0, 0);
-        let photo = canvas.toDataURL("image/png");
-        shots.push({key : i,url : photo});
-        i++;
-        console.log(shots);
-      } else {
-        clearInterval(interval);
+    let myPromise = new Promise((myResolve,myReject)=>{
+      let number = countdown;
+      let starting = setInterval(()=>{
+        if(number>=1){
+          setIsOverlayCountdown('block');
+          number--;
+          setCountdown(number);
+          console.log(countdown);
+        }else{
+          clearInterval(starting);
+          setIsOverlayCountdown('none');
+          myResolve("Begin Shot");
+          setCountdown(timer+1);
+        }
+        },1000)
+      });
+    
+    myPromise.then(
+      (value) => {
+        let interval = setInterval(() => {
+          if (i<n){
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            let photo = canvas.toDataURL("image/png");
+            console.log(photo);
+            setShotsArray(prevShotsArray => {
+              return [...prevShotsArray, photo];
+            });
+            i++;
+          } else {
+            clearInterval(interval);
+            setIsDone(false);
+            setIsNext(false);
+          }
+        },1000);
       }
-    },1000);
-  };
-
-  const createShots = (shot) => {
-    return(
-      <Shots 
-        key = {shot.key}
-        url = {shot.url}
-      />
     )
-  }
+
+  };
 
 
   return (
-    <div>
-      <h1>Click Capture Button to Begin Countdown</h1>
+    <div style={{
+      backgroundImage: `url(${Background}`,
+      backgroundSize: 'contain',
+      height: "100vh",
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+    > 
+      <Header/>
       <div>
-        <video width={videowidth} height={videoheight} ref={videoRef}/>
+        <OverlayCountdown 
+        isOverlayCountdown={isOverlayCountdown}
+        number={countdown}
+         />
+      </div>   
+      <div>
+        <video width={videowidth} ref={videoRef} autoPlay/>
 	    </div>
 	    <div>
-		    <button onClick={() => takePhoto(4)}>Capture</button>
-		    <button>Save</button>
+		    <button onClick={() => takePhoto(numberShots.current)} disabled={isDone}>Capture</button>
+		    <button disabled={isNext}>Next</button>
 	    </div>
 	    <div>
         <canvas ref={canvasRef} style={{display:"none"}}></canvas>
-
+        {shotsArray.map((shots, index) => {
+        return (
+          <Shots
+            key={index}
+            url={shots}
+          />
+          );
+        })}
       </div>
+      <Footer />
     </div>
   );
 }
