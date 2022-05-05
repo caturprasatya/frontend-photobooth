@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Container, Image } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import Footer from '../components/Footer';
 import Background from "../assets/images/bg-payment.png";
 import Placeholder from "../assets/images/placeholder.png";
@@ -17,7 +17,7 @@ const Payment = () => {
 
   React.useEffect(() => {
     if (!state) {
-      navigate('/load');
+      navigate('/');
     }
   }, []);
 
@@ -46,7 +46,7 @@ const Payment = () => {
           Available for all your payment methods!
         </h5>
         <Link 
-          to="/load2" 
+          to="/load" 
           state={{
             action: 'verify',
             id: state.id

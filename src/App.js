@@ -12,7 +12,6 @@ import Capture from "./pages/Capture"
 import Frame from "./pages/Frame"
 import Email from "./pages/Email"
 import LoadingScreen from "./pages/LoadingScreen";
-import LoadingScreen2 from "./pages/LoadingScreen2";
 
 function App() {
   return (
@@ -21,7 +20,6 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/payment" element={<Payment />} />
       <Route path="/load" element={<LoadingScreen />} />
-      <Route path="/load2" element={<LoadingScreen2 />} />
       <Route path="/capture" element={<Capture />} />
       <Route path="/number-photos" element={<Numberphotos />} />
       <Route path="/frame" element={<Frame />}/>

@@ -6,21 +6,6 @@ import Background from "../assets/images/bg-home.png";
 import CTA from "../assets/images/snaphere.png";
 
 const Home = () => {
-  // const { state } = useLocation();
-  // const navigate = useNavigate();
-  // console.log(state)
-
-  // let image = Placeholder
-  // if (state) {
-  //   image = state.qr_code
-  // }
-
-  // React.useEffect(() => {
-  //   if (!state) {
-  //     navigate('/load');
-  //   }
-  // }, []);
-
   return (
     <div style={{ 
       backgroundImage: `url(${Background}`,
