@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 import Background from "../assets/images/bg-payment.png";
 import Placeholder from "../assets/images/placeholder.png";
 
@@ -33,6 +34,7 @@ const Payment = () => {
     }}
     >
       {/* Navbar */}
+      <Header/>
       <div 
         className='qr-code'
       >

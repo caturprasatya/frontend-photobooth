@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Container, Image } from 'react-bootstrap';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 import Background from "../assets/images/bg-home.png";
 import CTA from "../assets/images/snaphere.png";
 
@@ -17,7 +18,7 @@ const Home = () => {
       justifyContent: 'center',
     }}
     >
-      {/* Navbar */}
+      <Header />
       <div 
         className='home'
       >

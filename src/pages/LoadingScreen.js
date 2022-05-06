@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Spinner from "react-bootstrap/Spinner";
 import Background from "../assets/images/bg-payment.png";
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
 
@@ -30,7 +32,7 @@ const LoadingScreen = () => {
       (response) => {
         if (response.data.status === 'paid') {
           console.log(response.data);
-          navigate('/capture', {
+          navigate('/number-photos', {
             state: response.data
           })
         } else {
@@ -49,7 +51,7 @@ const LoadingScreen = () => {
   }
 
   const generateImage = (data) => {
-    PhotoService.generateImage(data.fileName, data.frameID)
+    PhotoService.generateImage(data.txID, data.frameID)
     .then(
       (response) => {
         
@@ -108,6 +110,7 @@ const LoadingScreen = () => {
 
   return (
     <>
+      <Header/>
       <div style={{ 
         backgroundImage: `url(${Background}`,
         backgroundSize: 'contain',
@@ -122,6 +125,7 @@ const LoadingScreen = () => {
           <Spinner animation="border" />
         </div>
       </div>
+      <Footer />
     </>
   );
 };
