@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Shots from "../components/Shots"
 import Background from "../assets/images/bg-payment.png";
 import Header from '../components/Header';
@@ -8,21 +8,24 @@ import OverlayCountdown from "../components/OverlayCountdown";
 import OverlayPreview from "../components/OverlayPreview";
 
 const Capture = (props) => {
-  const numberShots = useRef(4);
   const { state } = useLocation();
+  const numberShots = useRef(6);
   const timer = 5;
+
   if(state){
     numberShots.current = state.number;
   }
+
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const isRetake = useRef(false);
   const [shotsArray, setShotsArray] = useState([]);
   const [isDone, setIsDone] = useState(false);  //Check if Capture's done
   const [isNext, setIsNext] = useState(true);   //Check if next button available
   const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay active
   const [countdown, setCountdown] = useState(timer+1);  //Countdown
 
-  const videowidth = useRef(512);
+  const videowidth = useRef();
 
   useEffect(() => {
     getVideo();
@@ -52,7 +55,7 @@ const Capture = (props) => {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    let myPromise = new Promise((myResolve,myReject)=>{
+    let myPromise = new Promise(myResolve=>{
       let number = countdown;
       let starting = setInterval(()=>{
         if(number>=1){
@@ -70,12 +73,11 @@ const Capture = (props) => {
       });
     
     myPromise.then(
-      (value) => {
+      () => {
         let interval = setInterval(() => {
           if (i<n){
             canvas.getContext('2d').drawImage(video, 0, 0);
             let photo = canvas.toDataURL("image/png");
-            console.log(photo);
             setShotsArray(prevShotsArray => {
               return [...prevShotsArray, photo];
             });
