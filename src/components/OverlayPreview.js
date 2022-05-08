@@ -1,7 +1,7 @@
 import React from "react";
 
 const OverlayPreview = (props) => {
-    const style={
+    const styleOverlay={
         height: '100%',
         width: '100%',
         position: 'fixed',
@@ -11,12 +11,20 @@ const OverlayPreview = (props) => {
         backgroundColor: 'rgb(0,0,0)',
         backgroundColor: 'rgba(0,0,0, 0.9)',
         overflowX: 'hidden',
-        display : props.isOverlay,
+        display : props.isOverlayPreview,
     }
 
+    const styleCloseButton={
+        position: 'absolute',
+        top: '20px',
+        right: '45px',
+        fontSize: '60px',
+        color: 'white',
+    }
     return(
-        <div style={style}>
-            <a href="javascript:void(0)"  onclick="() => SetIsOverlay('none')">&times;</a>
+        <div style={styleOverlay}>
+            <div onClick={props.closeOverlay} style={styleCloseButton}>&times;</div>
+            
         </div> 
     )
 }

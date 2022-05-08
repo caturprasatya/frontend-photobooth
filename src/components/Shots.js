@@ -1,9 +1,8 @@
 import React from "react";
 
 const Shots = (props) => {
-    let width = "200px"
     return(
-        <img width={width} src={props.url}></img>
+        <img width={props.width} src={props.url} onClick={props.activateOverlayPreview}></img>
     )
 }
 

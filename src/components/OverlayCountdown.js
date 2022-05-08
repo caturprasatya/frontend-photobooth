@@ -1,7 +1,7 @@
 import React from "react";
 
 const OverlayCountdown = (props) => {
-    const style={
+    const styleOverlay={
         height: '100%',
         width: '100%',
         position: 'fixed',
@@ -14,9 +14,18 @@ const OverlayCountdown = (props) => {
         display : props.isOverlayCountdown,
     }
 
+    const styleText ={
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        fontSize: '400px',
+        color: 'white',
+        transform: 'translate(-50%,-50%)',
+    }
+
     return(
-        <div style={style}>
-            <div><h1>{props.number}</h1></div>
+        <div style={styleOverlay}>
+            <div style={styleText}>{props.number}</div>
         </div> 
     )
 }

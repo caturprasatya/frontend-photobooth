@@ -8,9 +8,10 @@ import OverlayCountdown from "../components/OverlayCountdown";
 import OverlayPreview from "../components/OverlayPreview";
 
 const Capture = (props) => {
-  const { state } = useLocation();
   const numberShots = useRef(6);
   const timer = 5;
+  const shotsInterval = 1000;
+  const { state } = useLocation();
 
   if(state){
     numberShots.current = state.number;
@@ -19,13 +20,14 @@ const Capture = (props) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const isRetake = useRef(false);
-  const [shotsArray, setShotsArray] = useState([]);
+  const videowidth = useRef();
+
+  const [imageUrl, setImageUrl] = useState([]);
   const [isDone, setIsDone] = useState(false);  //Check if Capture's done
   const [isNext, setIsNext] = useState(true);   //Check if next button available
-  const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay active
-  const [countdown, setCountdown] = useState(timer+1);  //Countdown
-
-  const videowidth = useRef();
+  const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay countdown active
+  const [isOverlayPreview, setIsOverlayPreview] = useState('none'); //check if overlay preview active
+  const [countdown, setCountdown] = useState(timer+1);  //Countdown timer
 
   useEffect(() => {
     getVideo();
@@ -44,7 +46,7 @@ const Capture = (props) => {
   };
 
   const takePhoto = (n) => {
-    setShotsArray([]);
+    setImageUrl([]);
     setIsDone(true);
     setIsNext(true);
 
@@ -78,8 +80,8 @@ const Capture = (props) => {
           if (i<n){
             canvas.getContext('2d').drawImage(video, 0, 0);
             let photo = canvas.toDataURL("image/png");
-            setShotsArray(prevShotsArray => {
-              return [...prevShotsArray, photo];
+            setImageUrl(prevImageUrl => {
+              return [...prevImageUrl, photo];
             });
             i++;
           } else {
@@ -87,7 +89,7 @@ const Capture = (props) => {
             setIsDone(false);
             setIsNext(false);
           }
-        },1000);
+        },shotsInterval);
       }
     )
 
@@ -108,8 +110,15 @@ const Capture = (props) => {
       <Header/>
       <div>
         <OverlayCountdown 
-        isOverlayCountdown={isOverlayCountdown}
-        number={countdown}
+          isOverlayCountdown={isOverlayCountdown}
+          number={countdown}
+         />
+      </div>
+      <div>
+        <OverlayPreview
+          isOverlayPreview={isOverlayPreview}
+          imageUrl={imageUrl}
+          closeOverlay={()=>{setIsOverlayPreview("none")}}
          />
       </div>   
       <div>
@@ -121,11 +130,13 @@ const Capture = (props) => {
 	    </div>
 	    <div>
         <canvas ref={canvasRef} style={{display:"none"}}></canvas>
-        {shotsArray.map((shots, index) => {
+        {imageUrl.map((shots, index) => {
         return (
           <Shots
             key={index}
             url={shots}
+            width={200}
+            activateOverlayPreview={()=>{setIsOverlayPreview('block')}}
           />
           );
         })}
