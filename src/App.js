@@ -12,6 +12,7 @@ import Capture from "./pages/Capture"
 import Frame from "./pages/Frame"
 import Email from "./pages/Email"
 import LoadingScreen from "./pages/LoadingScreen";
+import FinalPreview from "./pages/FinalPreview";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route path="/capture" element={<Capture />} />
       <Route path="/number-photos" element={<Numberphotos />} />
       <Route path="/frame" element={<Frame />}/>
+      <Route path="/final-preview" element={<FinalPreview />}/>
       <Route path="/email" element={<Email />}/>
     </Routes>
   </Router>

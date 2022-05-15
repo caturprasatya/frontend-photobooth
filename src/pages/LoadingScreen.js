@@ -54,7 +54,9 @@ const LoadingScreen = () => {
     PhotoService.generateImage(data.txID, data.frameID)
     .then(
       (response) => {
-        
+        navigate('/final-preview',{
+          state: response.data
+        })
       }
     ).catch(
       (err) => console.log(err)

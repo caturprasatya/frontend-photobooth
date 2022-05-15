@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation } from 'react-router-dom';
 import Shots from "../components/Shots"
-import Background from "../assets/images/bg-payment.png";
+import Background from "../assets/images/bg-home.png";
 import Header from '../components/Header';
-import Footer from '../components/Footer'
+import Footer from '../components/Footer';
 import OverlayCountdown from "../components/OverlayCountdown";
 import OverlayPreview from "../components/OverlayPreview";
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Capture = (props) => {
   const numberShots = useRef(6);
@@ -19,8 +19,8 @@ const Capture = (props) => {
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const isRetake = useRef(false);
-  const videowidth = useRef();
+  const isSnapEmpty = useRef(null);
+  const videoWidth = useRef('85%');
 
   const [imageUrl, setImageUrl] = useState([]);
   const [isDone, setIsDone] = useState(false);  //Check if Capture's done
@@ -28,6 +28,7 @@ const Capture = (props) => {
   const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay countdown active
   const [isOverlayPreview, setIsOverlayPreview] = useState('none'); //check if overlay preview active
   const [countdown, setCountdown] = useState(timer+1);  //Countdown timer
+  const [isRetake, setIsRetake] = useState('Capture');
 
   useEffect(() => {
     getVideo();
@@ -49,6 +50,7 @@ const Capture = (props) => {
     setImageUrl([]);
     setIsDone(true);
     setIsNext(true);
+    setIsRetake('Retake');
 
     let i = 0;
     let video = videoRef.current;
@@ -56,6 +58,8 @@ const Capture = (props) => {
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
+
+    isSnapEmpty.current.style.display = 'block';
 
     let myPromise = new Promise(myResolve=>{
       let number = countdown;
@@ -76,6 +80,7 @@ const Capture = (props) => {
     
     myPromise.then(
       () => {
+        isSnapEmpty.current.style.display = 'none';
         let interval = setInterval(() => {
           if (i<n){
             canvas.getContext('2d').drawImage(video, 0, 0);
@@ -120,26 +125,37 @@ const Capture = (props) => {
           imageUrl={imageUrl}
           closeOverlay={()=>{setIsOverlayPreview("none")}}
          />
-      </div>   
-      <div>
-        <video width={videowidth} ref={videoRef} autoPlay/>
-	    </div>
-	    <div>
-		    <button onClick={() => takePhoto(numberShots.current)} disabled={isDone}>Capture</button>
-		    <button disabled={isNext}>Next</button>
-	    </div>
-	    <div>
-        <canvas ref={canvasRef} style={{display:"none"}}></canvas>
-        {imageUrl.map((shots, index) => {
-        return (
-          <Shots
-            key={index}
-            url={shots}
-            width={200}
-            activateOverlayPreview={()=>{setIsOverlayPreview('block')}}
-          />
-          );
-        })}
+      </div>
+      <div className="container h-100"> 
+        <div className="row h-100 justify-content-center align-items-center">  
+          <div className="col-3 card">
+            <div>
+              <canvas ref={canvasRef} style={{display:"none"}}></canvas>
+              <h1 style={{textAlign : 'center'}} ref={isSnapEmpty}>Your Snap is here</h1>
+              <Shots
+                imageUrl={imageUrl}
+              />
+            </div>
+          </div>
+          <div className="col">
+              <video width={videoWidth.current} ref={videoRef} autoPlay/>
+          </div>
+          <div className="col-2">
+            <button className="btn btn-danger btn-lg" onClick={() => takePhoto(numberShots.current)} disabled={isDone}>{isRetake}</button>
+            <Link 
+              to="/load" 
+              state={{
+                action: 'generate',
+                data:{
+                  txID : '0',
+                  frameID : '0'
+                }
+              }}
+            >
+            <button className="btn btn-dark btn-lg"disabled={isNext}>Next</button>
+            </Link>
+          </div>
+        </div>
       </div>
       <Footer />
     </div>

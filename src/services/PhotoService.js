@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:9000/api/';
+const API_URL = 'http://localhost:8080/api/';
 
 class PhotoService {
   generateImage(txID, frameID) {
     return axios
       .post(API_URL + 'generate-image', {
-        txID,
-        frameID
+        tx_id : txID,
+        frame_id : frameID
       })
       .then(response => {
         return response.data;
