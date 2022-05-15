@@ -3,3 +3,14 @@
 body {
     font-family: 'Poppins', sans-serif;
 }
+
+.btn-print {
+    color: aliceblue;
+    background-color: #C82826;
+}
+
+
+.btn-print:hover {
+    color: aliceblue;
+    background-color: #B42422;
+}

@@ -6,8 +6,8 @@ class PhotoService {
   generateImage(txID, frameID) {
     return axios
       .post(API_URL + 'generate-image', {
-        tx_id : txID,
-        frame_id : frameID
+        tx_id: txID,
+        frame_id: frameID
       })
       .then(response => {
         return response.data;
@@ -25,10 +25,10 @@ class PhotoService {
   sendEmail(txID, frameID, email, recipientName) {
     return axios
       .post(API_URL + 'send-email', {
-        txID,
-        frameID,
-        email,
-        recipientName
+        tx_id: txID,
+        frame_id: frameID,
+        email: email,
+        recipient_name: recipientName
       })
       .then(response => {
         return response.data;
@@ -38,8 +38,8 @@ class PhotoService {
   printImage(txID, frameID) {
     return axios
       .post(API_URL + 'print-image', {
-        txID,
-        frameID
+        tx_id: txID,
+        frame_id: frameID
       })
       .then(response => {
         return response.data;

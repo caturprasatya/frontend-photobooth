@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:9000/api/v1/transaction/';
+const API_URL = 'http://localhost:8080/api/v1/transaction/';
 
 class PaymentService {
   createTransaction(amount, paymentType) {
     return axios
       .post(API_URL, {
         amount,
-        paymentType
+        payment_type: paymentType
       })
       .then(response => {
         if (response.data.accessToken) {
