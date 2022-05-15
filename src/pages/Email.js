@@ -1,45 +1,37 @@
 import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Background from "../assets/images/bg-home.png";
 import PhotoService from '../services/PhotoService';
 
 const Email = (props) => {
+  const { state } = useLocation();
   const [inputField , setInputField] = useState({
     full_name: '',
     email: ''
   })
+
+  let txID;
+  let frameID;
+  let isEmailSuccess = false;
+  let isPrintSuccess = false;
+  if (state) {
+    txID = state.txID;
+    frameID = state.frameID;
+    if (state.isEmailSuccess) {
+      isEmailSuccess = true
+    }
+
+    if (state.isPrintSuccess) {
+      isPrintSuccess = true
+    }
+  }
   // const []
 
   const inputsHandler = (e) =>{
     setInputField( {[e.target.name]: e.target.value} )
     console.log(inputField);
-  }
-
-  const submitButton = () =>{
-    alert(inputField.full_name)
-  }
-
-  const sendEmail = (data) => {
-    PhotoService.sendEmail(data.fileName, data.frameID, data.email, data.recipientName)
-    .then(
-      (response) => {
-        console.log("Check your email!")
-      }
-    ).catch(
-      (err) => console.log(err)
-    )
-  }
-
-  const printImage = (data) => {
-    PhotoService.printImage(data.txID, data.frameID)
-    .then(
-      (response) => {
-        console.log("Print success!")
-      }
-    ).catch(
-      (err) => console.log(err)
-    )
   }
 
   return (
@@ -83,8 +75,58 @@ const Email = (props) => {
         />
       </div>
       <br/>
-      <button className="btn btn-success mb-2" onClick={submitButton}>Print Photo!</button>
-      <button className="btn btn-primary" onClick={submitButton}>Send Email!</button>
+      {isEmailSuccess ? (
+        <h6 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Email Sent!</h6>
+      ) : (
+        <Link 
+          to="/load" 
+          state={{
+            action: 'send-email',
+            data: inputField,
+            txID: txID,
+            frameID: frameID
+          }}
+        >
+          <button className="btn btn-primary mb-2">Send Email!</button>
+        </Link>
+      )}
+      {isPrintSuccess ? (
+        <h6 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Photo Printed!</h6>
+      ) : (
+        <Link 
+          to="/load" 
+          state={{
+            action: 'print-photo',
+            data: inputField,
+            txID: txID,
+            frameID: frameID
+          }}
+        >
+          <button className="btn btn-print mb-2">Print Photo!</button>
+      </Link>
+      )}
+      {/* <Link 
+          to="/load" 
+          state={{
+            action: 'send-email',
+            data: inputField,
+            txID: txID,
+            frameID: frameID
+          }}
+        >
+        <button className="btn btn-primary mb-2" onClick={submitButton}>Send Email!</button>
+      </Link> */}
+      {/* <Link 
+          to="/load" 
+          state={{
+            action: 'print-photo',
+            data: inputField,
+            txID: txID,
+            frameID: frameID
+          }}
+        >
+          <button className="btn btn-print mb-2" onClick={submitButton}>Print Photo!</button>
+      </Link> */}
       <Footer />
     </div>
   )

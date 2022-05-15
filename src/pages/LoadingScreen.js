@@ -65,7 +65,7 @@ const LoadingScreen = () => {
     PhotoService.getFrame()
     .then(
       (response) => {
-        response.data.ID = ID;
+        response.data.txID = ID;
         navigate('/frame', {
           state: response.data
         })
@@ -76,10 +76,38 @@ const LoadingScreen = () => {
   }
 
   const sendEmail = (data) => {
-    PhotoService.sendEmail(data.fileName, data.frameID, data.email, data.recipientName)
+    let isEmailSuccess = false
+    PhotoService.sendEmail(data.txID, data.frameID, data.email, data.recipientName)
     .then(
       (response) => {
+        isEmailSuccess = true
+        response.data.txID = data.txID;
+        response.data.frameID = data.frameID;
+        response.data.action = isEmailSuccess;
+        response.data.email = data.email;
+        response.data.recipientName = data.recipientName;
+        navigate('/email', {
+          state: response.data
+        })
+      }
+    ).catch(
+      (err) => console.log(err)
+    )
+  }
 
+  const printImage = (data) => {
+    let isPrintSuccess = false;
+    PhotoService.printImage(data.txID, data.frameID)
+    .then(
+      (response) => {
+        console.log("Print success!")
+        isPrintSuccess = true
+        response.data.txID = data.txID;
+        response.data.frameID = data.frameID;
+        response.data.action = isPrintSuccess;
+        navigate('/email', {
+          state: response.data
+        })
       }
     ).catch(
       (err) => console.log(err)
@@ -88,6 +116,7 @@ const LoadingScreen = () => {
 
   useEffect(() => {
     while (requestCount) {
+      let temp = state;
       switch(state.action) {
         case 'payment': 
           postData(30000, 1);
@@ -105,6 +134,30 @@ const LoadingScreen = () => {
           getFrame();
           requestCount--;
           break;
+        case 'send-email':
+          let data = {
+            txID: state.txID,
+            frameID: state.frameID,
+            email: state.data.email,
+            recipientName: state.data.full_name
+          };
+          // sendEmail(data);
+          requestCount--;
+          temp.isEmailSuccess = true
+          navigate('/email', {
+            state: temp
+          })
+          break;
+        case 'print-photo':
+          // printImage(state);
+          requestCount--;
+          temp.isPrintSuccess = true
+          navigate('/email', {
+            state: temp
+          })
+          break;
+        default:
+          navigate('/');
       }
     }
   }, []);
