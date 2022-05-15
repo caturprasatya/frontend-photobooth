@@ -32,9 +32,7 @@ const LoadingScreen = () => {
       (response) => {
         if (response.data.status === 'paid') {
           console.log(response.data);
-          navigate('/number-photos', {
-            state: response.data
-          })
+          getFrame(response.data.ID);
         } else {
           console.log("else clause");
           return new Promise(function(resolve, reject) { 
@@ -54,17 +52,20 @@ const LoadingScreen = () => {
     PhotoService.generateImage(data.txID, data.frameID)
     .then(
       (response) => {
-        
+        navigate('/final-preview', {
+          state: response.data
+        })
       }
     ).catch(
       (err) => console.log(err)
     )
   }
 
-  const getFrame = () => {
+  const getFrame = (ID) => {
     PhotoService.getFrame()
     .then(
       (response) => {
+        response.data.ID = ID;
         navigate('/frame', {
           state: response.data
         })
@@ -89,7 +90,7 @@ const LoadingScreen = () => {
     while (requestCount) {
       switch(state.action) {
         case 'payment': 
-          postData(30000, 0);
+          postData(30000, 1);
           requestCount--;
           break;
         case 'verify':

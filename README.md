@@ -6,6 +6,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm run build`
+### `npm install -g serve`
+### `npm global add serve`
+### `serve -s build`
+
 ### `yarn start`
 
 Runs the app in the development mode.\
