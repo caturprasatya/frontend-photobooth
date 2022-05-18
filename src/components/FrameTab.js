@@ -45,6 +45,8 @@ const FrameTab = (props) => {
                     <FramePreview
                         frameUrl={props.frame6}
                         isSelected={props.frameSelected}
+                        numberSnap={3}
+                        detail={""}
                     />
                 </div>
             </div>
@@ -58,6 +60,7 @@ const FrameTab = (props) => {
                     <FramePreview
                         frameUrl={props.frame8}
                         isSelected={props.frameSelected}
+                        numberSnap={8}
                     />
                 </div>
             </div>

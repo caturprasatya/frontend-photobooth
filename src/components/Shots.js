@@ -6,7 +6,7 @@ const Shots = (props) => {
         {props.imageUrl.map((shots,index) => {
           return (
             <div key={index} className="col-6">
-                <img src={shots} className="w-100 img-thumbnail" alt={index}></img>
+                <img src={shots} className="img-thumbnail" alt={index}></img>
             </div>
             );
           })}

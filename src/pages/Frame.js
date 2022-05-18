@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { Link, useLocation } from 'react-router-dom';
 import Footer from "../components/Footer";
 import Header from '../components/Header';
 import Background from "../assets/images/bg-payment.png"
@@ -6,6 +7,7 @@ import FrameTab from "../components/FrameTab";
 
 const Frame = (props) => {
   const [frame,setFrame] = useState("http://localhost:8080/static/frame_assets/frame-1.png");
+  const numberSnap = useRef(3);
   const listFrame8 = useRef([
     "http://localhost:8080/static/frame_assets/frame-1.png",
     "http://localhost:8080/static/frame_assets/frame-2.png",
@@ -39,14 +41,28 @@ const listFrame6 = useRef([
             <FrameTab
               frame8={listFrame8.current}
               frame6={listFrame6.current}
-              frameSelected={(select)=>{setFrame(select)}}
+              frameSelected={(frameStyle,shotsNumber)=>{
+                setFrame(frameStyle);
+                numberSnap.current = shotsNumber;
+              }}
             />
           </div>
           <div className="col-5 text-center">
             <img className='img-thumbnail' style={{height:'400px'}} src={frame} alt='your frame'/>
           </div>
           <div className="col-1 text-center">
-            <button className="btn btn-dark btn-lg">Next</button>
+            <Link 
+                to="/capture" 
+                state={{
+                  data:{
+                    txID : '0',
+                    frameID : frame.match(/frame-\d/)[0][6],
+                    numberSnap : numberSnap.current
+                  }
+                }}
+              >
+              <button className="btn btn-dark btn-lg">Next</button>
+            </Link>
           </div>
         </div>
       </div>

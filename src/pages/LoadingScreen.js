@@ -53,7 +53,11 @@ const LoadingScreen = () => {
     .then(
       (response) => {
         navigate('/final-preview', {
-          state: response.data
+          state: {
+            res : response,
+            txID : data.txID,
+            frameID : data.frameID
+          }
         })
       }
     ).catch(
@@ -119,7 +123,7 @@ const LoadingScreen = () => {
       let temp = state;
       switch(state.action) {
         case 'payment': 
-          postData(30000, 1);
+          postData(100, 1);
           requestCount--;
           break;
         case 'verify':

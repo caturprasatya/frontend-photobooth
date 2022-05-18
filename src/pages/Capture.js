@@ -1,26 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState} from "react";
 import Shots from "../components/Shots"
 import Background from "../assets/images/bg-home.png";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import OverlayCountdown from "../components/OverlayCountdown";
 import OverlayPreview from "../components/OverlayPreview";
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 const Capture = (props) => {
-  const numberShots = useRef(6);
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const numberShots = useRef(3);
+
   const timer = 5;
   const shotsInterval = 1000;
-  const { state } = useLocation();
 
   if(state){
-    numberShots.current = state.number;
+    numberShots.current = state.data.numberSnap;
   }
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const isSnapEmpty = useRef(null);
-  const videoWidth = useRef('85%');
+  const videoWidth = '70%';
 
   const [imageUrl, setImageUrl] = useState([]);
   const [isDone, setIsDone] = useState(false);  //Check if Capture's done
@@ -61,14 +63,13 @@ const Capture = (props) => {
 
     isSnapEmpty.current.style.display = 'block';
 
-    let myPromise = new Promise(myResolve=>{
+    new Promise(myResolve=>{
       let number = countdown;
       let starting = setInterval(()=>{
         if(number>=1){
           setIsOverlayCountdown('block');
           number--;
           setCountdown(number);
-          console.log(countdown);
         }else{
           clearInterval(starting);
           setIsOverlayCountdown('none');
@@ -76,15 +77,14 @@ const Capture = (props) => {
           setCountdown(timer+1);
         }
         },1000)
-      });
-    
-    myPromise.then(
+      }).then(
       () => {
         isSnapEmpty.current.style.display = 'none';
         let interval = setInterval(() => {
           if (i<n){
             canvas.getContext('2d').drawImage(video, 0, 0);
             let photo = canvas.toDataURL("image/png");
+            console.log(photo);
             setImageUrl(prevImageUrl => {
               return [...prevImageUrl, photo];
             });
@@ -96,11 +96,36 @@ const Capture = (props) => {
           }
         },shotsInterval);
       }
+    ).catch(
+      (err) => console.log(err)
     )
 
   };
 
+  const nextPage = (event)=> {
+    // new Promise(myResolve=>{
+    //    for(let i=0;i<imageUrl.length;i++){
+    //     const link = document.createElement("a");
+    //     link.href = imageUrl[i];
+    //     link.download = i;
+    //     link.click();
+    //   }
+      // myResolve("done download");
+      setTimeout(navigate('/load',{state : {
+        action: 'generate',
+        data:{
+          txID : state.data.txID,
+          frameID : state.data.frameID,
+        }
+      }}),1000)
+    }
+    // ).then(
 
+    // ).catch(
+    //   (err) => console.log(err)
+    // )
+  // }
+  
   return (
     <div style={{
       backgroundImage: `url(${Background}`,
@@ -137,23 +162,12 @@ const Capture = (props) => {
               />
             </div>
           </div>
-          <div className="col">
-              <video width={videoWidth.current} ref={videoRef} autoPlay/>
+          <div className="col text-center">
+              <video width={videoWidth} ref={videoRef} autoPlay/>
           </div>
-          <div className="col-2">
-            <button className="btn btn-danger btn-lg" onClick={() => takePhoto(numberShots.current)} disabled={isDone}>{isRetake}</button>
-            <Link 
-              to="/load" 
-              state={{
-                action: 'generate',
-                data:{
-                  txID : '0',
-                  frameID : '0'
-                }
-              }}
-            >
-            <button className="btn btn-dark btn-lg"disabled={isNext}>Next</button>
-            </Link>
+          <div className="col-1">
+            <button className="btn btn-danger btn-lg" onClick={() => takePhoto(numberShots.current)} disabled={isDone}>{isRetake}</button> 
+            <button className="btn btn-dark btn-lg" disabled={isNext} onClick={nextPage}>Next</button>
           </div>
         </div>
       </div>

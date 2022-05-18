@@ -6,7 +6,8 @@ const FramePreview = (props) => {
         {props.frameUrl.map((frame,index) => {
             return (
                 <div key={index} className="col-3">
-                    <img src={frame}  className="w-100 img-thumbnail" alt={index} onClick={()=> {props.isSelected(frame)}}></img>
+                    <img src={frame}  className="w-100 img-thumbnail" alt={index} onClick={()=> {props.isSelected(frame,props.numberSnap)}}></img>
+                    <p>{props.detail}</p>
                 </div>
                 );
             })}
