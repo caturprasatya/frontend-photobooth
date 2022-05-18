@@ -8,7 +8,7 @@ import PhotoService from '../services/PhotoService';
 const Email = (props) => {
   const { state } = useLocation();
   const [inputField , setInputField] = useState({
-    full_name: '',
+    recipient_name: '',
     email: ''
   })
 
@@ -57,10 +57,10 @@ const Email = (props) => {
         <input 
           className="form-control"
           type="text" 
-          name="full_name" 
+          name="recipient_name" 
           onChange={inputsHandler} 
           placeholder="Nama Lengkap" 
-          value={inputField.full_name}
+          value={inputField.recipient_name}
         />
       </div>
       <br/>
@@ -99,7 +99,7 @@ const Email = (props) => {
             action: 'print-photo',
             data: inputField,
             txID: txID,
-            frameID: frameID
+            effect: effect
           }}
         >
           <button className="btn btn-print mb-2">Print Photo!</button>

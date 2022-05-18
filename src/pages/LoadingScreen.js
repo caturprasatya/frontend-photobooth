@@ -82,7 +82,7 @@ const LoadingScreen = () => {
 
   const sendEmail = (data) => {
     let isEmailSuccess = false
-    PhotoService.sendEmail(data.txID, data.effect, data.email, data.recipientName)
+    PhotoService.sendEmail(data.txID, data.effect, data.email, data.recipient_name)
     .then(
       (response) => {
         isEmailSuccess = true
@@ -90,7 +90,7 @@ const LoadingScreen = () => {
         response["effect"] = data.effect;
         response["action"] = isEmailSuccess;
         response["email"] = data.email;
-        response["recipientName"] = data.recipientName;
+        response["recipient_name"] = data.recipient_name;
         navigate('/email', {
           state: response
         })
@@ -108,7 +108,7 @@ const LoadingScreen = () => {
         console.log("Print success!")
         isPrintSuccess = true
         response["txID"] = data.txID;
-        response["frameID"] = data.effect;
+        response["effect"] = data.effect;
         response["action"] = isPrintSuccess;
         navigate('/email', {
           state: response
@@ -144,7 +144,7 @@ const LoadingScreen = () => {
             txID: state.txID,
             effect: state.effect,
             email: state.data.email,
-            recipientName: state.data.full_name
+            recipient_name: state.data.recipient_name
           };
           sendEmail(data);
           requestCount--;

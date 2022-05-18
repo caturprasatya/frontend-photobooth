@@ -54,10 +54,8 @@ const FinalPreview = (props) => {
             <Link 
                 to="/email" 
                 state={{
-                  data:{
-                    txID : state.txID,
-                    filterID : regexFilter
-                  }
+                  txID : state.txID,
+                  effect : regexFilter
                 }}
               >
               <button className="btn btn-dark btn-lg">Next</button>
