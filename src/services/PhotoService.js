@@ -22,11 +22,11 @@ class PhotoService {
     );
   }
 
-  sendEmail(txID, frameID, email, recipientName) {
+  sendEmail(txID, effect, email, recipientName) {
     return axios
       .post(API_URL + 'send-email', {
         tx_id: txID,
-        frame_id: frameID,
+        effect: effect,
         email: email,
         recipient_name: recipientName
       })
