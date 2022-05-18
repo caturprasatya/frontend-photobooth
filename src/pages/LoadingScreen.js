@@ -142,20 +142,20 @@ const LoadingScreen = () => {
             email: state.data.email,
             recipientName: state.data.full_name
           };
-          // sendEmail(data);
+          sendEmail(data);
           requestCount--;
-          temp.isEmailSuccess = true
-          navigate('/email', {
-            state: temp
-          })
+          // temp.isEmailSuccess = true
+          // navigate('/email', {
+          //   state: temp
+          // })
           break;
         case 'print-photo':
-          // printImage(state);
+          printImage(state);
           requestCount--;
-          temp.isPrintSuccess = true
-          navigate('/email', {
-            state: temp
-          })
+          // temp.isPrintSuccess = true
+          // navigate('/email', {
+          //   state: temp
+          // })
           break;
         default:
           navigate('/');
