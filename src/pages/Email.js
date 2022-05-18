@@ -13,12 +13,12 @@ const Email = (props) => {
   })
 
   let txID;
-  let frameID;
+  let effect;
   let isEmailSuccess = false;
   let isPrintSuccess = false;
   if (state) {
     txID = state.txID;
-    frameID = state.frameID;
+    effect = state.effect;
     if (state.isEmailSuccess) {
       isEmailSuccess = true
     }
@@ -84,7 +84,7 @@ const Email = (props) => {
             action: 'send-email',
             data: inputField,
             txID: txID,
-            frameID: frameID
+            effect: effect
           }}
         >
           <button className="btn btn-primary mb-2">Send Email!</button>

@@ -66,7 +66,7 @@ const LoadingScreen = () => {
     PhotoService.getFrame()
     .then(
       (response) => {
-        response.data["txID"] = ID;
+        response["txID"] = ID;
         navigate('/frame', {
           state: response
         })
@@ -78,15 +78,15 @@ const LoadingScreen = () => {
 
   const sendEmail = (data) => {
     let isEmailSuccess = false
-    PhotoService.sendEmail(data.txID, data.frameID, data.email, data.recipientName)
+    PhotoService.sendEmail(data.txID, data.effect, data.email, data.recipientName)
     .then(
       (response) => {
         isEmailSuccess = true
-        response.data["txID"] = data.txID;
-        response.data["frameID"] = data.frameID;
-        response.data["action"] = isEmailSuccess;
-        response.data["email"] = data.email;
-        response.data["recipientName"] = data.recipientName;
+        response["txID"] = data.txID;
+        response["effect"] = data.effect;
+        response["action"] = isEmailSuccess;
+        response["email"] = data.email;
+        response["recipientName"] = data.recipientName;
         navigate('/email', {
           state: response
         })
@@ -98,14 +98,14 @@ const LoadingScreen = () => {
 
   const printImage = (data) => {
     let isPrintSuccess = false;
-    PhotoService.printImage(data.txID, data.frameID)
+    PhotoService.printImage(data.txID, data.effect)
     .then(
       (response) => {
         console.log("Print success!")
         isPrintSuccess = true
-        response.data["txID"] = data.txID;
-        response.data["frameID"] = data.frameID;
-        response.data["action"] = isPrintSuccess;
+        response["txID"] = data.txID;
+        response["frameID"] = data.effect;
+        response["action"] = isPrintSuccess;
         navigate('/email', {
           state: response
         })
@@ -138,7 +138,7 @@ const LoadingScreen = () => {
         case 'send-email':
           let data = {
             txID: state.txID,
-            frameID: state.frameID,
+            effect: state.effect,
             email: state.data.email,
             recipientName: state.data.full_name
           };
