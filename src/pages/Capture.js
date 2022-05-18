@@ -9,6 +9,8 @@ import {useLocation, useNavigate} from 'react-router-dom';
 
 const Capture = (props) => {
   const { state } = useLocation();
+  console.log(state);
+
   const navigate = useNavigate();
   const numberShots = useRef(3);
 
@@ -117,7 +119,7 @@ const Capture = (props) => {
           txID : state.data.txID,
           frameID : state.data.frameID,
         }
-      }}),1000)
+      }}),3000)
     }
     // ).then(
 

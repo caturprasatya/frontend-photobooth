@@ -7,6 +7,7 @@ import FramePreview from "../components/FramePreview";
 
 const FinalPreview = (props) => {
   const { state } = useLocation();
+  console.log(state);
 
   // if(state){
   //   if(state.status_code===200){
@@ -55,7 +56,6 @@ const FinalPreview = (props) => {
                 state={{
                   data:{
                     txID : state.txID,
-                    frameID : state.frameID,
                     filterID : regexFilter
                   }
                 }}

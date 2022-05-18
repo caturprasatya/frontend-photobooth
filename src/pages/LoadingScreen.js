@@ -30,9 +30,9 @@ const LoadingScreen = () => {
     PaymentService.getTransactionByID(ID)
     .then(
       (response) => {
+        console.log(response.data);
         if (response.data.status === 'paid') {
-          console.log(response.data);
-          getFrame(response.data.ID);
+          getFrame(response.data.id);
         } else {
           console.log("else clause");
           return new Promise(function(resolve, reject) { 
@@ -70,7 +70,7 @@ const LoadingScreen = () => {
     PhotoService.getFrame()
     .then(
       (response) => {
-        response.data["txID"] = ID;
+        response["txID"] = ID;
         navigate('/frame', {
           state: response
         })
@@ -124,7 +124,7 @@ const LoadingScreen = () => {
       let temp = state;
       switch(state.action) {
         case 'payment': 
-          postData(100, 1);
+          postData(1000, 0);
           requestCount--;
           break;
         case 'verify':

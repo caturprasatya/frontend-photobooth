@@ -6,21 +6,21 @@ import Background from "../assets/images/bg-payment.png"
 import FrameTab from "../components/FrameTab";
 
 const Frame = (props) => {
-  const [frame,setFrame] = useState("http://localhost:8080/static/frame_assets/frame-1.png");
+  const {state} = useLocation();
+  console.log(state);
+
+  let res8frame = [];
+  let res6frame = [];
+
+  if(state){
+    res8frame = state.frame_list.eight_frame_list;
+    res6frame = state.frame_list.six_frame_list;
+  }
+
   const numberSnap = useRef(3);
-  const listFrame8 = useRef([
-    "http://localhost:8080/static/frame_assets/frame-1.png",
-    "http://localhost:8080/static/frame_assets/frame-2.png",
-    "http://localhost:8080/static/frame_assets/frame-3.png",
-    "http://localhost:8080/static/frame_assets/frame-4.png",
-    "http://localhost:8080/static/frame_assets/frame-8.png",
-    "http://localhost:8080/static/frame_assets/frame-9.png",
-    ]);
-const listFrame6 = useRef([
-    "http://localhost:8080/static/frame_assets/frame-5.png",
-    "http://localhost:8080/static/frame_assets/frame-6.png",
-    "http://localhost:8080/static/frame_assets/frame-7.png"
-    ]);
+  const listFrame8 = useRef(res8frame);
+  const listFrame6 = useRef(res6frame);
+  const [frame,setFrame] = useState(listFrame6.current[0]);
 
   return (
     <div style={{
@@ -55,7 +55,7 @@ const listFrame6 = useRef([
                 to="/capture" 
                 state={{
                   data:{
-                    txID : '0',
+                    txID : state.txID.toString(),
                     frameID : frame.match(/frame-\d/)[0][6],
                     numberSnap : numberSnap.current
                   }
