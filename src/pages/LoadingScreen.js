@@ -78,7 +78,8 @@ const LoadingScreen = () => {
 
   const sendEmail = (data) => {
     let isEmailSuccess = false
-    PhotoService.sendEmail(data.txID, data.effect, data.email, data.recipientName)
+    console.log(data);
+    PhotoService.sendEmail(data.txID, data.effect, data.email, data.recipient_name)
     .then(
       (response) => {
         isEmailSuccess = true
@@ -98,6 +99,7 @@ const LoadingScreen = () => {
 
   const printImage = (data) => {
     let isPrintSuccess = false;
+    console.log(data);
     PhotoService.printImage(data.txID, data.effect)
     .then(
       (response) => {
