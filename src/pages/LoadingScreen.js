@@ -52,8 +52,9 @@ const LoadingScreen = () => {
     PhotoService.generateImage(data.txID, data.frameID)
     .then(
       (response) => {
+        console.log(response);
         navigate('/final-preview', {
-          state: response.data
+          state: response
         })
       }
     ).catch(
@@ -65,9 +66,9 @@ const LoadingScreen = () => {
     PhotoService.getFrame()
     .then(
       (response) => {
-        response.data.txID = ID;
+        response.data["txID"] = ID;
         navigate('/frame', {
-          state: response.data
+          state: response
         })
       }
     ).catch(
@@ -81,13 +82,13 @@ const LoadingScreen = () => {
     .then(
       (response) => {
         isEmailSuccess = true
-        response.data.txID = data.txID;
-        response.data.frameID = data.frameID;
-        response.data.action = isEmailSuccess;
-        response.data.email = data.email;
-        response.data.recipientName = data.recipientName;
+        response.data["txID"] = data.txID;
+        response.data["frameID"] = data.frameID;
+        response.data["action"] = isEmailSuccess;
+        response.data["email"] = data.email;
+        response.data["recipientName"] = data.recipientName;
         navigate('/email', {
-          state: response.data
+          state: response
         })
       }
     ).catch(
@@ -102,11 +103,11 @@ const LoadingScreen = () => {
       (response) => {
         console.log("Print success!")
         isPrintSuccess = true
-        response.data.txID = data.txID;
-        response.data.frameID = data.frameID;
-        response.data.action = isPrintSuccess;
+        response.data["txID"] = data.txID;
+        response.data["frameID"] = data.frameID;
+        response.data["action"] = isPrintSuccess;
         navigate('/email', {
-          state: response.data
+          state: response
         })
       }
     ).catch(
@@ -158,6 +159,7 @@ const LoadingScreen = () => {
           break;
         default:
           navigate('/');
+          break;
       }
     }
   }, []);
