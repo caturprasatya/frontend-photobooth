@@ -35,11 +35,11 @@ class PhotoService {
       });
   }
 
-  printImage(txID, frameID) {
+  printImage(txID, effect) {
     return axios
       .post(API_URL + 'print-image', {
         tx_id: txID,
-        frame_id: frameID
+        effect: effect
       })
       .then(response => {
         return response.data;

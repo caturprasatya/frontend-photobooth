@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -7,12 +7,10 @@ import PhotoService from '../services/PhotoService';
 
 const Email = (props) => {
   const { state } = useLocation();
-  const [inputField , setInputField] = useState({
-    recipient_name: '',
-    email: ''
-  })
+  const [email, setEmail] = React.useState('');
+  const [recipient_name, setRecipientName] = React.useState('');
 
-  let txID;
+  let txID = 37;
   let effect;
   let isEmailSuccess = false;
   let isPrintSuccess = false;
@@ -27,11 +25,22 @@ const Email = (props) => {
       isPrintSuccess = true
     }
   }
-  // const []
+  
+  useEffect(() => {
+    if (state) {
+      setEmail(state.data.email);
+      setRecipientName(state.data.recipient_name);
+    } 
+  }, []);
 
-  const inputsHandler = (e) =>{
-    setInputField( {[e.target.name]: e.target.value} )
-    console.log(inputField);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    console.log(email);
+  }
+
+  const handleNameChange = (e) => {
+    setRecipientName(e.target.value);
+    console.log(recipient_name);
   }
 
   return (
@@ -58,9 +67,9 @@ const Email = (props) => {
           className="form-control"
           type="text" 
           name="recipient_name" 
-          onChange={inputsHandler} 
+          onChange={handleNameChange} 
           placeholder="Nama Lengkap" 
-          value={inputField.recipient_name}
+          value={recipient_name}
         />
       </div>
       <br/>
@@ -69,9 +78,9 @@ const Email = (props) => {
           className="form-control"
           type="email" 
           name="email" 
-          onChange={inputsHandler} 
+          onChange={handleEmailChange} 
           placeholder="Email" 
-          value={inputField.email}
+          value={email}
         />
       </div>
       <br/>
@@ -82,7 +91,10 @@ const Email = (props) => {
           to="/load" 
           state={{
             action: 'send-email',
-            data: inputField,
+            data: {
+              email: email,
+              recipient_name: recipient_name
+            },
             txID: txID,
             effect: effect
           }}
@@ -97,7 +109,10 @@ const Email = (props) => {
           to="/load" 
           state={{
             action: 'print-photo',
-            data: inputField,
+            data: {
+              email: email,
+              recipient_name: recipient_name
+            },
             txID: txID,
             effect: effect
           }}
