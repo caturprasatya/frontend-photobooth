@@ -27,7 +27,7 @@ const Email = (props) => {
   }
   
   useEffect(() => {
-    if (state) {
+    if (state.data) {
       setEmail(state.data.email);
       setRecipientName(state.data.recipient_name);
     } 
@@ -44,7 +44,7 @@ const Email = (props) => {
   }
 
   return (
-    <div style={{ 
+    <div className="container" style={{ 
       backgroundImage: `url(${Background}`,
       backgroundSize: 'contain',
       height: "100vh",

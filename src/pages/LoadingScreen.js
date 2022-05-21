@@ -49,6 +49,7 @@ const LoadingScreen = () => {
   }
 
   const generateImage = (data) => {
+    console.log(data);
     PhotoService.uploadImage(data.txID, data.imageBlob)
     .then(
       (response1) => {
@@ -96,7 +97,7 @@ const LoadingScreen = () => {
         isEmailSuccess = true
         response["txID"] = data.txID;
         response["effect"] = data.effect;
-        response["action"] = isEmailSuccess;
+        response["isEmailSuccess"] = isEmailSuccess;
         response["email"] = data.email;
         response["recipient_name"] = data.recipient_name;
         navigate('/email', {
@@ -118,7 +119,7 @@ const LoadingScreen = () => {
         isPrintSuccess = true
         response["txID"] = data.txID;
         response["effect"] = data.effect;
-        response["action"] = isPrintSuccess;
+        response["isPrintSuccess"] = isPrintSuccess;
         navigate('/email', {
           state: response
         })
@@ -133,7 +134,7 @@ const LoadingScreen = () => {
       let temp = state;
       switch(state.action) {
         case 'payment': 
-          postData(1000, 0);
+          postData(10, 0);
           requestCount--;
           break;
         case 'verify':

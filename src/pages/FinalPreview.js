@@ -10,6 +10,7 @@ const FinalPreview = (props) => {
   console.log(state);
 
   const listFilter = useRef([]);
+  const listFilterRegex = useRef([]);
 
   if(state){
     if(state.status_code===200){
@@ -18,11 +19,14 @@ const FinalPreview = (props) => {
   }
 
   const [filter,setFilter] = useState(listFilter.current[0]);
+  // listFilter.forEach(filter=>{
+  //   listFilterRegex.push(filter)
+  //   )
+  // }
   let regexFilter = filter.replace("http://localhost:8080/static/res_image/","").split("/")[1];
-  console.log(regexFilter);
   
   return (
-    <div style={{
+    <div className="container" style={{
       backgroundImage: `url(${Background}`,
       backgroundSize: 'contain',
       height: "100vh",
@@ -33,8 +37,8 @@ const FinalPreview = (props) => {
     }}>
 
       <Header/>
-      <div className="container h-100">
-        <div className="row h-100 justify-content-center align-items-center">
+      <div>
+        <div className="row justify-content-center align-items-center">
           <div className="col-6">
             <h1 style={{textAlign : 'center', marginBottom:'15px'}}>Choose Your Filter</h1>
             <div style={{height:'300px', overflowY: 'scroll', overflowX: 'hidden'}}>

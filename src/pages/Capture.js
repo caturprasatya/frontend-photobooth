@@ -16,13 +16,12 @@ const Capture = (props) => {
   const shotsInterval = 1000;
 
   if(state){
-    numberShots.current = state.data.numberSnap;
+    numberShots.current = state.numberSnap;
   }
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const isSnapEmpty = useRef(null);
-  const videoWidth = '70%';
 
   const [imageBlob, setImageBlob] = useState([]);
   const [isDone, setIsDone] = useState(false);  //Check if Capture's done
@@ -83,7 +82,6 @@ const Capture = (props) => {
         let interval = setInterval(() => {
           if (i<n){
             canvas.getContext('2d').drawImage(video, 0, 0);
-            // let photo = canvas.toDataURL("image/png");
             canvas.toBlob(blob=>{
               setImageBlob(prevImageBlob => {
                 return [...prevImageBlob, blob]
@@ -104,32 +102,18 @@ const Capture = (props) => {
   };
 
   const nextPage = (event)=> {
-    // new Promise(myResolve=>{
-    //    for(let i=0;i<imageUrl.length;i++){
-    //     const link = document.createElement("a");
-    //     link.href = imageUrl[i];
-    //     link.download = i;
-    //     link.click();
-    //   }
-      // myResolve("done download");
       setTimeout(navigate('/load',{state : {
         action: 'generate',
         data:{
-          txID : '0',
-          frameID : '5',
+          txID : state.txID,
+          frameID : state.frameID,
           imageBlob : imageBlob
         }
       }}),3000)
     }
-    // ).then(
-
-    // ).catch(
-    //   (err) => console.log(err)
-    // )
-  // }
   
   return (
-    <div style={{
+    <div className='container' style={{
       backgroundImage: `url(${Background}`,
       backgroundSize: 'contain',
       height: "100vh",
@@ -153,8 +137,8 @@ const Capture = (props) => {
           closeOverlay={()=>{setIsOverlayPreview("none")}}
          /> */}
       </div>
-      <div className="container h-100"> 
-        <div className="row h-100 justify-content-center align-items-center">  
+      <div> 
+        <div className="row justify-content-center align-items-center">  
           <div className="col-3 card">
             <div>
               <canvas ref={canvasRef} style={{display:"none"}}></canvas>
@@ -165,10 +149,10 @@ const Capture = (props) => {
             </div>
           </div>
           <div className="col text-center">
-              <video width={videoWidth} ref={videoRef} autoPlay/>
+              <video height="85%" width="85%" ref={videoRef} autoPlay/>
           </div>
-          <div className="col-1">
-            <button className="btn btn-danger btn-lg" onClick={() => takePhoto(numberShots.current)} disabled={isDone}>{isRetake}</button> 
+          <div className="col-2 text-center">
+            <button className="btn btn-danger btn-lg mb-3" onClick={() => takePhoto(numberShots.current)} disabled={isDone}>{isRetake}</button> 
             <button className="btn btn-dark btn-lg" disabled={isNext} onClick={nextPage}>Next</button>
           </div>
         </div>

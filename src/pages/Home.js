@@ -8,7 +8,7 @@ import CTA from "../assets/images/snaphere.png";
 
 const Home = () => {
   return (
-    <div style={{ 
+    <div className="container" style={{ 
       backgroundImage: `url(${Background}`,
       backgroundSize: 'contain',
       height: "100vh",

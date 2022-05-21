@@ -23,7 +23,7 @@ const Frame = (props) => {
   const [frame,setFrame] = useState(listFrame6.current[0]);
 
   return (
-    <div style={{
+    <div className="container" style={{
       backgroundImage: `url(${Background}`,
       backgroundSize: 'contain',
       height: "100vh",
@@ -34,8 +34,8 @@ const Frame = (props) => {
     }}>
 
       <Header/>
-      <div className="container h-100">
-        <div className="row h-100 justify-content-center align-items-center">
+      <div>
+        <div className="row justify-content-center align-items-center">
           <div className="col-6">
             <h1 style={{textAlign : 'center', marginBottom:'15px'}}>Choose Your Frame</h1>
             <FrameTab
@@ -52,13 +52,11 @@ const Frame = (props) => {
           </div>
           <div className="col-1 text-center">
             <Link 
-                to="/capture" 
+                to="/capture"
                 state={{
-                  data:{
                     txID : state.txID.toString(),
                     frameID : frame.match(/frame-\d/)[0][6],
                     numberSnap : numberSnap.current
-                  }
                 }}
               >
               <button className="btn btn-dark btn-lg">Next</button>

@@ -23,7 +23,7 @@ const Payment = () => {
   }, []);
 
   return (
-    <div style={{ 
+    <div className="container" style={{ 
       backgroundImage: `url(${Background}`,
       backgroundSize: 'contain',
       height: "100vh",
