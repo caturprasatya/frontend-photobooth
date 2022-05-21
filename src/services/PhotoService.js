@@ -45,6 +45,21 @@ class PhotoService {
         return response.data;
       });
   }
+
+  uploadImage(txID, imageBlob){
+    let formData = new FormData();
+    formData.append('tx_id', txID);
+    imageBlob.forEach((image,index) => {
+      formData.append('img_file', image, (index+1).toString() + '.png');
+    });
+    return axios
+      .post(API_URL + 'upload-image', formData, {headers: {
+        "Content-Type": "multipart/form-data"
+      }})
+      .then(response => {
+        return response.data;
+      })
+  }
 }
 
 export default new PhotoService();

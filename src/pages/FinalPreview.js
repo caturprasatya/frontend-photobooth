@@ -9,16 +9,16 @@ const FinalPreview = (props) => {
   const { state } = useLocation();
   console.log(state);
 
-  // if(state){
-  //   if(state.status_code===200){
-  //     const resultUrl = state.result_url;
-  //   }
-  // }
+  const listFilter = useRef([]);
 
-  const listFilter = useRef(state.res.result_url);
+  if(state){
+    if(state.status_code===200){
+      listFilter.current = state.result_url;
+    }
+  }
+
   const [filter,setFilter] = useState(listFilter.current[0]);
-  let regexFilter = filter.replace("http://localhost:8080/static/res_image/","");
-  regexFilter = regexFilter.split("/")[1];
+  let regexFilter = filter.replace("http://localhost:8080/static/res_image/","").split("/")[1];
   console.log(regexFilter);
   
   return (

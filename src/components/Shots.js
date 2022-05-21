@@ -3,10 +3,10 @@ import React from "react";
 const Shots = (props) => {
     return(
         <div className="row">
-        {props.imageUrl.map((shots,index) => {
+        {props.imageBlob.map((shots,index) => {
           return (
             <div key={index} className="col-6">
-                <img src={shots} className="img-thumbnail" alt={index}></img>
+                <img src={URL.createObjectURL(shots)} className="img-thumbnail" alt={index}></img>
             </div>
             );
           })}

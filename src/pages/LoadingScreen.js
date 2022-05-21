@@ -49,17 +49,24 @@ const LoadingScreen = () => {
   }
 
   const generateImage = (data) => {
-    PhotoService.generateImage(data.txID, data.frameID)
+    PhotoService.uploadImage(data.txID, data.imageBlob)
     .then(
-      (response) => {
-        console.log(response);
-        navigate('/final-preview', {
-          state: {
-            res : response,
-            txID : data.txID,
-            frameID : data.frameID
-          }
-        })
+      (response1) => {
+        console.log(response1);
+        if(response1.status_code === 200){
+          PhotoService.generateImage(data.txID, data.frameID)
+          .then(
+            (response2) => {
+              response2["txID"] = data.txID;
+              response2["frameID"] = data.frameID;
+              navigate('/final-preview', {
+                state: response2
+              })
+            }
+          )
+        } else{
+          console.log("else clause");
+        }
       }
     ).catch(
       (err) => console.log(err)

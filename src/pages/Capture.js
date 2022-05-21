@@ -9,11 +9,9 @@ import {useLocation, useNavigate} from 'react-router-dom';
 
 const Capture = (props) => {
   const { state } = useLocation();
-  console.log(state);
 
   const navigate = useNavigate();
   const numberShots = useRef(3);
-
   const timer = 5;
   const shotsInterval = 1000;
 
@@ -26,7 +24,7 @@ const Capture = (props) => {
   const isSnapEmpty = useRef(null);
   const videoWidth = '70%';
 
-  const [imageUrl, setImageUrl] = useState([]);
+  const [imageBlob, setImageBlob] = useState([]);
   const [isDone, setIsDone] = useState(false);  //Check if Capture's done
   const [isNext, setIsNext] = useState(true);   //Check if next button available
   const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay countdown active
@@ -51,7 +49,7 @@ const Capture = (props) => {
   };
 
   const takePhoto = (n) => {
-    setImageUrl([]);
+    setImageBlob([]);
     setIsDone(true);
     setIsNext(true);
     setIsRetake('Retake');
@@ -75,8 +73,8 @@ const Capture = (props) => {
         }else{
           clearInterval(starting);
           setIsOverlayCountdown('none');
-          myResolve("Begin Shot");
           setCountdown(timer+1);
+          myResolve("Begin Shot");
         }
         },1000)
       }).then(
@@ -85,16 +83,17 @@ const Capture = (props) => {
         let interval = setInterval(() => {
           if (i<n){
             canvas.getContext('2d').drawImage(video, 0, 0);
-            let photo = canvas.toDataURL("image/png");
-            console.log(photo);
-            setImageUrl(prevImageUrl => {
-              return [...prevImageUrl, photo];
-            });
+            // let photo = canvas.toDataURL("image/png");
+            canvas.toBlob(blob=>{
+              setImageBlob(prevImageBlob => {
+                return [...prevImageBlob, blob]
+              })
+            },'image/png');
             i++;
           } else {
-            clearInterval(interval);
             setIsDone(false);
             setIsNext(false);
+            clearInterval(interval);
           }
         },shotsInterval);
       }
@@ -116,8 +115,9 @@ const Capture = (props) => {
       setTimeout(navigate('/load',{state : {
         action: 'generate',
         data:{
-          txID : state.data.txID,
-          frameID : state.data.frameID,
+          txID : '0',
+          frameID : '5',
+          imageBlob : imageBlob
         }
       }}),3000)
     }
@@ -147,11 +147,11 @@ const Capture = (props) => {
          />
       </div>
       <div>
-        <OverlayPreview
+        {/* <OverlayPreview
           isOverlayPreview={isOverlayPreview}
           imageUrl={imageUrl}
           closeOverlay={()=>{setIsOverlayPreview("none")}}
-         />
+         /> */}
       </div>
       <div className="container h-100"> 
         <div className="row h-100 justify-content-center align-items-center">  
@@ -160,7 +160,7 @@ const Capture = (props) => {
               <canvas ref={canvasRef} style={{display:"none"}}></canvas>
               <h1 style={{textAlign : 'center'}} ref={isSnapEmpty}>Your Snap is here</h1>
               <Shots
-                imageUrl={imageUrl}
+                imageBlob={imageBlob}
               />
             </div>
           </div>
