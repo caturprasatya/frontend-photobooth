@@ -5,9 +5,9 @@ const FramePreview = (props) => {
         <div className="row">
         {props.frameUrl.map((frame,index) => {
             return (
-                <div key={index} className="col-3">
+                <div key={index} className="col-3 text-center">
                     <img src={frame}  className="w-100 img-thumbnail" alt={index} onClick={()=> {props.isSelected(frame,props.numberSnap)}}></img>
-                    <p>{props.detail}</p>
+                    <p>{props.detail[index]}</p>
                 </div>
                 );
             })}

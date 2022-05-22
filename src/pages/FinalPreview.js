@@ -19,11 +19,11 @@ const FinalPreview = (props) => {
   }
 
   const [filter,setFilter] = useState(listFilter.current[0]);
-  // listFilter.forEach(filter=>{
-  //   listFilterRegex.push(filter)
-  //   )
-  // }
   let regexFilter = filter.replace("http://localhost:8080/static/res_image/","").split("/")[1];
+
+  listFilter.current.forEach(filter=>{
+    listFilterRegex.current.push(filter.replace("http://localhost:8080/static/res_image/","").split("/")[1])
+  })
   
   return (
     <div className="container" style={{
@@ -47,7 +47,7 @@ const FinalPreview = (props) => {
                 isSelected={(filter)=>{
                   setFilter(filter);
                 }}
-                detail={regexFilter}
+                detail={listFilterRegex.current}
               />
             </div>
           </div>

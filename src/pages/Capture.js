@@ -5,12 +5,11 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import OverlayCountdown from "../components/OverlayCountdown";
 import OverlayPreview from "../components/OverlayPreview";
-import {useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 
 const Capture = (props) => {
   const { state } = useLocation();
 
-  const navigate = useNavigate();
   const numberShots = useRef(3);
   const timer = 5;
   const shotsInterval = 1000;
@@ -24,12 +23,13 @@ const Capture = (props) => {
   const isSnapEmpty = useRef(null);
 
   const [imageBlob, setImageBlob] = useState([]);
-  const [isDone, setIsDone] = useState(false);  //Check if Capture's done
+  const [isDone, setIsDone] = useState(true);  //Check if Capture's done
   const [isNext, setIsNext] = useState(true);   //Check if next button available
   const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay countdown active
   const [isOverlayPreview, setIsOverlayPreview] = useState('none'); //check if overlay preview active
   const [countdown, setCountdown] = useState(timer+1);  //Countdown timer
   const [isRetake, setIsRetake] = useState('Capture');
+  const [snapCountdown, setSnapCountdown] = useState("Cick Capture to Begin")
 
   useEffect(() => {
     getVideo();
@@ -41,6 +41,7 @@ const Capture = (props) => {
       .then(stream => {
         let video = videoRef.current;
         video.srcObject = stream;
+        setIsDone(false);
       })
       .catch(err => {
         console.error("error:", err);
@@ -79,6 +80,7 @@ const Capture = (props) => {
       }).then(
       () => {
         isSnapEmpty.current.style.display = 'none';
+        
         let interval = setInterval(() => {
           if (i<n){
             canvas.getContext('2d').drawImage(video, 0, 0);
@@ -100,17 +102,6 @@ const Capture = (props) => {
     )
 
   };
-
-  const nextPage = (event)=> {
-      setTimeout(navigate('/load',{state : {
-        action: 'generate',
-        data:{
-          txID : state.txID,
-          frameID : state.frameID,
-          imageBlob : imageBlob
-        }
-      }}),3000)
-    }
   
   return (
     <div className='container' style={{
@@ -152,8 +143,21 @@ const Capture = (props) => {
               <video height="85%" width="85%" ref={videoRef} autoPlay/>
           </div>
           <div className="col-2 text-center">
-            <button className="btn btn-danger btn-lg mb-3" onClick={() => takePhoto(numberShots.current)} disabled={isDone}>{isRetake}</button> 
-            <button className="btn btn-dark btn-lg" disabled={isNext} onClick={nextPage}>Next</button>
+            <button className="btn btn-danger btn-lg mb-3" onClick={() => takePhoto(numberShots.current)} disabled={isDone}>{isRetake}</button>
+            <Link
+              to="/load"
+              state={{
+                action: 'generate',
+                data:{
+                  txID : state.txID,
+                  frameID : state.frameID,
+                  imageBlob : imageBlob
+                }
+              }}
+            >
+              <button className="btn btn-dark btn-lg" disabled={isNext}>Next</button>
+            </Link>
+            <h1>{}</h1> 
           </div>
         </div>
       </div>

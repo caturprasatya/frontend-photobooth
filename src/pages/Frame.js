@@ -7,20 +7,27 @@ import FrameTab from "../components/FrameTab";
 
 const Frame = (props) => {
   const {state} = useLocation();
-  console.log(state);
-
-  let res8frame = [];
-  let res6frame = [];
-
-  if(state){
-    res8frame = state.frame_list.eight_frame_list;
-    res6frame = state.frame_list.six_frame_list;
-  }
 
   const numberSnap = useRef(3);
-  const listFrame8 = useRef(res8frame);
-  const listFrame6 = useRef(res6frame);
+  const listFrame8 = useRef([]);
+  const listFrame6 = useRef([]);
+  const listFrame8Regex = useRef([]);
+  const listFrame6Regex = useRef([]);
+
+  if(state){
+    listFrame8.current = state.frame_list.eight_frame_list;
+    listFrame6.current = state.frame_list.six_frame_list;
+  }
+
   const [frame,setFrame] = useState(listFrame6.current[0]);
+  let regexFrame = frame.match(/frame-\d/)[0][6];
+
+  listFrame8.current.forEach(frame=>{
+    listFrame8Regex.current.push(frame.match(/frame-\d/)[0]);
+  })
+  listFrame6.current.forEach(frame=>{
+    listFrame6Regex.current.push(frame.match(/frame-\d/)[0]);
+  })
 
   return (
     <div className="container" style={{
@@ -45,6 +52,8 @@ const Frame = (props) => {
                 setFrame(frameStyle);
                 numberSnap.current = shotsNumber;
               }}
+              detailframe8={listFrame8Regex.current}
+              detailframe6={listFrame6Regex.current}
             />
           </div>
           <div className="col-5 text-center">
@@ -55,7 +64,7 @@ const Frame = (props) => {
                 to="/capture"
                 state={{
                     txID : state.txID.toString(),
-                    frameID : frame.match(/frame-\d/)[0][6],
+                    frameID : regexFrame,
                     numberSnap : numberSnap.current
                 }}
               >
