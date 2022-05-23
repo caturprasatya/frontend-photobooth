@@ -40,8 +40,8 @@ const FinalPreview = (props) => {
       <div>
         <div className="row justify-content-center align-items-center">
           <div className="col-6">
-            <h1 style={{textAlign : 'center', marginBottom:'15px'}}>Choose Your Filter</h1>
-            <div style={{height:'300px', overflowY: 'scroll', overflowX: 'hidden'}}>
+            <h2 style={{textAlign : 'center', marginBottom:'15px'}}>Choose Your Filter</h2>
+            <div style={{height:'350px', overflowY: 'scroll', overflowX: 'hidden'}}>
               <FramePreview
                 frameUrl={listFilter.current}
                 isSelected={(filter)=>{

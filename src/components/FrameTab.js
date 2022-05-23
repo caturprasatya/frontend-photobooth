@@ -41,7 +41,7 @@ const FrameTab = (props) => {
             role="tabpanel"
             aria-labelledby="tab-1"
             >
-                <div style={{height:'300px', overflowY: 'scroll', overflowX: 'hidden'}}>
+                <div style={{height:'350px', overflowY: 'scroll', overflowX: 'hidden'}}>
                     <FramePreview
                         frameUrl={props.frame6}
                         isSelected={props.frameSelected}
@@ -56,7 +56,7 @@ const FrameTab = (props) => {
             role="tabpanel"
             aria-labelledby="tab-2"
             >
-                <div style={{height:'300px', overflowY: 'scroll', overflowX: 'hidden'}}>
+                <div style={{height:'350px', overflowY: 'scroll', overflowX: 'hidden'}}>
                     <FramePreview
                         frameUrl={props.frame8}
                         isSelected={props.frameSelected}
