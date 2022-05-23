@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Background from "../assets/images/bg-home.png";
@@ -7,6 +7,7 @@ import PhotoService from '../services/PhotoService';
 
 const Email = (props) => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const [email, setEmail] = React.useState('');
   const [recipient_name, setRecipientName] = React.useState('');
 
@@ -27,6 +28,10 @@ const Email = (props) => {
   }
   
   useEffect(() => {
+    if (!state) {
+      navigate('/')
+    }
+
     if (state.data) {
       setEmail(state.data.email);
       setRecipientName(state.data.recipient_name);
@@ -85,10 +90,10 @@ const Email = (props) => {
       </div>
       <br/>
       {isEmailSuccess ? (
-        <h6 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Email Sent!</h6>
+        <h4 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Snap already sent to your Email!</h4>
       ) : (
         <Link 
-          to="/load" 
+          to="/home" 
           state={{
             action: 'send-email',
             data: {
@@ -103,7 +108,18 @@ const Email = (props) => {
         </Link>
       )}
       {isPrintSuccess ? (
-        <h6 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Photo Printed!</h6>
+        <>
+          <h4 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Printing Snap..</h4>
+          <Link 
+            to="/load" 
+            state={{
+              action: 'verify',
+              id: state.id
+            }}
+          >
+            <h3 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Let's take another Snap!</h3>
+          </Link>
+        </>
       ) : (
         <Link 
           to="/load" 
@@ -118,7 +134,7 @@ const Email = (props) => {
           }}
         >
           <button className="btn btn-print mb-2">Print Photo!</button>
-      </Link>
+        </Link>
       )}
       {/* <Link 
           to="/load" 

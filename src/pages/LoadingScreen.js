@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Spinner from "react-bootstrap/Spinner";
 import Background from "../assets/images/bg-payment.png";
 import Footer from '../components/Footer';
@@ -9,6 +9,12 @@ import PhotoService from '../services/PhotoService';
 
 const LoadingScreen = () => {
   let requestCount = 1;
+
+  // verify transaction helper variables
+  let timeoutVerify = 1;
+  let TIMEOUT_LIMIT = 180 / 5;
+
+  const [isTimeout, setTimeoutVerify] = React.useState(false);
   const { state } = useLocation();
   // state = action, tambahan
   const navigate = useNavigate();
@@ -27,25 +33,35 @@ const LoadingScreen = () => {
   }
 
   const verifyTransaction = (ID) => {
-    PaymentService.getTransactionByID(ID)
-    .then(
-      (response) => {
-        console.log(response.data);
-        if (response.data.status === 'paid') {
-          getFrame(response.data.id);
-        } else {
-          console.log("else clause");
-          return new Promise(function(resolve, reject) { 
-            setTimeout(() => {
-                verifyTransaction(ID)
-                resolve();
-            }, 10000)
-        });
+    if (timeoutVerify < TIMEOUT_LIMIT) {
+      PaymentService.getTransactionByID(ID)
+      .then(
+        (response) => {
+          console.log(response.data);
+          if (response.data.status === 'paid') {
+            getFrame(response.data.id);
+          } else {
+            console.log("else clause");
+            return new Promise(function(resolve, reject) { 
+              setTimeout(() => {
+                  timeoutVerify++;
+                  verifyTransaction(ID);
+                  resolve();
+              }, 5000)
+            });
+          }
         }
-      }
-    ).catch(
-      (err) => console.log(err)
-    )
+      ).catch(
+        (err) => console.log(err)
+      )
+    } else {
+      setTimeoutVerify(true);
+      setTimeout(() => {
+        navigate('/')
+      }, 7000)
+    }
+    
+    return
   }
 
   const generateImage = (data) => {
@@ -131,10 +147,10 @@ const LoadingScreen = () => {
 
   useEffect(() => {
     while (requestCount) {
-      let temp = state;
+      // let temp = state;
       switch(state.action) {
         case 'payment': 
-          postData(10, 0);
+          postData(10, 1);
           requestCount--;
           break;
         case 'verify':
@@ -191,6 +207,18 @@ const LoadingScreen = () => {
         justifyContent: 'center',
       }}
       >
+        {isTimeout ? (
+          <>
+            <h4 className="fw-bold text-center">Problem verifying your transaction</h4>
+            <Link 
+              to="/home" 
+            >
+              <h3 className="fw-bold text-center">Back to Home</h3>
+            </Link>
+          </>
+        ) : (
+          <></>
+        )}
         <div className="text-center py-5">
           <Spinner animation="border" />
         </div>
