@@ -93,7 +93,7 @@ const Email = (props) => {
         <h4 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Snap already sent to your Email!</h4>
       ) : (
         <Link 
-          to="/home" 
+          to="/load" 
           state={{
             action: 'send-email',
             data: {
@@ -111,11 +111,7 @@ const Email = (props) => {
         <>
           <h4 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Printing Snap..</h4>
           <Link 
-            to="/load" 
-            state={{
-              action: 'verify',
-              id: state.id
-            }}
+            to="/" 
           >
             <h3 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Let's take another Snap!</h3>
           </Link>
