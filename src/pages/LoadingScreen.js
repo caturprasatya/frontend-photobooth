@@ -8,6 +8,12 @@ import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
 
 const LoadingScreen = () => {
+  // payment variables
+  let snapFee = 10;
+  // 1 -> GoPay, 0 -> QRIS
+  let paymentType = 1;  
+
+  // request limiter
   let requestCount = 1;
 
   // verify transaction helper variables
@@ -15,6 +21,8 @@ const LoadingScreen = () => {
   let TIMEOUT_LIMIT = 180 / 5;
 
   const [isTimeout, setTimeoutVerify] = React.useState(false);
+  const [isEmailFailed, setEmailFailed] = React.useState(false);
+  const [isGenerateImageFailed, setGenerateImageFailed] = React.useState(false);
   const { state } = useLocation();
   // state = action, tambahan
   const navigate = useNavigate();
@@ -22,7 +30,6 @@ const LoadingScreen = () => {
   const isMounted = useRef();
 
   const postData = (amount, paymentType) => {
-    console.log('wkwkwkwkk')
     PaymentService.createTransaction(amount, paymentType)
     .then(
       (response) => {
@@ -79,6 +86,14 @@ const LoadingScreen = () => {
             (response2) => {
               response2["txID"] = data.txID;
               response2["frameID"] = data.frameID;
+              // if (response2.status_code != 200) {
+              //   setGenerateImageFailed(true);
+              // }
+              // setTimeout(() => {
+              //   navigate('/email', {
+              //     state: response
+              //   })
+              // }, 3000)
               navigate('/final-preview', {
                 state: response2
               })
@@ -118,10 +133,15 @@ const LoadingScreen = () => {
         response["effect"] = data.effect;
         response["isEmailSuccess"] = isEmailSuccess;
         response["email"] = data.email;
-        response["recipient_name"] = data.recipient_name;
-        navigate('/email', {
-          state: response
-        })
+        response["recipient_name"] = data.recipient_name;     
+        if (response.status_code != 200) {
+          setEmailFailed(true);
+        }
+        setTimeout(() => {
+          navigate('/email', {
+            state: response
+          })
+        }, 3000)
       }
     ).catch(
       (err) => console.log(err)
@@ -158,7 +178,7 @@ const LoadingScreen = () => {
       // let temp = state;
       switch(state.action) {
         case 'payment': 
-          postData(10, 1);
+          postData(snapFee, paymentType);
           requestCount--;
           break;
         case 'verify':
@@ -225,7 +245,19 @@ const LoadingScreen = () => {
             </Link>
           </>
         ) : (
-          <></>
+          <>
+            <h4 className="fw-bold text-center">Please Wait</h4>
+          </>
+        )}
+        {isEmailFailed ? (
+          <>
+            <h4 className="fw-bold text-center">Problem Sending Email</h4>
+            <h3 className="fw-bold text-center">Sending Back to Snap Form!</h3>
+          </>
+        ) : (
+          <>
+            <h4 className="fw-bold text-center">Please Wait</h4>
+          </>
         )}
         <div className="text-center py-5">
           <Spinner animation="border" />

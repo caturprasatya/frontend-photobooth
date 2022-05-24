@@ -113,7 +113,7 @@ const Email = (props) => {
           <Link 
             to="/" 
           >
-            <h3 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Let's take another Snap!</h3>
+            <h3 className="fw-bold text-center">Let's take another Snap!</h3>
           </Link>
         </>
       ) : (
