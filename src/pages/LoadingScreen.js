@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useRef,useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Spinner from "react-bootstrap/Spinner";
 import Background from "../assets/images/bg-payment.png";
@@ -18,8 +18,11 @@ const LoadingScreen = () => {
   const { state } = useLocation();
   // state = action, tambahan
   const navigate = useNavigate();
+  //Check concurrent render on Hooks
+  const isMounted = useRef();
 
   const postData = (amount, paymentType) => {
+    console.log('wkwkwkwkk')
     PaymentService.createTransaction(amount, paymentType)
     .then(
       (response) => {
@@ -146,6 +149,11 @@ const LoadingScreen = () => {
   }
 
   useEffect(() => {
+    if(isMounted.current){
+      return
+    }
+
+    isMounted.current = true;
     while (requestCount) {
       // let temp = state;
       switch(state.action) {
@@ -211,7 +219,7 @@ const LoadingScreen = () => {
           <>
             <h4 className="fw-bold text-center">Problem verifying your transaction</h4>
             <Link 
-              to="/home" 
+              to="/" 
             >
               <h3 className="fw-bold text-center">Back to Home</h3>
             </Link>
