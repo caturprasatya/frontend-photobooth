@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Poppins');
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -7,10 +7,15 @@ body {
 .btn-print {
     color: aliceblue;
     background-color: #C82826;
+    width: 100%;
 }
 
+.btn-email {
+    width: 100%;
+}
 
 .btn-print:hover {
     color: aliceblue;
     background-color: #B42422;
+    width: 100%;
 }

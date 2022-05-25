@@ -226,8 +226,6 @@ const LoadingScreen = () => {
     <>
       <Header/>
       <div style={{ 
-        backgroundImage: `url(${Background}`,
-        backgroundSize: 'contain',
         height: "100vh",
         display: 'flex',
         flexDirection: 'column',

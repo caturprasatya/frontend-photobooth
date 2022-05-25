@@ -1,7 +1,8 @@
 import styled from 'styled-components';
    
 export const Box = styled.div`
-  padding: 10px 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   box-shadow: 5px -5px 10px 2px rgba(0,0,0,.8);
   background: white;
   position: absolute;
@@ -19,7 +20,7 @@ export const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     max-width: 1000px;
-    margin: 0 auto;
+    // margin: 0 auto;
     /* background: red; */
 `
    
@@ -34,12 +35,12 @@ export const Column = styled.div`
 export const Row = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 
-                         minmax(200px, 1fr));
-  grid-gap:150px;
+                         minmax(500px, 1fr));
+  grid-gap:0px;
    
   @media (max-width: 1000px) {
     grid-template-columns: repeat(auto-fill, 
-                           minmax(200px, 1fr));
+                           minmax(500px, 1fr));
   }
 `;
    

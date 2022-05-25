@@ -23,7 +23,7 @@ const Payment = () => {
   }, []);
 
   return (
-    <div className="container" style={{ 
+    <div style={{ 
       backgroundImage: `url(${Background}`,
       backgroundSize: 'contain',
       height: "100vh",
@@ -38,11 +38,16 @@ const Payment = () => {
       <div 
         className='qr-code'
       >
-        <h3 className="fw-bold text-center">
-          Scan Here to Pay!
+        <h2 className="text-center">
+          <span style={{ color: 'red' }}>Scan</span> here to pay!
+        </h2>
+        <h3 className='fw-bold text-center'>
+         IDR 30.000
         </h3>
         <div className='text-center'>
-          <Image className='text-center' src={image} height={300} width={300}/>
+          <Image className='text-center mb-4' src={image} height={300} width={300} style={{ 
+            boxShadow: '2px 2px 2px 2px rgba(0,0,0,.2)'
+          }}/>
         </div>
         <h5 className='text-center'>
           Available for all your payment methods!

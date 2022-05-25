@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import Background from "../assets/images/bg-home.png";
-import PhotoService from '../services/PhotoService';
+import Overlay from "../components/Overlay";
 
 const Email = (props) => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [email, setEmail] = React.useState('');
   const [recipient_name, setRecipientName] = React.useState('');
+  const [isOverlay, setIsOverlay] = useState('none');
+  const [show, setShow] = useState(false);
 
   let txID = 37;
   let effect;
@@ -28,6 +30,21 @@ const Email = (props) => {
   }
   
   useEffect(() => {
+    console.log(state);
+    if (state) {
+      if (state.isEmailSuccess) {
+        setShow(true);
+      }
+  
+      if (state.isPrintSuccess) {
+        console.log("tes");
+        setIsOverlay('block');
+        setShow(false);
+        setTimeout(() => {
+          navigate('/')
+        }, 5000)
+      }
+    }
     if (!state) {
       navigate('/')
     }
@@ -48,10 +65,10 @@ const Email = (props) => {
     console.log(recipient_name);
   }
 
+  const handleClose = () => setShow(false);
+
   return (
     <div className="container" style={{ 
-      backgroundImage: `url(${Background}`,
-      backgroundSize: 'contain',
       height: "100vh",
       display: 'flex',
       flexDirection: 'column',
@@ -60,100 +77,128 @@ const Email = (props) => {
     }}
     >
       <Header />
-      <h3 className="fw-bold text-center">
+      <Modal size="sm" centered show={show} onHide={handleClose}>
+        <Modal.Body>
+          <h4 className="text-center fw-bold mt-3 mb-3">
+            We've sent the <br></br> photos to your email!
+          </h4>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Link 
+              to="/load" 
+              state={{
+                action: 'print-photo',
+                data: {
+                  email: email,
+                  recipient_name: recipient_name
+                },
+                txID: txID,
+                effect: effect
+              }}
+            >
+              <button className="btn text-center btn-print" onClick={handleClose}>
+                Print Photo!
+              </button>
+            </Link>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <h1 className="fw-bold text-center">
         Thanks for using SnapLab!
-      </h3>
-      <h5 className="text-center">
+      </h1>
+      <h3 className="text-center">
         For the next step, please fill this form and we will get you your photos!
-      </h5>
+      </h3>
       <br/>
-      <div className="form-group">
-        <input 
-          className="form-control"
-          type="text" 
-          name="recipient_name" 
-          onChange={handleNameChange} 
-          placeholder="Nama Lengkap" 
-          value={recipient_name}
-        />
-      </div>
-      <br/>
-      <div className="form-group">
-        <input 
-          className="form-control"
-          type="email" 
-          name="email" 
-          onChange={handleEmailChange} 
-          placeholder="Email" 
-          value={email}
-        />
-      </div>
-      <br/>
-      {isEmailSuccess ? (
-        <h4 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Snap already sent to your Email!</h4>
-      ) : (
-        <Link 
-          to="/load" 
-          state={{
-            action: 'send-email',
-            data: {
-              email: email,
-              recipient_name: recipient_name
-            },
-            txID: txID,
-            effect: effect
-          }}
-        >
-          <button className="btn btn-primary mb-2">Send Email!</button>
-        </Link>
-      )}
-      {isPrintSuccess ? (
-        <>
-          <h4 className="fw-bold text-center" style={{'color': '#5EBA7D'}}>Printing Snap..</h4>
-          <Link 
-            to="/" 
-          >
-            <h3 className="fw-bold text-center">Let's take another Snap!</h3>
-          </Link>
-        </>
-      ) : (
-        <Link 
-          to="/load" 
-          state={{
-            action: 'print-photo',
-            data: {
-              email: email,
-              recipient_name: recipient_name
-            },
-            txID: txID,
-            effect: effect
-          }}
-        >
-          <button className="btn btn-print mb-2">Print Photo!</button>
-        </Link>
-      )}
-      {/* <Link 
-          to="/load" 
-          state={{
-            action: 'send-email',
-            data: inputField,
-            txID: txID,
-            frameID: frameID
-          }}
-        >
-        <button className="btn btn-primary mb-2" onClick={submitButton}>Send Email!</button>
-      </Link> */}
-      {/* <Link 
-          to="/load" 
-          state={{
-            action: 'print-photo',
-            data: inputField,
-            txID: txID,
-            frameID: frameID
-          }}
-        >
-          <button className="btn btn-print mb-2" onClick={submitButton}>Print Photo!</button>
-      </Link> */}
+      <form>
+        <div className="form-group">
+          <input 
+            className="form-control form-control-lg"
+            type="text" 
+            name="recipient_name" 
+            onChange={handleNameChange} 
+            placeholder="Nama Lengkap" 
+            value={recipient_name}
+          />
+        </div>
+        <br/>
+        <div className="form-group">
+          <input 
+            className="form-control form-control-lg"
+            type="email" 
+            name="email" 
+            onChange={handleEmailChange} 
+            placeholder="Email" 
+            value={email}
+          />
+        </div>
+        <br/>
+        <div className="form-group">
+          {isEmailSuccess ? (
+            <></>
+          ) : (
+            <Link 
+              to="/load" 
+              state={{
+                action: 'send-email',
+                data: {
+                  email: email,
+                  recipient_name: recipient_name
+                },
+                txID: txID,
+                effect: effect
+              }}
+            >
+              <button className="btn btn-lg btn-primary mb-2 btn-block btn-email">
+                Send Email!
+              </button>
+            </Link>
+          )}
+        </div>
+        <div className="form-group">
+          {isPrintSuccess ? (
+            <>
+              <Overlay
+                isOverlay={isOverlay}
+                text="Printing..."
+              />
+              <Link 
+                to="/load" 
+                state={{
+                  action: 'print-photo',
+                  data: {
+                    email: email,
+                    recipient_name: recipient_name
+                  },
+                  txID: txID,
+                  effect: effect
+                }}
+              >
+                <button className="btn btn-lg btn-print mb-2">Print Photo!</button>
+              </Link>
+            </>
+          ) : (
+            <Link 
+              to="/load" 
+              state={{
+                action: 'print-photo',
+                data: {
+                  email: email,
+                  recipient_name: recipient_name
+                },
+                txID: txID,
+                effect: effect
+              }}
+            >
+              <button className="btn btn-lg btn-print mb-2">Print Photo!</button>
+            </Link>
+          )}
+        </div>
+      </form>
       <Footer />
     </div>
   )

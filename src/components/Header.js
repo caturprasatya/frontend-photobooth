@@ -10,7 +10,7 @@ import {
 const Header = () => {
   return (
     <Box>
-      <Container>
+      {/* <Container> */}
         <Row>
             <Column>
             </Column>
@@ -20,7 +20,7 @@ const Header = () => {
             <img src={Logo} width='150px' />
             </Column>
         </Row>
-      </Container>
+      {/* </Container> */}
     </Box>
   );
 };

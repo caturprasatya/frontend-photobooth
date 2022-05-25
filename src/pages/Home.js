@@ -8,9 +8,10 @@ import CTA from "../assets/images/snaphere.png";
 
 const Home = () => {
   return (
-    <div className="container" style={{ 
+    <div style={{ 
       backgroundImage: `url(${Background}`,
       backgroundSize: 'contain',
+      backgroundRepeat: 'no-repeat',
       height: "100vh",
       display: 'flex',
       flexDirection: 'column',
@@ -22,9 +23,9 @@ const Home = () => {
       <div 
         className='home'
       >
-        <h3 className="fw-bold text-center">
+        <h1 className="fw-bold text-center">
           hello!
-        </h3>
+        </h1>
         <Link 
           to="/load" 
           state={{
@@ -32,12 +33,12 @@ const Home = () => {
           }}
         >
           <div className='text-center'>
-            <Image className='text-center' src={CTA} height={220} width={500}/>
+            <Image className='text-center' src={CTA} height={132} width={300}/>
           </div>
         </Link>
-        <h3 className='text-center mt-2'>
+        <h2 className='text-center mt-4'>
          IDR 30.000
-        </h3>
+        </h2>
       </div>
       <Footer />
     </div>

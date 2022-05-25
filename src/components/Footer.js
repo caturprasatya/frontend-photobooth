@@ -10,7 +10,7 @@ import {
 const Footer = () => {
   return (
     <Box>
-      <Container>
+      {/* <Container> */}
         <Row>
           <Column>
             <FooterLink>reach us at:</FooterLink>
@@ -22,7 +22,7 @@ const Footer = () => {
             <FooterLink href="#"><i className="fa fa-light fa-envelope"></i> its.snaplab@gmail.com</FooterLink>
           </Column>
         </Row>
-      </Container>
+      {/* </Container> */}
     </Box>
   );
 };
