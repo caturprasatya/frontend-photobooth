@@ -246,7 +246,6 @@ const LoadingScreen = () => {
           </>
         ) : (
           <>
-            <h4 className="fw-bold text-center">Please Wait</h4>
           </>
         )}
         {isEmailFailed ? (
