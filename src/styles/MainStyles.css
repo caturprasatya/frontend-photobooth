@@ -19,3 +19,26 @@ body {
     background-color: #B42422;
     width: 100%;
 }
+
+#flash{ 
+    opacity: 0;
+    transition: all 10ms ease-in;/* Shutter speed */
+    position: fixed;
+    height: 0%;
+    width: 0%;
+    pointer-events: none;
+    z-index:1;
+  
+    background-color: black;/* Shutter Color */
+    
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%)
+  }
+  
+#flash.on {
+opacity: 1;/* Shutter Transparency */
+height: 100%;
+width: 100%;
+}

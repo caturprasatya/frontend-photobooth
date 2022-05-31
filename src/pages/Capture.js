@@ -14,7 +14,7 @@ const Capture = (props) => {
   let i = 0;
   var audio = new Audio('../../static/audio/camera-shutter-click-08.mp3');
 
-  const numberShots = useRef(3);
+  const numberShots = useRef(7);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const isSnapEmpty = useRef(null);
@@ -31,6 +31,7 @@ const Capture = (props) => {
 
   if(state){
     numberShots.current = state.numberSnap;
+    console.log(state.frameID)
   }
 
   useEffect(() => {
