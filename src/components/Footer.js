@@ -1,31 +1,23 @@
 import React from "react";
 import {
-  Box,
-  Row,
-  Column,
-  FooterLink
+  Box
 } from "../styles/custom/FooterStyles";
-import { Container} from 'react-bootstrap';
 import '../styles/Footer.css';
   
 const Footer = () => {
   return (
     <Box>
-      {/* <div className="footer-container"> */}
       <div className="footer-container">
-        <div className="row">
           <div className="column">
-            <h4 className="p-left">reach us at:</h4>
+            <h5 className="p-left">reach us at:</h5>
           </div>
           <div className="column">
-            <h4 className="p-center"><i className="fa fa-brands fa-instagram"></i> @its.snaplab</h4>
+            <h5 className="p-center"><i className="fa fa-brands fa-instagram"></i> @its.snaplab</h5>
           </div>
           <div className="column">
-            <h4 className="p-right"><i className="fa fa-light fa-envelope"></i> its.snaplab@gmail.com</h4>
+            <h5 className="p-right"><i className="fa fa-light fa-envelope"></i> its.snaplab@gmail.com</h5>
           </div>
         </div>
-      {/* </div> */}
-      </div>
     </Box>
     // <Box>
     //   {/* <Container> */}

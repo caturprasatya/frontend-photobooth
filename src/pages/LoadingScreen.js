@@ -224,7 +224,6 @@ const LoadingScreen = () => {
 
   return (
     <>
-      <Header/>
       <div style={{ 
         height: "100vh",
         display: 'flex',
@@ -260,7 +259,6 @@ const LoadingScreen = () => {
           <Spinner animation="border" />
         </div>
       </div>
-      <Footer />
     </>
   );
 };

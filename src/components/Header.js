@@ -1,13 +1,11 @@
-import Logo from "../assets/images/snaplab logo-red.png"
-import React, { Component } from "react";
+import React from "react";
+import { Link } from 'react-router-dom';
 import {
-  Box,
-  Container,
-  Row,
-  Column,
+  Box
 } from "../styles/custom/HeaderStyles";
+import Logo from "../assets/images/snaplab logo-red.png"
 import '../styles/Header.css';
-  
+
 const Header = () => {
   return (
     <Box>
@@ -20,7 +18,11 @@ const Header = () => {
             <div className="p-center"></div>
           </div>
           <div className="column">
-            <img className="p-right" src={Logo} width='180px' />
+            <Link 
+              to="/" 
+            >
+              <img className="p-right" src={Logo} width='150px' />
+            </Link>
           </div>
         </div>
       </div>
