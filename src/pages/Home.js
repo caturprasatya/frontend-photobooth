@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Container, Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Image } from 'react-bootstrap';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Background from "../assets/images/bg-home.png";
