@@ -1,74 +1,56 @@
 import React, { useState,useRef } from "react";
 import { Link, useLocation } from 'react-router-dom';
-import Footer from "../components/Footer";
-import Header from '../components/Header';
-import Background from "../assets/images/bg-payment.png"
-import FramePreview from "../components/FramePreview";
 
 const FinalPreview = (props) => {
   const { state } = useLocation();
-  console.log(state);
 
-  const listFilter = useRef([]);
-  const listFilterRegex = useRef([]);
+  const listEffectsURI = useRef([]);
 
   if(state){
-    if(state.status_code===200){
-      listFilter.current = state.result_url;
-    }
+    listEffectsURI.current = [];
+    state.img_url.forEach((element,index) => {
+      const a = {};
+      a.effectName = element.replace("http://localhost:8080/static/res_image/","").split("/")[1];
+      a.imgURI = element;
+      a.GIF = state.gif_url[index];
+      listEffectsURI.current.push(a);
+    });
   }
 
-  const [filter,setFilter] = useState(listFilter.current[0]);
-  let regexFilter = filter.replace("http://localhost:8080/static/res_image/","").split("/")[1];
-
-  listFilter.current.forEach(filter=>{
-    listFilterRegex.current.push(filter.replace("http://localhost:8080/static/res_image/","").split("/")[1])
-  })
+  const [effectSelected,setEffectSelected] = useState(listEffectsURI.current[0]);
   
   return (
-    <div className="container" style={{
-      backgroundImage: `url(${Background}`,
-      backgroundSize: 'contain',
-      height: "100vh",
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-
-      <Header/>
-      <div>
-        <div className="row justify-content-center align-items-center">
-          <div className="col-6">
-            <h2 style={{textAlign : 'center', marginBottom:'15px'}}>Choose Your Filter</h2>
-            <div style={{height:'350px', overflowY: 'scroll', overflowX: 'hidden'}}>
-              <FramePreview
-                frameUrl={listFilter.current}
-                isSelected={(filter)=>{
-                  setFilter(filter);
-                }}
-                detail={listFilterRegex.current}
-              />
-            </div>
+    <div className="container-fluid" style={{height:'100vh',overflowY: 'hidden', overflowX:'hidden'}}>
+      <div className="row">
+        <div className="col-3 bg-dark">
+          <div  className="text-center" style={{height:'100vh', overflowY: 'scroll', overflowX: 'hidden'}}>
+            {listEffectsURI.current.map((effect,index) => {
+              return (
+                <img key={index} src={effect.imgURI} className={`col-10 mb-4 mt-4 rounded ${effectSelected.effectName===effect.effectName ? "greenBorder" : ""}`}
+                alt={index} onClick={()=>{setEffectSelected(effect)}}></img>
+                );
+              })}
           </div>
-          <div className="col-5 text-center">
-            <img className='img-thumbnail' style={{height:'400px'}} src={filter} alt='your frame'/>
-          </div>
-          <div className="col-1 text-center">
-            <Link 
-                to="/email" 
-                state={{
+        </div>
+        <div className="col text-center center" style={{backgroundColor:'#000000'}}>
+          <div style={{overflowY: 'hidden', overflowX:'hidden'}}>
+            <img src={effectSelected.imgURI} style={{width:'100%'}} className="rounded" alt="selected effect"></img>
+            <Link
+              to="/"
+              state={{
                   txID : state.txID,
-                  effect : regexFilter
-                }}
-              >
-              <button className="btn btn-dark btn-lg">Next</button>
-            </Link>
+                  effect : effectSelected.effectName,
+                  GIF : effectSelected.GIF
+              }}
+            >
+              <button type="button" className="btn btn-success btn-lg finishButton">
+                Finish
+              </button>
+            </Link>  
           </div>
         </div>
       </div>
-      <Footer/>
-    </div>
+    </div>  
   );
 }
 
