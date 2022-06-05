@@ -43,11 +43,16 @@ height: 100%;
 width: 100%;
 }
 
-.center {
+.fill {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+    
+}
+/* .fill img {
+    background-size: cover;
+    background-position: center;
+} */
 
 .greenBorder {
     border : 5px solid lime;
@@ -65,18 +70,12 @@ width: 100%;
     bottom: 12%;
 }
 
-.imgShadow {
-    box-shadow: 3px 3px 10px grey;
-}
-
 .styleOverlay{
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2;
-    overflow-x: hidden;
-    overflow-y: hidden;
 }
 
 .overlayText{
