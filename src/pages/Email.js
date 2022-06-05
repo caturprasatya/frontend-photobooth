@@ -31,28 +31,29 @@ const Email = (props) => {
   
   useEffect(() => {
     console.log(state);
-    if (state) {
-      if (state.isEmailSuccess) {
-        setShow(true);
-      }
-  
-      if (state.isPrintSuccess) {
-        console.log("tes");
-        setIsOverlay('block');
-        setShow(false);
-        setTimeout(() => {
-          navigate('/')
-        }, 5000)
-      }
-    }
     if (!state) {
       navigate('/')
+    } else {
+      if (state) {
+        if (state.isEmailSuccess) {
+          setShow(true);
+        }
+    
+        if (state.isPrintSuccess) {
+          console.log("tes");
+          setIsOverlay('block');
+          setShow(false);
+          setTimeout(() => {
+            navigate('/')
+          }, 5000)
+        }
+      }
+  
+      if (state.data) {
+        setEmail(state.data.email);
+        setRecipientName(state.data.recipient_name);
+      } 
     }
-
-    if (state.data) {
-      setEmail(state.data.email);
-      setRecipientName(state.data.recipient_name);
-    } 
   }, []);
 
   const handleEmailChange = (e) => {
