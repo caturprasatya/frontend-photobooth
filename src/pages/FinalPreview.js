@@ -34,7 +34,7 @@ const FinalPreview = (props) => {
   return (
     <div className="container-fluid" style={{height:'100vh',overflowY: 'hidden', overflowX:'hidden'}}>
       <div className="row center">
-        <div className="col-3 px-0 text-center bg-dark" style={{backgroundColor:'#FFFFFF',height:'100vh', overflowY: 'auto'}}>
+        <div className="col-3 px-0 text-center bg-dark" style={{backgroundColor:'#FFFFFF',height:'100vh'}}>
           <Scrollbars renderThumbHorizontal={renderThumb} renderThumbVertical={renderThumb} >
             {listEffectsURI.current.map((effect,index) => {
               return (

@@ -21,7 +21,6 @@ const Capture = (props) => {
   
   const isRetake = useRef('none');
   const numberSnap = useRef(8);
-  // const snapCounter = useRef(0);
   const isFlashOn = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -58,7 +57,6 @@ const Capture = (props) => {
     if(mode==='retake'){
       let m = snapCounter;
       m--;
-      // snapCounter.current--;
       setSnapCounter(m);
       if(imageBlob.length===1){
         setImageBlob([]);
