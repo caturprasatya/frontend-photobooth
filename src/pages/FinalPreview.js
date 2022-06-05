@@ -47,7 +47,7 @@ const FinalPreview = (props) => {
         <div className="col px-0 text-center fill" style={{backgroundColor:'#000000'}}>
           <img src={effectSelected.imgURI} className="" alt="selected effect"></img>
           <Link
-            to="/"
+            to="/email"
             state={{
                 txID : state.txID,
                 effect : effectSelected.effectName,
