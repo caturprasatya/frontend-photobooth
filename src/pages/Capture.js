@@ -145,15 +145,17 @@ const Capture = (props) => {
     <div className="container-fluid" style={{height:'100vh',overflowY: 'hidden', overflowX:'hidden'}}>
       <div id="flash" ref={isFlashOn}/> 
       <div className="row">
-        <div className="col-3 bg-dark text-center"  style={{backgroundColor:'#D9D9D9',height:'100vh'}}>
+        <div className="col-3 bg-dark text-center px-0" style={{height:'100vh'}}>
           <canvas ref={canvasRef} style={{display:"none"}}/>
           <Scrollbars renderThumbHorizontal={renderThumb} renderThumbVertical={renderThumb} >
-            {imageBlob.map((shots,index) => {
-            return (
-              <img key={index} src={URL.createObjectURL(shots)} className={`col-10 mb-4 mt-4 ${snapCounter===index ? "greenBorder" : ""}`}
-                alt={index}></img>
-              );
-            })}
+            <div>
+              {imageBlob.map((shots,index) => {
+              return (
+                <img key={index} src={URL.createObjectURL(shots)} className={`col-10 mb-4 mt-4 ${snapCounter===recentSnap ? "greenBorder" : ""}`}
+                  alt={index}></img>
+                );
+              })}
+            </div>
           </Scrollbars>
         </div>
         <div className="col text-center fill" style={{backgroundColor:'#000000'}}>
@@ -161,14 +163,16 @@ const Capture = (props) => {
             <div className="overlayText">{countdown}</div>
           </div> 
           <div>
-            <video width="100%" ref={videoRef} style={{display:isVideo}} autoPlay/>
-            <img src={imageBlob.length>0?URL.createObjectURL(recentSnap):""} style={{width:'100%', display:isImage}} className="" alt="recent snap"/>
-            <button ref={isRetake} type="button" className="btn btn-light btn-lg retakeButton" onClick={()=>takeSnap('retake')} style={{display:'none'}}>
-              Retake
-            </button>
-            <button type="button" className="btn btn-dark btn-lg finishButton" disabled={isNext} onClick={()=>takeSnap('take')}>
-              {"Next >>"}
-            </button>
+            <video width="100%" ref={videoRef} className="img-thumbnail" style={{display:isVideo}} autoPlay/>
+            <img src={imageBlob.length>0 ? URL.createObjectURL(recentSnap):""} style={{width:'100%', display:isImage}} className="img-thumbnail" alt="recent snap"/>
+            <div className="nextButton">
+              <button ref={isRetake} type="button" className="btn btn-light btn-lg w-100 mb-2" onClick={()=>takeSnap('retake')} style={{display:'none'}}>
+                Retake
+              </button>
+              <button type="button" className="btn btn-dark btn-lg w-100 mt-2" disabled={isNext} onClick={()=>takeSnap('take')}>
+                {"Next >>"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

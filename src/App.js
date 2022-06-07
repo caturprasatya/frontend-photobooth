@@ -11,6 +11,7 @@ import Frame from "./pages/Frame"
 import Email from "./pages/Email"
 import LoadingScreen from "./pages/LoadingScreen";
 import FinalPreview from "./pages/FinalPreview";
+import GifPreview from "./pages/GifPreview";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/capture" element={<Capture />} />
       <Route path="/frame" element={<Frame />}/>
       <Route path="/final-preview" element={<FinalPreview />}/>
+      <Route path="/gif-preview" element={<GifPreview />}/>
       <Route path="/email" element={<Email />}/>
     </Routes>
   </Router>

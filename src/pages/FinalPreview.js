@@ -33,19 +33,24 @@ const FinalPreview = (props) => {
   
   return (
     <div className="container-fluid" style={{height:'100vh',overflowY: 'hidden', overflowX:'hidden'}}>
-      <div className="row center">
-        <div className="col-3 px-0 text-center bg-dark" style={{backgroundColor:'#FFFFFF',height:'100vh'}}>
-          <Scrollbars renderThumbHorizontal={renderThumb} renderThumbVertical={renderThumb} >
-            {listEffectsURI.current.map((effect,index) => {
-              return (
-                <img key={index} src={effect.imgURI} className={`col-10 mb-4 mt-4 ${effectSelected.effectName===effect.effectName ? "greenBorder" : ""}`}
-                alt={index} onClick={()=>{setEffectSelected(effect)}}></img>
-                );
-              })}
-          </Scrollbars>
+      <div className="row"> 
+        <div className="col-3 text-center bg-dark px-0" style={{height:'100vh'}}>
+            <Scrollbars renderThumbHorizontal={renderThumb} renderThumbVertical={renderThumb}>
+              <div>
+                <p className="text-white mt-3 mb-0" style={{fontSize:'4vh'}}>Choose an effect</p>
+              </div>
+              <div>
+                {listEffectsURI.current.map((effect,index) => {
+                  return (
+                    <img key={index} src={effect.imgURI} className={`col-10 mb-4 mt-4 ${effectSelected.effectName===effect.effectName ? "greenBorder" : ""}`}
+                    alt={index} onClick={()=>{setEffectSelected(effect)}}></img>
+                    );
+                })}
+              </div>
+            </Scrollbars>
         </div>
-        <div className="col px-0 text-center fill" style={{backgroundColor:'#000000'}}>
-          <img src={effectSelected.imgURI} className="" alt="selected effect"></img>
+        <div className="col text-center fill" style={{backgroundColor:'#000000'}}>
+          <img src={effectSelected.imgURI} className="img-thumbnail" alt="selected effect"></img>
           <Link
             to="/email"
             state={{
@@ -54,7 +59,7 @@ const FinalPreview = (props) => {
                 GIF : effectSelected.GIF
             }}
           >
-            <button type="button" className="btn btn-success btn-lg finishButton">
+            <button type="button" className="btn btn-success btn-lg nextButton">
               Finish
             </button>
           </Link>  

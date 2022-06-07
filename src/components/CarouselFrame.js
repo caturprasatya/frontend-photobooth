@@ -45,7 +45,7 @@ const CarouselFrame = (props) => {
               max: 1024,
               min: 464
             },
-            items: 3,
+            items: 2,
             partialVisibilityGutter: 30
           }
         }}
@@ -57,9 +57,8 @@ const CarouselFrame = (props) => {
         >
         {props.frameURI.map((frame,index) => {
           return (
-            <div key={index
-            } style={{margin:'5% 5px 5% 5px'}}>
-              <img src={frame.URI} style={{border:selectedFrame.frameName===frame.frameName ? '5px solid #00FF00' : '0px solid #00FF00', height:'45vh'}} className="img-thumbnail" alt={frame.frameName} onClick={(e)=>{
+            <div key={index}>
+              <img src={frame.URI} style={{height:'70vh'}} className={`img-thumbnail ${selectedFrame.frameName===frame.frameName ? "greenBorder" : ""}`} alt={frame.frameName} onClick={(e)=>{
                 props.pickFrame(frame);
                 setSelectedFrame(frame);
               }}></img>

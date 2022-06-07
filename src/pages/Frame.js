@@ -29,33 +29,27 @@ const Frame = (props) => {
   const [frameSelected,setFrameSelected] = useState(frameURI.current[0]);
 
   return (
-    <div className="bg-dark text-white" style={{height:'100vh'}}>
-      <div className="container" style={{height:'100vh', alignItems: 'center'}}>
-        <div className="row">
-            <h1 style={{textAlign : 'center', fontSize:'5vh', marginTop:'5vh'}}>Choose Your Favourite Frame</h1>
-        </div>
-        <div className="row" style={{height:'60vh'}}>
-            <CarouselFrame
-              frameURI={frameURI.current}
-              pickFrame = {(choosen)=>{
-                setFrameSelected(choosen);
-              }}
-              whichSelected= {frameSelected}
-            />
-        </div>
-        <div style={{textAlign : 'center'}}>
-            <Link 
-              to="/capture"
-              state={{
-                  txID : state.txID.toString(),
-                  frameID : frameSelected.frameName,
-                  numberSnap : frameSelected.snap
-              }}
-            >
-              <img src={"../../static/images/camera-icon.png"} style={{height:'10vh', marginTop:'5vh'}} alt="camera-icon"/>
-            </Link>
-            <p>Start</p>
-        </div>
+    <div className="bg-dark text-white text-center" style={{height:'100vh',overflowY:'hidden'}}>
+      <h1 className="headerText">Choose Your Favourite Frame</h1>
+      <CarouselFrame
+        frameURI={frameURI.current}
+        pickFrame = {(choosen)=>{
+          setFrameSelected(choosen);
+        }}
+        whichSelected= {frameSelected}
+      />
+      <div className="text-center">
+        <Link 
+          to="/capture"
+          state={{
+              txID : state.txID.toString(),
+              frameID : frameSelected.frameName,
+              numberSnap : frameSelected.snap
+          }}
+        >
+          <img src={"../../static/images/camera-icon.png"} style={{height:'8vh', marginTop:'20px'}} alt="camera-icon"/>
+        </Link>
+        <h2 style={{fontSize:'4vh'}} >Start</h2>
       </div>
     </div>
   );
