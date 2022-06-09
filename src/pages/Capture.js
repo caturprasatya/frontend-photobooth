@@ -7,7 +7,7 @@ const Capture = (props) => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const TIMER = 3;
+  const TIMER = 5;
   const audio = new Audio('../../static/audio/camera-shutter-click-08.mp3');
 
   const [imageBlob, setImageBlob] = useState([]);

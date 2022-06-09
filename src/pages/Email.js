@@ -122,7 +122,7 @@ const Email = (props) => {
             type="text" 
             name="recipient_name" 
             onChange={handleNameChange} 
-            placeholder="Nama Lengkap" 
+            placeholder="Your Name" 
             value={recipient_name}
           />
         </div>

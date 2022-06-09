@@ -133,9 +133,11 @@ const LoadingScreen = () => {
         response["effect"] = data.effect;
         response["isEmailSuccess"] = isEmailSuccess;
         response["email"] = data.email;
-        response["recipient_name"] = data.recipient_name;     
+        response["recipient_name"] = data.recipient_name;
+        console.log(response);     
         if (response.status_code != 200) {
           setEmailFailed(true);
+          isEmailSuccess=false;
         }
         setTimeout(() => {
           navigate('/email', {
