@@ -1,33 +1,44 @@
-import React, { useState,useRef } from "react";
+import React, { useState,useRef, useEffect } from "react";
 import { Link, useLocation } from 'react-router-dom';
 
 const GifPreview = (props) => {
     const { state } = useLocation();
 
-    const [compiledImage,setCompiledImage] = useState();
+    // const [compiledImage,setCompiledImage] = useState();
+    // const [gif,setGif] = useState();
     const [gif,setGif] = useState();
-    const isGif = useRef(false);
+    const [compiledImage,setCompiledImage] = useState();
+    const [isGif,setIsGif] = useState(false);
 
-    if(state){
-      setCompiledImage(state.compiled);
-      setGif(state.GIF);
-    }
+    useEffect(()=>{
+      if(state){
+        setCompiledImage(state.compiled);
+        setGif(state.GIF);
+      }
+      },[]);
+    // console.log(compiledImage.current);
+    // console.log(gif.current);
 
     const gifOrImage = () => {
-      if(isGif.current){
-        isGif.current = false;
+      console.log(isGif);
+      if(isGif){
+        setIsGif(false);
       }else{
-        isGif.current = true;
+        setIsGif(true);
       }
     }
 
     return(
-        <div className="container-fluid" style={{height:'100vh',overflowY: 'hidden', overflowX:'hidden'}}>
-            <h1 className="headerText">Yeay, you've got that snapped!</h1>
-            <img src={isGif.current ? gif : compiledImage} alt="you are snapped"/>
+        <div className="text-center container-fluid bg-dark" style={{height:'100vh',overflowY: 'hidden', overflowX:'hidden'}}>
+            <h1 className="text-white headerText">Yeay, you've got that snapped!</h1>
+            {isGif ? (
+                <img className="img-thumbnail" style={{height:'80vh'}} src={gif} alt="you are gifted"/>
+            ) : (
+                <img className="img-thumbnail" style={{height:'80vh'}} src={compiledImage} alt="you are snapped"/>
+            )}
             <div className="nextButton">
-              <button type="button" className="btn btn-light btn-lg w-100 mb-2" onClick={()=>gifOrImage} style={{display:'none'}}>
-                Retake
+              <button type="button" style={{width:'150px',display:'block'}} className="btn btn-light btn-lg mb-2" onClick={gifOrImage}>
+                {isGif ? "Photos" : "GIF"}
               </button>
               <Link
                 to="/email"
@@ -35,8 +46,9 @@ const GifPreview = (props) => {
                     txID : state.txID,
                     effect : state.effect
                 }}
+                style={{textDecoration:'none'}}
               >
-                <button type="button" className="btn btn-success btn-lg w-100 mt-2">
+                <button type="button" style={{width:'150px',display:'block',color:'white'}} className="btn btn-success btn-lg mt-2">
                   {"Next >>"}
                 </button>
               </Link>
