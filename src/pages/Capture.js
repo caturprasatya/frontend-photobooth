@@ -8,22 +8,22 @@ const Capture = (props) => {
   const navigate = useNavigate();
 
   const TIMER = 3;
-  var audio = new Audio('../../static/audio/camera-shutter-click-08.mp3');
+  const audio = new Audio('../../static/audio/camera-shutter-click-08.mp3');
 
   const [imageBlob, setImageBlob] = useState([]);
   const [countdown,setCountdown] = useState(TIMER);
   const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay countdown active
-  const [isNext, setIsNext] = useState(false);   //Check if next button available
+  const [isNext, setIsNext] = useState(true);   //Check if next button available
   const [isVideo,setIsVideo] = useState('block');
   const [isImage, setIsImage] = useState('none');
   const [recentSnap, setRecentSnap] = useState();
-  const [snapCounter,setSnapCounter] = useState(0);
   
   const isRetake = useRef('none');
-  const numberSnap = useRef(8);
+  const numberSnap = useRef(4);
   const isFlashOn = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const scrollRef = useRef(null);
 
   if(state){
     numberSnap.current = state.numberSnap;
@@ -32,6 +32,10 @@ const Capture = (props) => {
   useEffect(() => {
     getVideo();
   }, [videoRef]);
+
+  useEffect(() => {
+    scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+  });
 
   const flashOn = () => {
     isFlashOn.current.classList.add('on');
@@ -47,6 +51,7 @@ const Capture = (props) => {
       .then(stream => {
         let video = videoRef.current;
         video.srcObject = stream;
+        setIsNext(false);
       })
       .catch(err => {
         console.error("error:", err);
@@ -55,9 +60,6 @@ const Capture = (props) => {
 
   const takeSnap = (mode) => {
     if(mode==='retake'){
-      let m = snapCounter;
-      m--;
-      setSnapCounter(m);
       if(imageBlob.length===1){
         setImageBlob([]);
       }else{
@@ -95,7 +97,6 @@ const Capture = (props) => {
           },1000)
         }).then(
         () => {
-          flashOn();
           canvas.getContext('2d').drawImage(video, 0, 0);
           canvas.toBlob(blob=>{
             setRecentSnap(blob);
@@ -103,12 +104,8 @@ const Capture = (props) => {
               return [...prevImageBlob, blob]
             })
           },'image/png');
+          flashOn();
           
-          console.log(snapCounter);
-          let n = snapCounter;
-          n++;
-          // snapCounter.current++;
-          setSnapCounter(n);
           isRetake.current.style.display = 'block';
           setIsNext(false);
           setIsVideo('none');
@@ -140,22 +137,21 @@ const Capture = (props) => {
         />
     );
   }
-  
+
   return (
-    <div className="container-fluid" style={{height:'100vh',overflowY: 'hidden', overflowX:'hidden'}}>
+    <div className="container-fluid" style={{height:'100vh',overflowY:'hidden',overflowX:'hidden'}}>
       <div id="flash" ref={isFlashOn}/> 
       <div className="row">
         <div className="col-3 bg-dark text-center px-0" style={{height:'100vh'}}>
           <canvas ref={canvasRef} style={{display:"none"}}/>
           <Scrollbars renderThumbHorizontal={renderThumb} renderThumbVertical={renderThumb} >
-            <div>
+              <div ref={scrollRef}/>
               {imageBlob.map((shots,index) => {
               return (
-                <img key={index} src={URL.createObjectURL(shots)} className={`col-10 mb-4 mt-4 ${snapCounter===recentSnap ? "greenBorder" : ""}`}
+                <img key={index} src={URL.createObjectURL(shots)} className={`col-10 mb-4 mt-4 ${imageBlob.length===index+1 ? "greenBorder" : ""}`}
                   alt={index}></img>
                 );
-              })}
-            </div>
+              }).reverse()}
           </Scrollbars>
         </div>
         <div className="col text-center fill" style={{backgroundColor:'#000000'}}>

@@ -14,7 +14,7 @@ const Frame = (props) => {
       const a = {};
       a.frameName = element.match(regex)[0][6];
       a.URI = element;
-      a.snap = 8;
+      a.snap = 4;
       frameURI.current.push(a);
     });
     state.frame_list.six_frame_list.forEach(element => {
