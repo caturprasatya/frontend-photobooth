@@ -18,13 +18,19 @@ const LoadingScreen = () => {
 
   // verify transaction helper variables
   let timeoutVerify = 1;
-  let TIMEOUT_LIMIT = 180 / 5;
+  let TIMEOUT_LIMIT = 60 / 5;
+
+  // email timeout helper variables
+  let timeoutEmail = 1;
+  let TIMEOUT_EMAIL_LIMIT = 20 / 5;
 
   const [isTimeout, setTimeoutVerify] = React.useState(false);
   const [isEmailFailed, setEmailFailed] = React.useState(false);
   const [isGenerateImageFailed, setGenerateImageFailed] = React.useState(false);
-  const { state } = useLocation();
+
   // state = action, tambahan
+  const { state } = useLocation();
+
   const navigate = useNavigate();
   //Check concurrent render on Hooks
   const isMounted = useRef();
@@ -125,29 +131,55 @@ const LoadingScreen = () => {
   const sendEmail = (data) => {
     let isEmailSuccess = false
     console.log(data);
-    PhotoService.sendEmail(data.txID, data.effect, data.email, data.recipient_name)
-    .then(
-      (response) => {
-        isEmailSuccess = true
-        response["txID"] = data.txID;
-        response["effect"] = data.effect;
-        response["isEmailSuccess"] = isEmailSuccess;
-        response["email"] = data.email;
-        response["recipient_name"] = data.recipient_name;
-        console.log(response);     
-        if (response.status_code != 200) {
-          setEmailFailed(true);
-          isEmailSuccess=false;
+    if (timeoutEmail < TIMEOUT_EMAIL_LIMIT) {
+      PhotoService.sendEmail(data.txID, data.effect, data.email, data.recipient_name)
+      .then(
+        (response) => {     
+          if (response.status_code == 200) {
+            isEmailSuccess = true
+            response["txID"] = data.txID;
+            response["effect"] = data.effect;
+            response["isEmailSuccess"] = isEmailSuccess;
+            response["email"] = data.email;
+            response["recipient_name"] = data.recipient_name;
+            setTimeout(() => {
+              navigate('/email', {
+                state: response
+              })
+            }, 3000)
+          } else {
+            isEmailSuccess = false
+            response["txID"] = data.txID;
+            response["effect"] = data.effect;
+            response["isEmailSuccess"] = isEmailSuccess;
+            response["email"] = data.email;
+            response["recipient_name"] = data.recipient_name;
+            setEmailFailed(true);
+            setTimeout(() => {
+              navigate('/email', {
+                state: response
+              })
+            }, 3000)
+          }
         }
-        setTimeout(() => {
-          navigate('/email', {
-            state: response
-          })
-        }, 3000)
-      }
-    ).catch(
-      (err) => console.log(err)
-    )
+      ).catch(
+        (err) => {
+          let response = {};
+          isEmailSuccess = false
+          response["txID"] = data.txID;
+          response["effect"] = data.effect;
+          response["isEmailSuccess"] = isEmailSuccess;
+          response["email"] = data.email;
+          response["recipient_name"] = data.recipient_name;
+          setEmailFailed(true);
+          setTimeout(() => {
+            navigate('/email', {
+              state: response
+            })
+          }, 3000)
+        }
+      )
+    }
   }
 
   const printImage = (data) => {
