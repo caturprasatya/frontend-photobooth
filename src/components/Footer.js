@@ -9,13 +9,13 @@ const Footer = () => {
     <Box>
       <div className="footer-container">
           <div className="column">
-            <h5 className="p-left">reach us at:</h5>
+            <h4 className="p-left">reach us at:</h4>
           </div>
           <div className="column">
-            <h5 className="p-center"><i className="fa fa-brands fa-instagram"></i> @its.snaplab</h5>
+            <h4 className="p-center"><i className="fa fa-brands fa-instagram"></i> @its.snaplab</h4>
           </div>
           <div className="column">
-            <h5 className="p-right"><i className="fa fa-light fa-envelope"></i> its.snaplab@gmail.com</h5>
+            <h4 className="p-right"><i className="fa fa-light fa-envelope"></i> its.snaplab@gmail.com</h4>
           </div>
         </div>
     </Box>
