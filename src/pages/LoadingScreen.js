@@ -26,7 +26,7 @@ const LoadingScreen = () => {
 
   const [isTimeout, setTimeoutVerify] = React.useState(false);
   const [isEmailFailed, setEmailFailed] = React.useState(false);
-  const [isGenerateImageFailed, setGenerateImageFailed] = React.useState(false);
+  const [isPrintFailed, setPrintFailed] = React.useState(false);
 
   // state = action, tambahan
   const { state } = useLocation();
@@ -130,7 +130,6 @@ const LoadingScreen = () => {
 
   const sendEmail = (data) => {
     let isEmailSuccess = false
-    console.log(data);
     if (timeoutEmail < TIMEOUT_EMAIL_LIMIT) {
       PhotoService.sendEmail(data.txID, data.effect, data.email, data.recipient_name)
       .then(
@@ -184,7 +183,6 @@ const LoadingScreen = () => {
 
   const printImage = (data) => {
     let isPrintSuccess = false;
-    console.log(data);
     PhotoService.printImage(data.txID, data.effect)
     .then(
       (response) => {
@@ -198,7 +196,21 @@ const LoadingScreen = () => {
         })
       }
     ).catch(
-      (err) => console.log(err)
+      (err) => {
+        let response = {};
+        isPrintSuccess = false
+        response["txID"] = data.txID;
+        response["effect"] = data.effect;
+        response["isEmailSuccess"] = isEmailSuccess;
+        response["email"] = data.email;
+        response["recipient_name"] = data.recipient_name;
+        setPrintFailed(true);
+        setTimeout(() => {
+          navigate('/email', {
+            state: response
+          })
+        }, 3000)
+      }
     )
   }
 
@@ -282,6 +294,16 @@ const LoadingScreen = () => {
         {isEmailFailed ? (
           <>
             <h4 className="fw-bold text-center">Problem Sending Email</h4>
+            <h3 className="fw-bold text-center">Sending Back to Snap Form!</h3>
+          </>
+        ) : (
+          <>
+            <h4 className="fw-bold text-center">Please Wait</h4>
+          </>
+        )}
+        {isPrintFailed ? (
+          <>
+            <h4 className="fw-bold text-center">Problem Printing Photo!</h4>
             <h3 className="fw-bold text-center">Sending Back to Snap Form!</h3>
           </>
         ) : (
