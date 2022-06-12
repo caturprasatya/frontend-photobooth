@@ -201,7 +201,7 @@ const LoadingScreen = () => {
         isPrintSuccess = false
         response["txID"] = data.txID;
         response["effect"] = data.effect;
-        response["isEmailSuccess"] = isEmailSuccess;
+        response["isPrintSuccess"] = isPrintSuccess;
         response["email"] = data.email;
         response["recipient_name"] = data.recipient_name;
         setPrintFailed(true);
