@@ -27,6 +27,7 @@ const LoadingScreen = () => {
   const [isTimeout, setTimeoutVerify] = React.useState(false);
   const [isEmailFailed, setEmailFailed] = React.useState(false);
   const [isPrintFailed, setPrintFailed] = React.useState(false);
+  const [renderPleaseWait, setRenderPleaseWait] = React.useState(true);
 
   // state = action, tambahan
   const { state } = useLocation();
@@ -71,6 +72,7 @@ const LoadingScreen = () => {
         (err) => console.log(err)
       )
     } else {
+      setRenderPleaseWait(false);
       setTimeoutVerify(true);
       setTimeout(() => {
         navigate('/')
@@ -147,6 +149,7 @@ const LoadingScreen = () => {
               })
             }, 3000)
           } else {
+            setRenderPleaseWait(false);
             isEmailSuccess = false
             response["txID"] = data.txID;
             response["effect"] = data.effect;
@@ -163,6 +166,7 @@ const LoadingScreen = () => {
         }
       ).catch(
         (err) => {
+          setRenderPleaseWait(false);
           let response = {};
           isEmailSuccess = false
           response["txID"] = data.txID;
@@ -197,6 +201,7 @@ const LoadingScreen = () => {
       }
     ).catch(
       (err) => {
+        setRenderPleaseWait(false);
         let response = {};
         isPrintSuccess = false
         response["txID"] = data.txID;
@@ -278,6 +283,14 @@ const LoadingScreen = () => {
         justifyContent: 'center',
       }}
       >
+        {renderPleaseWait ? (
+          <>
+            <h4 className="fw-bold text-center">Please Wait</h4>
+          </>
+        ) : (
+          <>
+          </>
+        )}
         {isTimeout ? (
           <>
             <h4 className="fw-bold text-center">Problem verifying your transaction</h4>
@@ -298,7 +311,6 @@ const LoadingScreen = () => {
           </>
         ) : (
           <>
-            <h4 className="fw-bold text-center">Please Wait</h4>
           </>
         )}
         {isPrintFailed ? (
@@ -308,7 +320,6 @@ const LoadingScreen = () => {
           </>
         ) : (
           <>
-            <h4 className="fw-bold text-center">Please Wait</h4>
           </>
         )}
         <div className="text-center py-5">
