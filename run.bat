@@ -1,5 +1,6 @@
 cd "C:\Users\Isama\Documents\Isa\Kerja\frontend-photobooth"
+call npm install --force
+call npm install -g serve --force
 call npm run build --force
-call npm install -g serve
 serve -s build
 pause
