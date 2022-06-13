@@ -57,8 +57,8 @@ const CarouselFrame = (props) => {
         >
         {props.frameURI.map((frame,index) => {
           return (
-            <div key={index}>
-              <img src={frame.URI} style={{height:'70vh'}} className={`img-thumbnail ${selectedFrame.frameName===frame.frameName ? "greenBorder" : ""}`} alt={frame.frameName} onClick={(e)=>{
+            <div key={index} style={{margin:'0 10px 0 10px'}}>
+              <img src={frame.URI} style={{height:'65vh'}} className={`img-thumbnail ${selectedFrame.frameName===frame.frameName ? "greenBorder" : ""}`} alt={frame.frameName} onClick={(e)=>{
                 props.pickFrame(frame);
                 setSelectedFrame(frame);
               }}></img>

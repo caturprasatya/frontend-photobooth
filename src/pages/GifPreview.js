@@ -4,8 +4,6 @@ import { Link, useLocation } from 'react-router-dom';
 const GifPreview = (props) => {
     const { state } = useLocation();
 
-    // const [compiledImage,setCompiledImage] = useState();
-    // const [gif,setGif] = useState();
     const [gif,setGif] = useState();
     const [compiledImage,setCompiledImage] = useState();
     const [isGif,setIsGif] = useState(false);
@@ -16,8 +14,6 @@ const GifPreview = (props) => {
         setGif(state.GIF);
       }
       },[]);
-    // console.log(compiledImage.current);
-    // console.log(gif.current);
 
     const gifOrImage = () => {
       console.log(isGif);

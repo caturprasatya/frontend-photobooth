@@ -14,6 +14,7 @@ import FinalPreview from "./pages/FinalPreview";
 import GifPreview from "./pages/GifPreview";
 
 function App() {
+  window.addEventListener("contextmenu", e => e.preventDefault());
   return (
     <Router>
     <Routes>
