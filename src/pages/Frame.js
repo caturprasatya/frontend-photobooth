@@ -1,4 +1,4 @@
-import React, { useRef, useState} from "react";
+import React, { useRef, useState, useEffect} from "react";
 import { Link, useLocation } from 'react-router-dom';
 import CarouselFrame from "../components/CarouselFrame";
 
@@ -24,8 +24,15 @@ const Frame = (props) => {
       a.snap = 3;
       frameURI.current.push(a);
     });
+    state.frame_list.six_frame_six_takes_list.forEach(element => {
+      const a = {};
+      a.frameName = element.match(regex)[0][6];
+      a.URI = element;
+      a.snap = 6;
+      frameURI.current.push(a);
+    });
   }
-
+ 
   const [frameSelected,setFrameSelected] = useState(frameURI.current[0]);
 
   return (

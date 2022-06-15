@@ -7,21 +7,21 @@ const Capture = (props) => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const TIMER = 5;
+  const TIMER = 5;  //Countdown time
   const audio = new Audio('../../static/audio/camera-shutter-click-08.mp3');
 
-  const [imageBlob, setImageBlob] = useState([]);
-  const [countdown,setCountdown] = useState(TIMER);
+  const [imageBlob, setImageBlob] = useState([]); //List of captured image
+  const [countdown,setCountdown] = useState(TIMER); //Countdown
   const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay countdown active
   const [isNext, setIsNext] = useState(true);   //Check if next button available
-  const [isVideo,setIsVideo] = useState('block');
-  const [isImage, setIsImage] = useState('none');
-  const [recentSnap, setRecentSnap] = useState();
+  const [isVideo,setIsVideo] = useState('block'); //Check if camera is on
+  const [isImage, setIsImage] = useState('none'); //Capture mode or Image preview
+  const [recentSnap, setRecentSnap] = useState(); //Recent capture
   
-  const isRetake = useRef('none');
-  const numberSnap = useRef(4);
-  const isFlashOn = useRef(null);
-  const videoRef = useRef(null);
+  const isRetake = useRef('none');  //Retake button active or not
+  const numberSnap = useRef(4); //Capture number
+  const isFlashOn = useRef(null); //Flash effect
+  const videoRef = useRef(null);  
   const canvasRef = useRef(null);
   const scrollRef = useRef(null);
 
