@@ -24,9 +24,46 @@ const Capture = (props) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const scrollRef = useRef(null);
+  
+  const sizePict = [
+    {
+      // eight frame
+      width: 992,
+      height: 781
+    },
+    {
+      // eight frame ellipse
+      width: 1022,
+      height: 716
+    },
+    {
+      // six frame
+      width: 993,
+      height: 945
+    }
+  ]
+
+  const listOfEllipseFrame = [8, 9, 10];
+
+  let objSize = {
+    height: 992,
+    width: 781
+  };
 
   if(state){
     numberSnap.current = state.numberSnap;
+    if (listOfEllipseFrame.includes(state.frameID)) {
+      objSize.height = sizePict[1].height;
+      objSize.width = sizePict[1].width;
+    } else {
+      if (numberSnap.current == 4) {
+        objSize.height = sizePict[0].height;
+        objSize.width = sizePict[0].width;
+      } else {
+        objSize.height = sizePict[2].height;
+        objSize.width = sizePict[2].width;
+      }
+    }
   }
 
   useEffect(() => {
@@ -76,8 +113,8 @@ const Capture = (props) => {
 
       let video = videoRef.current;
       let canvas = canvasRef.current;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      canvas.width = objSize.width;
+      canvas.height = objSize.height;
       isRetake.current.style.display = 'none';
 
       new Promise(myResolve=>{
