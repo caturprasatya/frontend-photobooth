@@ -6,27 +6,27 @@ const Frame = (props) => {
   const {state} = useLocation();
 
   const frameURI = useRef([])
-  const regex = /frame-\d/
+  const regex = /\d+/
 
   if(state){
     frameURI.current = [];
     state.frame_list.eight_frame_list.forEach(element => {
       const a = {};
-      a.frameName = element.match(regex)[0][6];
+      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex);
       a.URI = element;
       a.snap = 4;
       frameURI.current.push(a);
     });
     state.frame_list.six_frame_list.forEach(element => {
       const a = {};
-      a.frameName = element.match(regex)[0][6];
+      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex);
       a.URI = element;
       a.snap = 3;
       frameURI.current.push(a);
     });
     state.frame_list.six_frame_six_takes_list.forEach(element => {
       const a = {};
-      a.frameName = element.match(regex)[0][6];
+      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex);
       a.URI = element;
       a.snap = 6;
       frameURI.current.push(a);
