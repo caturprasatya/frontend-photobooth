@@ -9,7 +9,7 @@ import PhotoService from '../services/PhotoService';
 
 const LoadingScreen = () => {
   // payment variables
-  let snapFee = 30000;
+  let snapFee = 1;
   // 1 -> GoPay, 0 -> QRIS
   let paymentType = 1;  
 

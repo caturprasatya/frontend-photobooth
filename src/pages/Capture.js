@@ -88,6 +88,9 @@ const Capture = (props) => {
       .then(stream => {
         let video = videoRef.current;
         video.srcObject = stream;
+        video.style.cssText = "-moz-transform: scale(-1, 1); \
+        -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
+        transform: scale(-1, 1); filter: FlipH;";
         setIsNext(false);
       })
       .catch(err => {
@@ -113,8 +116,8 @@ const Capture = (props) => {
 
       let video = videoRef.current;
       let canvas = canvasRef.current;
-      canvas.width = objSize.width;
-      canvas.height = objSize.height;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
       isRetake.current.style.display = 'none';
 
       new Promise(myResolve=>{
@@ -134,7 +137,9 @@ const Capture = (props) => {
           },1000)
         }).then(
         () => {
-          canvas.getContext('2d').drawImage(video, 0, 0);
+          var ctx = canvas.getContext('2d');
+          ctx.scale(-1,1);
+          ctx.drawImage(video,-video.videoWidth,0);
           canvas.toBlob(blob=>{
             setRecentSnap(blob);
             setImageBlob(prevImageBlob => {
@@ -196,14 +201,14 @@ const Capture = (props) => {
             <div className="overlayText">{countdown}</div>
           </div> 
           <div>
-            <video width="100%" ref={videoRef} className="img-thumbnail" style={{display:isVideo}} autoPlay/>
-            <img src={imageBlob.length>0 ? URL.createObjectURL(recentSnap):""} style={{width:'100%', display:isImage}} className="img-thumbnail" alt="recent snap"/>
+            <video width={objSize.width} height={objSize.height} ref={videoRef} className="img-thumbnail" style={{display:isVideo}} autoPlay/>
+            <img src={imageBlob.length>0 ? URL.createObjectURL(recentSnap):""} style={{width:objSize.width, height:objSize.height, display:isImage}} className="img-thumbnail" alt="recent snap"/>
             <div className="nextButton">
-              <button ref={isRetake} type="button" className="btn btn-light btn-lg w-100 mb-2" onClick={()=>takeSnap('retake')} style={{display:'none'}}>
-                Retake
+              <button ref={isRetake} type="button" className="btn btn-light btn-lg mb-4" onClick={()=>takeSnap('retake')} style={{display:'none'}}>
+                <h2>Retake</h2>
               </button>
-              <button type="button" className="btn btn-dark btn-lg w-100 mt-2" disabled={isNext} onClick={()=>takeSnap('take')}>
-                {"Next >>"}
+              <button type="button" className="btn btn-dark btn-lg mt-4" disabled={isNext} onClick={()=>takeSnap('take')}>
+                {<h2>Next >></h2>}
               </button>
             </div>
           </div>

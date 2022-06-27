@@ -61,10 +61,12 @@ const FinalPreview = (props) => {
                 compiled : effectSelected.compiled,
                 GIF : effectSelected.GIF
             }}
-          >
-            <button type="button" className="btn btn-success btn-lg nextButton">
-              Finish
-            </button>
+          > 
+            <div className="nextButton">
+              <button type="button" className="btn btn-success btn-lg">
+                <h2>Finish</h2>
+              </button>
+            </div>
           </Link>  
         </div>
       </div>
