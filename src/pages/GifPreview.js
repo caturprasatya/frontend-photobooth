@@ -33,8 +33,8 @@ const GifPreview = (props) => {
                 <img className="img-thumbnail" style={{height:'80vh'}} src={compiledImage} alt="you are snapped"/>
             )}
             <div className="nextButton">
-              <button type="button" style={{width:'150px',display:'block'}} className="btn btn-light btn-lg mb-4" onClick={gifOrImage}>
-                {isGif ? "Photos" : "GIF"}
+              <button type="button" style={{width:'150px',display:'block'}} className="btn btn-light btn-lg" onClick={gifOrImage}>
+                <span>{isGif ? "Photos" : "GIF"}</span>
               </button>
               <Link
                 to="/email"
@@ -44,8 +44,8 @@ const GifPreview = (props) => {
                 }}
                 style={{textDecoration:'none'}}
               >
-                <button type="button" style={{width:'150px',display:'block',color:'white'}} className="btn btn-success btn-lg mt-4">
-                  {"Next >>"}
+                <button type="button" style={{width:'150px',display:'block',color:'white'}} className="btn btn-success btn-lg">
+                  <span>{"Next >>"}</span>
                 </button>
               </Link>
             </div>

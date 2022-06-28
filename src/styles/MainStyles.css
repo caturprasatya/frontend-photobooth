@@ -55,7 +55,7 @@ width: 100%;
 
 .nextButton{
     position: absolute;
-    right: 4%;
+    right: 3%;
     bottom: 4%;
 }
 
@@ -82,4 +82,10 @@ width: 100%;
 .nextButton button{
     width: 150px;
     height: 100px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.nextButton span{
+    font-size: 1.7em;
 }

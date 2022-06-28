@@ -12,21 +12,21 @@ const Frame = (props) => {
     frameURI.current = [];
     state.frame_list.eight_frame_list.forEach(element => {
       const a = {};
-      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex);
+      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex)[0];
       a.URI = element;
       a.snap = 4;
       frameURI.current.push(a);
     });
     state.frame_list.six_frame_list.forEach(element => {
       const a = {};
-      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex);
+      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex)[0];
       a.URI = element;
       a.snap = 3;
       frameURI.current.push(a);
     });
     state.frame_list.six_frame_six_takes_list.forEach(element => {
       const a = {};
-      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex);
+      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex)[0];
       a.URI = element;
       a.snap = 6;
       frameURI.current.push(a);

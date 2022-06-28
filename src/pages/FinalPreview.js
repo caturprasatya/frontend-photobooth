@@ -64,7 +64,7 @@ const FinalPreview = (props) => {
           > 
             <div className="nextButton">
               <button type="button" className="btn btn-success btn-lg">
-                <h2>Finish</h2>
+                <span>Finish</span>
               </button>
             </div>
           </Link>  
