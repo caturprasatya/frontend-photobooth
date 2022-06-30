@@ -25,8 +25,9 @@ const Capture = (props) => {
   const canvasRef = useRef(null);
   const scrollRef = useRef(null);
 
-  const liveCamMirror = "-moz-transform: scale(-1, 1); -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); transform: scale(-1, 1); filter: FlipH;"
-  
+  const[videoNativeWidth,setVideoNativeWidth] = useState(0);
+  const[videoNativeHeight,setVideoNativeHeight] = useState(0);
+
   //------------------------------------Custom snap size----------------------------------//
   const sizePict = [
     {
@@ -41,10 +42,10 @@ const Capture = (props) => {
     },
     {
       // six frame
-      // width: 993,
-      // height: 945
-      width: 320,
-      height: 240
+      width: 993,
+      height: 945
+      // width: 240,
+      // height: 240
     }
   ]
 
@@ -61,25 +62,32 @@ const Capture = (props) => {
 
   if(state){
     numberSnap.current = state.numberSnap;
-    console.log(state.frameID);
+    // console.log(state.frameID);
     if (listOfEllipseFrame.includes(state.frameID)) {
       objSize.height = sizePict[1].height;
       objSize.width = sizePict[1].width;
-      // setObjSize({height: sizePict[1].height,width:sizePict[1].width})
     } else {
       if (numberSnap.current === 4) {
         objSize.height = sizePict[0].height;
         objSize.width = sizePict[0].width;
-        // setObjSize({height: sizePict[0].height,width:sizePict[0].width})
       } else {
         objSize.height = sizePict[2].height;
         objSize.width = sizePict[2].width;
-        // setObjSize({height: sizePict[2].height,width:sizePict[2].width})
       }
     }
   }
-  console.log(state);
-  console.log(objSize);
+
+  const videoStyle = {
+    MozTransform: "scale(-1, 1)",
+    WebkitTransform: "scale(-1, 1)",
+    OTransform: "scale(-1, 1)",
+    transform: "scale(-1, 1)",
+    filter: "FlipH",
+    marginLeft: -1*parseInt((videoNativeWidth-objSize.width)/2),
+    marginTop:  -1*parseInt((videoNativeHeight-objSize.height)/2),
+    // marginLeft: "-160px",
+    // marginTop:  "-120px",
+  };
 
   useEffect(() => {
     getVideo();
@@ -88,6 +96,19 @@ const Capture = (props) => {
   useEffect(() => {
     scrollRef.current.scrollIntoView({ behavior: 'smooth' });
   });
+
+  useEffect(()=>{
+    videoRef.current.addEventListener('loadedmetadata', function(e){
+      // Print the native height of the video
+      console.log(videoRef.current.videoHeight);
+  
+      // Print the native width of the video
+      console.log(videoRef.current.videoWidth);
+
+      setVideoNativeWidth(videoRef.current.videoWidth);
+      setVideoNativeHeight(videoRef.current.videoHeight);
+    });
+  },[])
 
   const flashOn = () => {
     isFlashOn.current.classList.add('on');
@@ -103,7 +124,6 @@ const Capture = (props) => {
       .then(stream => {
         let video = videoRef.current;
         video.srcObject = stream;
-        video.style.cssText = liveCamMirror;
         setIsNext(false);
       })
       .catch(err => {
@@ -112,6 +132,8 @@ const Capture = (props) => {
   };
 
   const takeSnap = (mode) => {
+    console.log(mode);
+    console.log(imageBlob.length);
     if(mode==='retake'){
       if(imageBlob.length===1){
         setImageBlob([]);
@@ -129,10 +151,8 @@ const Capture = (props) => {
 
       let video = videoRef.current;
       let canvas = canvasRef.current;
-      // canvas.width = objSize.width;
-      // canvas.height = objSize.height;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      canvas.width = objSize.width;
+      canvas.height = objSize.height;
       isRetake.current.style.display = 'none';
 
       new Promise(myResolve=>{
@@ -153,16 +173,10 @@ const Capture = (props) => {
         }).then(
         () => {
           var ctx = canvas.getContext('2d');
-          // ctx.setTransform(
-          //   -1, 0, // set the direction of x axis
-          //   0, 1,   // set the direction of y axis
-          //   0, // set the x origin
-          //   0   // set the y origin
-          // );
-          // ctx.translate(video.videoWidth, 0);
           ctx.scale(-1, 1); 
-          // ctx.drawImage(video,parseInt((video.videoWidth-objSize.width)/2),parseInt((video.videoHeight-objSize.width)/2),objSize.width-parseInt((video.videoWidth-objSize.width)/2),objSize.height-parseInt((video.videoHeight-objSize.height)/2),0,0,objSize.width,objSize.height);
-          ctx.drawImage(video, -video.videoWidth, 0);
+          ctx.drawImage(video,                                                                                                                    //drawing source
+                        parseInt((video.videoWidth-objSize.width)/2),parseInt((video.videoHeight-objSize.height)/2),objSize.width,objSize.height,  //source coordinates and sizes
+                        0,0,objSize.width*-1,objSize.height);                                                                                     //destination coordinates and sizes
           canvas.toBlob(blob=>{
             setRecentSnap(blob);
             setImageBlob(prevImageBlob => {
@@ -219,13 +233,21 @@ const Capture = (props) => {
               }).reverse()}
           </Scrollbars>
         </div>
-        <div className="col text-center fill" style={{backgroundColor:'#000000'}}>
+        <div className="col fill" style={{backgroundColor:'#000000'}}>
           <div className="styleOverlay" style={{display:isOverlayCountdown}}>
             <div className="overlayText">{countdown}</div>
           </div> 
           <div>
-            <video ref={videoRef} width="100%" className="" style={{display:isVideo}} autoPlay/>
-            <img src={imageBlob.length>0 ? URL.createObjectURL(recentSnap):"img-thumbnail"} style={{width:"100%", display:isImage}} className="img-thumbnail" alt="recent snap"/>
+            <div style={{
+                  width: objSize.width,
+                  height: objSize.height,
+                  overflow:"hidden",
+                  display:isVideo
+                  }}
+            >
+              <video ref={videoRef}  style={videoStyle} autoPlay/>
+            </div>
+            <img src={imageBlob.length>0 ? URL.createObjectURL(recentSnap):""} style={{width:"100%", display:isImage}} className="img-thumbnail" alt="recent snap"/>
             <div className="nextButton">
               <button ref={isRetake} type="button" className="btn btn-light btn-lg" onClick={()=>takeSnap('retake')} style={{display:'none'}}>
                 <span>Retake</span>
