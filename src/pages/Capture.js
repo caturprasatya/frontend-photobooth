@@ -99,11 +99,11 @@ const Capture = (props) => {
 
   useEffect(()=>{
     videoRef.current.addEventListener('loadedmetadata', function(e){
-      // Print the native height of the video
-      console.log(videoRef.current.videoHeight);
+      // // Print the native height of the video
+      // console.log(videoRef.current.videoHeight);
   
-      // Print the native width of the video
-      console.log(videoRef.current.videoWidth);
+      // // Print the native width of the video
+      // console.log(videoRef.current.videoWidth);
 
       setVideoNativeWidth(videoRef.current.videoWidth);
       setVideoNativeHeight(videoRef.current.videoHeight);
