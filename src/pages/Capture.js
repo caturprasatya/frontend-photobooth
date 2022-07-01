@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { frameRatio } from "../assets/frameRatio/frameRatio";
 
 
 const Capture = (props) => {
@@ -29,6 +30,21 @@ const Capture = (props) => {
   const[videoNativeHeight,setVideoNativeHeight] = useState(0);
 
   //------------------------------------Custom snap size----------------------------------//
+
+  const findCropPxl = (cropWidthRatio,cropHeightRatio,videoWidthPxl,videoHeightPxl) => {
+    let x = 0;
+    let y = 0;
+    if((cropWidthRatio/cropHeightRatio)>=(videoWidthPxl/videoHeightPxl)){
+      x = videoWidthPxl;
+      y = x / (cropWidthRatio/cropHeightRatio);
+    } else{
+      y = videoHeightPxl;
+      x = y * (cropWidthRatio/cropHeightRatio);
+    }
+
+    return {width:x,height:y};
+  }
+
   const sizePict = [
     {
       // eight frame
@@ -60,19 +76,30 @@ const Capture = (props) => {
 
   //--------------------------------------------------------------------------------------------------//
 
+
   if(state){
     numberSnap.current = state.numberSnap;
     // console.log(state.frameID);
-    if (listOfEllipseFrame.includes(state.frameID)) {
-      objSize.height = sizePict[1].height;
-      objSize.width = sizePict[1].width;
+    // if (listOfEllipseFrame.includes(state.frameID)) {
+    //   objSize.height = sizePict[1].height;
+    //   objSize.width = sizePict[1].width;
+    // } else {
+    //   if (numberSnap.current === 4) {
+    //     objSize.height = sizePict[0].height;
+    //     objSize.width = sizePict[0].width;
+    //   } else {
+    //     objSize.height = sizePict[2].height;
+    //     objSize.width = sizePict[2].width;
+    //   }
+    // }
+
+    if (listOfEllipseFrame.includes(state.frameID)){
+      objSize = findCropPxl(frameRatio.ellipseFrame.width,frameRatio.ellipseFrame.height,videoNativeWidth,videoNativeHeight);
     } else {
-      if (numberSnap.current === 4) {
-        objSize.height = sizePict[0].height;
-        objSize.width = sizePict[0].width;
-      } else {
-        objSize.height = sizePict[2].height;
-        objSize.width = sizePict[2].width;
+      if(numberSnap.current === 4){
+        objSize = findCropPxl(frameRatio.eightFrame.width,frameRatio.eightFrame.height,videoNativeWidth,videoNativeHeight);
+      } else{
+        objSize = findCropPxl(frameRatio.sixFrame.width,frameRatio.sixFrame.height,videoNativeWidth,videoNativeHeight);
       }
     }
   }
