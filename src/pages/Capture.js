@@ -3,7 +3,6 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { frameRatio } from "../assets/frameRatio/frameRatio";
 
-
 const Capture = (props) => {
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -31,6 +30,7 @@ const Capture = (props) => {
 
   //------------------------------------Custom snap size----------------------------------//
 
+  // Auto configure crop size function
   const findCropPxl = (cropWidthRatio,cropHeightRatio,videoWidthPxl,videoHeightPxl) => {
     let x = 0;
     let y = 0;
@@ -41,58 +41,22 @@ const Capture = (props) => {
       y = videoHeightPxl;
       x = y * (cropWidthRatio/cropHeightRatio);
     }
-
     return {width:x,height:y};
   }
-
-  const sizePict = [
-    {
-      // eight frame
-      width: 992,
-      height: 781,
-    },
-    {
-      // eight frame ellipse
-      width: 1022,
-      height: 716
-    },
-    {
-      // six frame
-      width: 993,
-      height: 945
-      // width: 240,
-      // height: 240
-    }
-  ]
 
   const listOfEllipseFrame = ["8", "9", "10"];   //List of EllipseFrame
 
   let objSize = {    //Default snap size
-    // width: 992,
-    // height: 781,
-    width: 320,
-    height: 240
+    width: 1024,
+    height: 576
   };
 
   //--------------------------------------------------------------------------------------------------//
 
-
   if(state){
     numberSnap.current = state.numberSnap;
-    // console.log(state.frameID);
-    // if (listOfEllipseFrame.includes(state.frameID)) {
-    //   objSize.height = sizePict[1].height;
-    //   objSize.width = sizePict[1].width;
-    // } else {
-    //   if (numberSnap.current === 4) {
-    //     objSize.height = sizePict[0].height;
-    //     objSize.width = sizePict[0].width;
-    //   } else {
-    //     objSize.height = sizePict[2].height;
-    //     objSize.width = sizePict[2].width;
-    //   }
-    // }
 
+    // find best crop size automatically
     if (listOfEllipseFrame.includes(state.frameID)){
       objSize = findCropPxl(frameRatio.ellipseFrame.width,frameRatio.ellipseFrame.height,videoNativeWidth,videoNativeHeight);
     } else {
@@ -104,6 +68,7 @@ const Capture = (props) => {
     }
   }
 
+  //styles for video tag
   const videoStyle = {
     MozTransform: "scale(-1, 1)",
     WebkitTransform: "scale(-1, 1)",
@@ -112,8 +77,6 @@ const Capture = (props) => {
     filter: "FlipH",
     marginLeft: -1*parseInt((videoNativeWidth-objSize.width)/2),
     marginTop:  -1*parseInt((videoNativeHeight-objSize.height)/2),
-    // marginLeft: "-160px",
-    // marginTop:  "-120px",
   };
 
   useEffect(() => {
