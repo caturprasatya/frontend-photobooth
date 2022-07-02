@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { frameRatio } from "../assets/frameRatio/frameRatio";
+import { frameRatio, ellipseFrameList } from "../assets/frameRatio/frameRatio";
 
 const Capture = (props) => {
   const { state } = useLocation();
@@ -44,7 +44,7 @@ const Capture = (props) => {
     return {width:x,height:y};
   }
 
-  const listOfEllipseFrame = ["8", "9", "10"];   //List of EllipseFrame
+  const listOfEllipseFrame = ellipseFrameList.frameID;   //List of EllipseFrame
 
   let objSize = {    //Default snap size
     width: 1024,

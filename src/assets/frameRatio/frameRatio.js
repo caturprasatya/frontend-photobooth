@@ -8,7 +8,11 @@ export const frameRatio = {
         height    : 3.4
     },
     ellipseFrame: {
-        width      : 4.5,
-        height    : 3.2
+        width       : 4.5,
+        height      : 3.2
     }
+};
+
+export const ellipseFrameList = {
+    frameID : ["8", "9", "10"]
 };
