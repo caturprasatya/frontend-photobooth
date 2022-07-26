@@ -46,7 +46,7 @@ function ProgressBarAnimation({ completed }) {
       justifyContent: 'center'
     }}
     > 
-      <div className="ProgressBar d-flex flex-column">
+      <div className="loading d-flex flex-column">
         <text className="text-center bold">Please Wait</text>
         <text className="text-center bold">We are processing your photos!</text>
       </div>
