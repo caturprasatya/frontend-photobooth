@@ -1,9 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Spinner from "react-bootstrap/Spinner";
-import Background from "../assets/images/bg-payment.png";
-import Footer from '../components/Footer';
-import Header from '../components/Header';
 import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
 import ProgressBarAnimation from '../components/ProgressBar';
