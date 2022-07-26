@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react'
 import ProgressBar from "@ramonak/react-progress-bar";
 import '../styles/Loading.css'
 
-function Loading() {
+function Loading({ completed }) {
   // Default variables
   const DEFAULT_INTERVAL = 1000;
   const TIMER_OVER = 85;
+  const randomInt = Math.floor(Math.random() * 6) + 1;
 
-  const [percentanse, setPercentanse] = useState(0)
-  const [finished, setFinished] = useState(false)
+  const [percentanse, setPercentanse] = useState(0);
+  const [finished, setFinished] = useState(false);
   
-  const randomInt = Math.floor(Math.random() * 6) + 1
 
   useEffect(() => {
     let interval;
@@ -23,10 +23,18 @@ function Loading() {
       clearInterval(interval);
     }
 
-    if (finished && percentanse > TIMER_OVER) setFinished(true);
+    if (!finished && percentanse > TIMER_OVER) setFinished(true);
 
     return () => clearInterval(interval);
   }, [finished, percentanse, randomInt]);
+
+  useEffect(() => {
+    if (completed) {
+      setFinished(true);
+      setPercentanse(100);
+    }
+  }, [completed])
+  
 
   return (
     <div style={{ 

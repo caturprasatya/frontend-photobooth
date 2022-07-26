@@ -1,6 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Spinner from "react-bootstrap/Spinner";
+import Background from "../assets/images/bg-payment.png";
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
 import Loading from '../components/LoadingAnimation';
@@ -26,6 +29,7 @@ const LoadingScreen = () => {
   const [isEmailFailed, setEmailFailed] = useState(false);
   const [isPrintFailed, setPrintFailed] = useState(false);
   const [isGenerateImg, setGenerateImg] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const [renderPleaseWait, setRenderPleaseWait] = useState(true);
 
   // state = action, tambahan
@@ -91,6 +95,8 @@ const LoadingScreen = () => {
           PhotoService.generateImage(data.txID, data.frameID)
           .then(
             (response2) => {
+              setCompleted(true);
+              
               response2["txID"] = data.txID;
               response2["frameID"] = data.frameID;
               // if (response2.status_code != 200) {
@@ -277,7 +283,11 @@ const LoadingScreen = () => {
 
   return (
     <>
-
+      {
+        isGenerateImg 
+          ? 
+            <Loading completed={completed} />
+          : 
             <div 
               style={{ 
                 height: "100vh",
@@ -317,7 +327,7 @@ const LoadingScreen = () => {
                 <Spinner animation="border" />
               </div>
             </div>
-      
+      }
     </>
   );
 };
