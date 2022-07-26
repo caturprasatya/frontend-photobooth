@@ -21,25 +21,12 @@ const Header = () => {
             <Link 
               to="/" 
             >
-              <img className="p-right" src={Logo} width='150px' />
+              <img className="p-right" src={Logo} width='150px' alt="logo" />
             </Link>
           </div>
         </div>
       </div>
     </Box>
-    // <Box>
-    //   {/* <Container> */}
-    //     <Row>
-    //         <Column>
-    //         </Column>
-    //         <Column>
-    //         </Column>
-    //         <Column>
-    //         <img src={Logo} width='150px' />
-    //         </Column>
-    //     </Row>
-    //   {/* </Container> */}
-    // </Box>
   );
 };
 export default Header;

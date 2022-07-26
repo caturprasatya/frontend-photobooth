@@ -47,13 +47,12 @@ function Loading({ completed }) {
     }}
     > 
       <div className="loading d-flex flex-column">
-        <text className="text-center">Please Wait</text>
-        <br />
-        <text className="text-center">We are processing your photos!</text>
+        <text className="text-center bold">Please Wait</text>
+        <text className="text-center bold">We are processing your photos!</text>
       </div>
       <div style={{ 
         height: "120",
-        width: "60%",
+        width: "50%",
       }}>
         <ProgressBar 
           completed={percentanse}
@@ -64,7 +63,7 @@ function Loading({ completed }) {
           baseBgColor="white"
         />
       </div>
-      <div className="progress d-flex flex-column">
+      <div className="update-progress d-flex flex-column">
         <text className="text-center">{ percentanse }% completed!</text>
       </div>
     </div>

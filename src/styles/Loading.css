@@ -6,8 +6,8 @@
   border: 3px solid black;
   border-radius: 25px;
 }
-.progress {
+.update-progress {
   font-family: 'Harmattan', sans-serif;
   font-size: 140%;
-  color: #403b3b;
+  color: #666666;
 }
