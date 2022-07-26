@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
-import Loading from '../components/LoadingAnimation';
+import ProgressBarAnimation from '../components/ProgressBar';
 
 const LoadingScreen = () => {
   // payment variables
@@ -286,7 +286,7 @@ const LoadingScreen = () => {
       {
         isGenerateImg 
           ? 
-            <Loading completed={completed} />
+            <ProgressBarAnimation completed={completed} />
           : 
             <div 
               style={{ 

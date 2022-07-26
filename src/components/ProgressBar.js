@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import ProgressBar from "@ramonak/react-progress-bar";
-import '../styles/Loading.css'
+import '../styles/ProgressBar.css'
 
-function Loading({ completed }) {
+function ProgressBarAnimation({ completed }) {
   // Default variables
   const DEFAULT_INTERVAL = 1000;
   const TIMER_OVER = 85;
@@ -26,7 +26,7 @@ function Loading({ completed }) {
     if (!finished && percentanse > TIMER_OVER) setFinished(true);
 
     return () => clearInterval(interval);
-  }, [finished, percentanse, randomInt]);
+  }, [finished, percentanse]);
 
   useEffect(() => {
     if (completed) {
@@ -46,7 +46,7 @@ function Loading({ completed }) {
       justifyContent: 'center'
     }}
     > 
-      <div className="loading d-flex flex-column">
+      <div className="ProgressBar d-flex flex-column">
         <text className="text-center bold">Please Wait</text>
         <text className="text-center bold">We are processing your photos!</text>
       </div>
@@ -70,4 +70,4 @@ function Loading({ completed }) {
   )
 }
 
-export default Loading
+export default ProgressBarAnimation
