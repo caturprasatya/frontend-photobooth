@@ -12,6 +12,8 @@ import Email from "./pages/Email"
 import LoadingScreen from "./pages/LoadingScreen";
 import FinalPreview from "./pages/FinalPreview";
 import GifPreview from "./pages/GifPreview";
+import Login from "./pages/Login"
+import Bypass from "./pages/Bypass"
 
 function App() {
   window.addEventListener("contextmenu", e => e.preventDefault());
@@ -20,6 +22,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/payment" element={<Payment />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/bypass" element={<Bypass />} />
       <Route path="/load" element={<LoadingScreen />} />
       <Route path="/capture" element={<Capture />} />
       <Route path="/frame" element={<Frame />}/>

@@ -1,9 +1,9 @@
 import React, { useRef,useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Spinner from "react-bootstrap/Spinner";
-import Background from "../assets/images/bg-payment.png";
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+// import Background from "../assets/images/bg-payment.png";
+// import Footer from '../components/Footer';
+// import Header from '../components/Header';
 import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
 
@@ -28,6 +28,8 @@ const LoadingScreen = () => {
   const [isEmailFailed, setEmailFailed] = React.useState(false);
   const [isPrintFailed, setPrintFailed] = React.useState(false);
   const [renderPleaseWait, setRenderPleaseWait] = React.useState(true);
+  const [isLoginFailed, setLoginFailed] = React.useState(false);
+  const [isBypassFailed, setBypassFailed] = React.useState(false);
 
   // state = action, tambahan
   const { state } = useLocation();
@@ -54,11 +56,11 @@ const LoadingScreen = () => {
       PaymentService.getTransactionByID(ID)
       .then(
         (response) => {
-          console.log(response.data);
+          // console.log(response.data);
           if (response.data.status === 'paid') {
-            getFrame(response.data.id);
+            getFrame(response.data.trx_id);
           } else {
-            console.log("else clause");
+            // console.log("else clause");
             return new Promise(function(resolve, reject) { 
               setTimeout(() => {
                   timeoutVerify++;
@@ -83,11 +85,11 @@ const LoadingScreen = () => {
   }
 
   const generateImage = (data) => {
-    console.log(data);
+    // console.log(data);
     PhotoService.uploadImage(data.txID, data.imageBlob)
     .then(
       (response1) => {
-        console.log(response1);
+        // console.log(response1);
         if(response1.status_code === 200){
           PhotoService.generateImage(data.txID, data.frameID)
           .then(
@@ -108,7 +110,7 @@ const LoadingScreen = () => {
             }
           )
         } else{
-          console.log("else clause");
+          // console.log("else clause");
         }
       }
     ).catch(
@@ -136,7 +138,7 @@ const LoadingScreen = () => {
       PhotoService.sendEmail(data.txID, data.effect, data.email, data.recipient_name)
       .then(
         (response) => {     
-          if (response.status_code == 200) {
+          if (response.status_code === 200) {
             isEmailSuccess = true
             response["txID"] = data.txID;
             response["effect"] = data.effect;
@@ -190,7 +192,7 @@ const LoadingScreen = () => {
     PhotoService.printImage(data.txID, data.effect)
     .then(
       (response) => {
-        console.log("Print success!")
+        // console.log("Print success!")
         isPrintSuccess = true
         response["txID"] = data.txID;
         response["effect"] = data.effect;
@@ -218,6 +220,53 @@ const LoadingScreen = () => {
       }
     )
   }
+
+  const login = (data) => {
+    PaymentService.login(data.email,data.password)
+    .then(
+      (response) => {
+        let selectedResponse = {};
+        selectedResponse["id"] = response.data.id;
+        selectedResponse["token"] = response.data.token;
+        navigate('/bypass', {
+          state: selectedResponse
+        })
+      }
+    ).catch(
+      (err) => {
+        // console.log(err.response.data.data.errors);
+        let selectedResponse = {};
+        selectedResponse["errorMessage"] = err.response.data.data.errors;
+        setRenderPleaseWait(false);
+        setLoginFailed(true);
+        setTimeout(() => {
+          navigate('/login', {
+            state: selectedResponse
+          })
+        }, 7000)
+      }
+    )
+  };
+
+  const getBypass = (token) => {
+    // console.log(token);
+    PaymentService.getBypass(token)
+    .then(
+      (response) => {
+        getFrame(response.data.trx_id);
+      }
+    ).catch(
+      (err) => {
+        // console.log(err);
+        setRenderPleaseWait(false);
+        setBypassFailed(true);
+        setTimeout(() => {
+          navigate('/login',{
+          })
+        }, 7000)
+      }
+    )
+  };
 
   useEffect(() => {
     if(isMounted.current){
@@ -266,11 +315,21 @@ const LoadingScreen = () => {
           //   state: temp
           // })
           break;
+        case 'login' :
+          login(state.data);
+          requestCount--;
+          break;
+        case 'get-bypass' :
+          // console.log(state);
+          getBypass(state.data.token);
+          requestCount--;
+          break;
         default:
           navigate('/');
           break;
       }
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -317,6 +376,24 @@ const LoadingScreen = () => {
           <>
             <h4 className="fw-bold text-center">Problem Printing Photo!</h4>
             <h3 className="fw-bold text-center">Sending Back to Snap Form!</h3>
+          </>
+        ) : (
+          <>
+          </>
+        )}
+        {isLoginFailed ? (
+          <>
+            <h4 className="fw-bold text-center">Problem Logging in!</h4>
+            <h3 className="fw-bold text-center">Sending Back to Login Page!</h3>
+          </>
+        ) : (
+          <>
+          </>
+        )}
+        {isBypassFailed ? (
+          <>
+            <h4 className="fw-bold text-center">Problem Generating code!</h4>
+            <h3 className="fw-bold text-center">Sending Back to Login Page!</h3>
           </>
         ) : (
           <>

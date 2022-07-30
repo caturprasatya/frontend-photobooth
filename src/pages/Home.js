@@ -39,6 +39,16 @@ const Home = () => {
         <h2 className='text-center mt-4'>
          IDR 30.000
         </h2>
+        <p className='text-center mb-0'>
+          Problem with payment?
+        </p>
+        <Link 
+          to="/login"
+        >
+          <p className='text-center'>
+            CLick here!
+          </p>
+        </Link>
       </div>
       <Footer />
     </div>

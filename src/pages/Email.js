@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { Modal, Button } from 'react-bootstrap';
+import { Link, useNavigate, useLocation} from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Overlay from "../components/Overlay";
@@ -30,7 +30,7 @@ const Email = (props) => {
   }
   
   useEffect(() => {
-    console.log(state);
+    // console.log(state);
     if (!state) {
       navigate('/')
     } else {
@@ -40,7 +40,7 @@ const Email = (props) => {
         }
     
         if (state.isPrintSuccess) {
-          console.log("tes");
+          // console.log("tes");
           setIsOverlay('block');
           setShow(false);
           setTimeout(() => {
@@ -58,12 +58,12 @@ const Email = (props) => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    console.log(email);
+    // console.log(email);
   }
 
   const handleNameChange = (e) => {
     setRecipientName(e.target.value);
-    console.log(recipient_name);
+    // console.log(recipient_name);
   }
 
   const handleClose = () => setShow(false);

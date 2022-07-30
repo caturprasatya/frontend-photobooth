@@ -26,11 +26,11 @@ const Capture = (props) => {
   const scrollRef = useRef(null);
   const videoDivWidth = useRef(null);
 
-  // const[videoNativeWidth,setVideoNativeWidth] = useState(0);
-  // const[videoNativeHeight,setVideoNativeHeight] = useState(0);
+  const[videoNativeWidth,setVideoNativeWidth] = useState(0);
+  const[videoNativeHeight,setVideoNativeHeight] = useState(0);
 
-  const videoWidthPercentage = useRef({actual:0.7,inPercent:"70%"});
-  const [videoCoverWidth,setVideoCoverWidth] = useState(0);
+  // const videoWidthPercentage = useRef({actual:0.7,inPercent:"70%"});
+  // const [videoCoverWidth,setVideoCoverWidth] = useState(0);
 
   //------------------------------------Custom snap size----------------------------------//
 
@@ -80,10 +80,10 @@ const Capture = (props) => {
     transform: "scale(-1, 1)",
     filter: "FlipH",
     objectFit: "cover",
-    width:videoDivWidth.current.inPercent,
+    // width:videoDivWidth.current.inPercent,
     // marginLeft: -1*parseInt((videoNativeWidth-objSize.width)/2),
     // marginTop:  -1*parseInt((videoNativeHeight-objSize.height)/2),
-    marginLeft: -1*parseInt((videoCoverWidth-objSize.width)/2),
+    marginLeft: -1*parseInt((videoNativeWidth-objSize.width)/2),
     marginTop:  -1*parseInt((videoNativeHeight-objSize.height)/2),
   };
 
@@ -96,18 +96,20 @@ const Capture = (props) => {
   });
 
   useEffect(()=>{
-    // videoRef.current.addEventListener('loadedmetadata', function(e){
-    //   // Print the native height of the video
-    //   console.log(videoRef.current.style.width);
+    videoRef.current.addEventListener('loadedmetadata', function(e){
+      // // Print the native height of the video
+      // console.log(videoRef.current.style.width);
   
-    //   // Print the native width of the video
-    //   console.log(videoRef.current.style.height);
+      // // Print the native width of the video
+      // console.log(videoRef.current.style.height);
 
-    //   setVideoNativeWidth(videoRef.current.videoWidth);
-    //   setVideoNativeHeight(videoRef.current.videoHeight);
-    // });
-    let num = videoWidthPercentage.current.actual*videoDivWidth.current.clientWidth;
-    setVideoCoverWidth(num);
+      setVideoNativeWidth(videoRef.current.videoWidth);
+      setVideoNativeHeight(videoRef.current.videoHeight);
+    });
+    // let num = videoWidthPercentage.current.actual*videoDivWidth.current.clientWidth;
+    // setVideoCoverWidth(num);
+    // console.log(num);
+    // console.log(videoDivWidth.current.clientWidth);
   },[])
 
   const flashOn = () => {
@@ -132,8 +134,8 @@ const Capture = (props) => {
   };
 
   const takeSnap = (mode) => {
-    console.log(mode);
-    console.log(imageBlob.length);
+    // console.log(mode);
+    // console.log(imageBlob.length);
     if(mode==='retake'){
       if(imageBlob.length===1){
         setImageBlob([]);
@@ -237,16 +239,16 @@ const Capture = (props) => {
           <div className="styleOverlay" style={{display:isOverlayCountdown}}>
             <div className="overlayText">{countdown}</div>
           </div> 
-          {/* <div> */}
-            {/* <div style={{
+          <div>
+            <div style={{
                   width: objSize.width,
                   height: objSize.height,
                   overflow:"hidden",
                   display:isVideo
                   }}
-            > */}
+            >
               <video ref={videoRef}  style={videoStyle} autoPlay/>
-            {/* </div> */}
+            </div>
             <img src={imageBlob.length>0 ? URL.createObjectURL(recentSnap):""} style={{display:isImage}} className="img-thumbnail" alt="recent snap"/>
             <div className="nextButton">
               <button ref={isRetake} type="button" className="btn btn-light btn-lg" onClick={()=>takeSnap('retake')} style={{display:'none'}}>
@@ -256,7 +258,7 @@ const Capture = (props) => {
                 <span>{imageBlob.length===0 ? "Start":"Next >>"}</span>
               </button>
             </div>
-          {/* </div> */}
+          </div>
         </div>
       </div>
     </div>

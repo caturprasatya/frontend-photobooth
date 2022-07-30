@@ -9,7 +9,7 @@ const FinalPreview = (props) => {
 
   if(state){
     listEffectsURI.current = [];
-    console.log(state.img_url);
+    // console.log(state.img_url);
     state.img_url.forEach((element,index) => {
       const a = {};
       a.effectName = element.replace("http://localhost:8080/static/res_image/","").split("/")[1];
