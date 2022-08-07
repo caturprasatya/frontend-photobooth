@@ -196,12 +196,12 @@ const Capture = (props) => {
         () => {
           var ctx = canvas.getContext('2d');
           ctx.scale(-1, 1);
-          console.log(videoRef.current.style.width);
-          console.log(videoRef.current.style.height);
-          console.log(videoNativeWidth);
-          console.log(videoNativeHeight);
-          console.log(objSize);
-          console.log(cameraScale);   
+          // console.log(videoRef.current.style.width);
+          // console.log(videoRef.current.style.height);
+          // console.log(videoNativeWidth);
+          // console.log(videoNativeHeight);
+          // console.log(objSize);
+          // console.log(cameraScale);   
           ctx.drawImage(videoRef.current,                                                                                                                    //drawing source
                         parseInt((videoNativeWidth-objSizeNative.width)/2),parseInt((videoNativeHeight-objSizeNative.height)/2),objSizeNative.width,objSizeNative.height,  //source coordinates and sizes
                         0,0,objSizeNative.width*-1,objSizeNative.height);                                                                              //destination coordinates and sizes
