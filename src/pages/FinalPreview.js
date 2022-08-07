@@ -1,6 +1,7 @@
 import React, { useState,useRef } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { cameraScale } from "../conf/conf";
 
 const FinalPreview = (props) => {
   const { state } = useLocation();
@@ -32,6 +33,13 @@ const FinalPreview = (props) => {
         />
     );
   }
+
+  const imgStyle = {
+    MozTransform: `scale(${cameraScale}, ${cameraScale})`,
+    WebkitTransform: `scale(${cameraScale}, ${cameraScale})`,
+    OTransform: `scale(${cameraScale}, ${cameraScale})`,
+    transform: `scale(${cameraScale}, ${cameraScale})`,
+  };
   
   return (
     <div className="container-fluid" style={{height:'100vh',overflowY: 'hidden', overflowX:'hidden'}}>
@@ -52,7 +60,7 @@ const FinalPreview = (props) => {
             </Scrollbars>
         </div>
         <div className="col text-center fill" style={{backgroundColor:'#000000'}}>
-          <img src={effectSelected.imgURI} className="img-thumbnail" alt="selected effect"></img>
+          <img src={effectSelected.imgURI} style={imgStyle} className="img-thumbnail" alt="selected effect"></img>
           <Link
             to="/gif-preview"
             state={{

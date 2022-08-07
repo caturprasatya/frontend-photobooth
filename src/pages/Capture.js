@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { frameRatio, ellipseFrameList } from "../assets/frameRatio/frameRatio";
+import { frameRatio, ellipseFrameList, cameraScale } from "../conf/conf";
 
 const Capture = (props) => {
   const { state } = useLocation();
@@ -28,9 +28,10 @@ const Capture = (props) => {
 
   const[videoNativeWidth,setVideoNativeWidth] = useState(0);
   const[videoNativeHeight,setVideoNativeHeight] = useState(0);
+  const[videoScaledWidth,setVideoScaledWidth] = useState(0);
+  const[videoScaledHeight,setVideoScaledHeight] = useState(0);
 
-  // const videoWidthPercentage = useRef({actual:0.7,inPercent:"70%"});
-  // const [videoCoverWidth,setVideoCoverWidth] = useState(0);
+  const imgRef = useRef(null);
 
   //------------------------------------Custom snap size----------------------------------//
 
@@ -55,6 +56,11 @@ const Capture = (props) => {
     height: 576
   };
 
+  let objSizeNative = {   //Scaled snap size
+    width : parseInt(objSize.width/cameraScale),
+    height : parseInt(objSize.height/cameraScale)
+  }
+
   //--------------------------------------------------------------------------------------------------//
 
   if(state){
@@ -62,29 +68,41 @@ const Capture = (props) => {
 
     // find best crop size automatically
     if (listOfEllipseFrame.includes(state.frameID)){
-      objSize = findCropPxl(frameRatio.ellipseFrame.width,frameRatio.ellipseFrame.height,videoNativeWidth,videoNativeHeight);
+      objSize = findCropPxl(frameRatio.ellipseFrame.width,frameRatio.ellipseFrame.height,videoScaledWidth,videoScaledHeight);
     } else {
       if(numberSnap.current === 4){
-        objSize = findCropPxl(frameRatio.eightFrame.width,frameRatio.eightFrame.height,videoNativeWidth,videoNativeHeight);
+        objSize = findCropPxl(frameRatio.eightFrame.width,frameRatio.eightFrame.height,videoScaledWidth,videoScaledHeight);
       } else{
-        objSize = findCropPxl(frameRatio.sixFrame.width,frameRatio.sixFrame.height,videoNativeWidth,videoNativeHeight);
+        // console.log(videoNativeWidth);
+        // console.log(videoNativeHeight);
+        objSize = findCropPxl(frameRatio.sixFrame.width,frameRatio.sixFrame.height,videoScaledWidth,videoScaledHeight);
       }
     }
+    objSizeNative.width = parseInt(objSize.width/cameraScale);
+    objSizeNative.height = parseInt(objSize.height/cameraScale);
   }
 
   //styles for video tag
   const videoStyle = {
-    MozTransform: "scale(-1, 1)",
-    WebkitTransform: "scale(-1, 1)",
-    OTransform: "scale(-1, 1)",
-    transform: "scale(-1, 1)",
-    filter: "FlipH",
-    objectFit: "cover",
-    // width:videoDivWidth.current.inPercent,
-    // marginLeft: -1*parseInt((videoNativeWidth-objSize.width)/2),
-    // marginTop:  -1*parseInt((videoNativeHeight-objSize.height)/2),
-    marginLeft: -1*parseInt((videoNativeWidth-objSize.width)/2),
-    marginTop:  -1*parseInt((videoNativeHeight-objSize.height)/2),
+    MozTransform: `scale(-1, 1)`,
+    WebkitTransform: `scale(-1, 1)`,
+    OTransform: `scale(-1, 1)`,
+    transform: `scale(-1, 1)`,
+    width : videoScaledWidth,
+    height : videoScaledHeight,
+
+    //adjust camera position to crop template
+    marginLeft: -1*parseInt((videoScaledWidth-objSize.width)/2),
+    marginTop:  -1*parseInt((videoScaledHeight-objSize.height)/2),
+  };
+
+  //styles for captured image tag
+  const imgStyle = {
+    display:isImage,
+    MozTransform: `scale(${cameraScale}, ${cameraScale})`,
+    WebkitTransform: `scale(${cameraScale}, ${cameraScale})`,
+    OTransform: `scale(${cameraScale}, ${cameraScale})`,
+    transform: `scale(${cameraScale}, ${cameraScale})`,
   };
 
   useEffect(() => {
@@ -100,18 +118,16 @@ const Capture = (props) => {
       // // Print the native height of the video
       // console.log(videoRef.current.style.width);
   
-      // // Print the native width of the video
-      // console.log(videoRef.current.style.height);
-
       setVideoNativeWidth(videoRef.current.videoWidth);
       setVideoNativeHeight(videoRef.current.videoHeight);
-    });
-    // let num = videoWidthPercentage.current.actual*videoDivWidth.current.clientWidth;
-    // setVideoCoverWidth(num);
-    // console.log(num);
-    // console.log(videoDivWidth.current.clientWidth);
+      setVideoScaledWidth(cameraScale*videoRef.current.videoWidth);
+      setVideoScaledHeight(cameraScale*videoRef.current.videoHeight);
+      // console.log(cameraScale*videoRef.current.videoWidth);
+      // console.log(cameraScale*videoRef.current.videoHeight);
+    })
   },[])
 
+  //Flash effect
   const flashOn = () => {
     isFlashOn.current.classList.add('on');
     audio.play();
@@ -120,6 +136,7 @@ const Capture = (props) => {
     }, 10*2+45);
   }
 
+  //Camera initialization
   const getVideo = () => {
     navigator.mediaDevices
       .getUserMedia({ video : true})
@@ -151,10 +168,13 @@ const Capture = (props) => {
       setIsImage('none');
       setIsNext(true);
 
-      let video = videoRef.current;
       let canvas = canvasRef.current;
-      canvas.width = objSize.width;
-      canvas.height = objSize.height;
+      // console.log(objSizeNative.width);
+      // console.log(objSizeNative.height);
+      canvas.width=objSizeNative.width;
+      canvas.height=objSizeNative.height;
+      // canvas.width = objSize.width;
+      // canvas.height = objSize.height;
       isRetake.current.style.display = 'none';
 
       new Promise(myResolve=>{
@@ -175,10 +195,16 @@ const Capture = (props) => {
         }).then(
         () => {
           var ctx = canvas.getContext('2d');
-          ctx.scale(-1, 1); 
-          ctx.drawImage(video,                                                                                                                    //drawing source
-                        parseInt((video.videoWidth-objSize.width)/2),parseInt((video.videoHeight-objSize.height)/2),objSize.width,objSize.height,  //source coordinates and sizes
-                        0,0,objSize.width*-1,objSize.height);                                                                                     //destination coordinates and sizes
+          ctx.scale(-1, 1);
+          console.log(videoRef.current.style.width);
+          console.log(videoRef.current.style.height);
+          console.log(videoNativeWidth);
+          console.log(videoNativeHeight);
+          console.log(objSize);
+          console.log(cameraScale);   
+          ctx.drawImage(videoRef.current,                                                                                                                    //drawing source
+                        parseInt((videoNativeWidth-objSizeNative.width)/2),parseInt((videoNativeHeight-objSizeNative.height)/2),objSizeNative.width,objSizeNative.height,  //source coordinates and sizes
+                        0,0,objSizeNative.width*-1,objSizeNative.height);                                                                              //destination coordinates and sizes
           canvas.toBlob(blob=>{
             setRecentSnap(blob);
             setImageBlob(prevImageBlob => {
@@ -208,6 +234,7 @@ const Capture = (props) => {
     }
   }
 
+  //render scrollbar
   const renderThumb = () => {
     const thumbStyle = {
         backgroundColor: "#C82826"
@@ -249,7 +276,7 @@ const Capture = (props) => {
             >
               <video ref={videoRef}  style={videoStyle} autoPlay/>
             </div>
-            <img src={imageBlob.length>0 ? URL.createObjectURL(recentSnap):""} style={{display:isImage}} className="img-thumbnail" alt="recent snap"/>
+            <img ref={imgRef} src={imageBlob.length>0 ? URL.createObjectURL(recentSnap):""} style={imgStyle} className="img-thumbnail" alt="recent snap"/>
             <div className="nextButton">
               <button ref={isRetake} type="button" className="btn btn-light btn-lg" onClick={()=>takeSnap('retake')} style={{display:'none'}}>
                 <span>Retake</span>

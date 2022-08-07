@@ -236,14 +236,14 @@ const LoadingScreen = () => {
       (err) => {
         // console.log(err.response.data.data.errors);
         let selectedResponse = {};
-        selectedResponse["errorMessage"] = err.response.data.data.errors;
+        selectedResponse["errorMessage"] = "Incorrect Email or Password!";
         setRenderPleaseWait(false);
         setLoginFailed(true);
         setTimeout(() => {
           navigate('/login', {
             state: selectedResponse
           })
-        }, 7000)
+        }, 5000)
       }
     )
   };
@@ -258,12 +258,15 @@ const LoadingScreen = () => {
     ).catch(
       (err) => {
         // console.log(err);
+        let selectedResponse = {};
+        selectedResponse["errorMessage"] = err.response.data.data.errors;
         setRenderPleaseWait(false);
         setBypassFailed(true);
         setTimeout(() => {
           navigate('/login',{
+            state: selectedResponse
           })
-        }, 7000)
+        }, 5000)
       }
     )
   };
@@ -282,7 +285,7 @@ const LoadingScreen = () => {
           requestCount--;
           break;
         case 'verify':
-          verifyTransaction(state.id);
+          verifyTransaction(state.trx_id);
           requestCount--;
           break;
         case 'generate':

@@ -9,7 +9,7 @@ import Placeholder from "../assets/images/placeholder.png";
 const Payment = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  console.log(state)
+  // console.log(state)
 
   let image = Placeholder
   if (state) {
@@ -56,7 +56,7 @@ const Payment = () => {
           to="/load" 
           state={{
             action: 'verify',
-            id: state.id
+            trx_id: state.trx_id
           }}
         >
           <h3 className='fw-bold text-center'>

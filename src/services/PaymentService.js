@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'https://api.snaplab.site/dev/api/v1/transaction/';
-const API_URL_LOGIN = "https://api.snaplab.site/dev/api/v1/admin/login";
+const API_URL = 'https://api.snaplab.site/api/v1/transaction/';
+const API_URL_LOGIN = "https://api.snaplab.site/api/v1/admin/login";
 
 class PaymentService {
   createTransaction(amount, paymentType) {
