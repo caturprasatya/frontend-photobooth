@@ -36,7 +36,7 @@ const Capture = (props) => {
   //------------------------------------Custom snap size----------------------------------//
 
   // Auto configure crop size function
-  const findCropPxl = (cropWidthRatio,cropHeightRatio,videoWidthPxl,videoHeightPxl) => {
+  const findCropPxl = (cropWidthRatio, cropHeightRatio, videoWidthPxl, videoHeightPxl) => {
     let x = 0;
     let y = 0;
     if((cropWidthRatio/cropHeightRatio)>=(videoWidthPxl/videoHeightPxl)){
@@ -163,7 +163,7 @@ const Capture = (props) => {
       }
     }
 
-    if(imageBlob.length<numberSnap.current){
+    if(imageBlob.length < numberSnap.current){
       setIsVideo('block');
       setIsImage('none');
       setIsNext(true);
@@ -177,12 +177,13 @@ const Capture = (props) => {
       // canvas.height = objSize.height;
       isRetake.current.style.display = 'none';
 
-      new Promise(myResolve=>{
+      new Promise(myResolve => {
         let number = countdown;
         setIsOverlayCountdown('block');
         isRetake.current.style.display = 'none';
-        let starting = setInterval(()=>{
-          if(number>1){
+        
+        let starting = setInterval(() => {
+          if(number > 1){
             number--;
             setCountdown(number);
           }else{
@@ -191,9 +192,8 @@ const Capture = (props) => {
             setCountdown(TIMER);
             myResolve("Begin Shot");
           }
-          },1000)
-        }).then(
-        () => {
+        },1000);
+      }).then(() => {
           var ctx = canvas.getContext('2d');
           ctx.scale(-1, 1);
           // console.log(videoRef.current.style.width);
@@ -211,6 +211,7 @@ const Capture = (props) => {
               return [...prevImageBlob, blob]
             })
           },'image/png');
+          
           flashOn();
           
           isRetake.current.style.display = 'block';
@@ -218,11 +219,12 @@ const Capture = (props) => {
           setIsVideo('none');
           setIsImage('block');
         }
-        ).catch(
-          (err) => console.log(err)
-        )
-      }else{
-        navigate("/load", { state: { 
+      ).catch(
+        (err) => console.log(err)
+      );
+    }else{
+      navigate("/load", { 
+        state: { 
           action: 'generate',
           data:{
             txID : state.txID,

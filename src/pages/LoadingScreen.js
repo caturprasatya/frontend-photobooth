@@ -1,4 +1,4 @@
-import React, { useRef,useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Spinner from "react-bootstrap/Spinner";
 // import Background from "../assets/images/bg-payment.png";
@@ -6,6 +6,7 @@ import Spinner from "react-bootstrap/Spinner";
 // import Header from '../components/Header';
 import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
+import ProgressBarAnimation from '../components/ProgressBar';
 
 const LoadingScreen = () => {
   // payment variables
@@ -24,10 +25,12 @@ const LoadingScreen = () => {
   let timeoutEmail = 1;
   let TIMEOUT_EMAIL_LIMIT = 20 / 5;
 
-  const [isTimeout, setTimeoutVerify] = React.useState(false);
-  const [isEmailFailed, setEmailFailed] = React.useState(false);
-  const [isPrintFailed, setPrintFailed] = React.useState(false);
-  const [renderPleaseWait, setRenderPleaseWait] = React.useState(true);
+  const [isTimeout, setTimeoutVerify] = useState(false);
+  const [isEmailFailed, setEmailFailed] = useState(false);
+  const [isPrintFailed, setPrintFailed] = useState(false);
+  const [isGenerateImg, setGenerateImg] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [renderPleaseWait, setRenderPleaseWait] = useState(true);
   const [isLoginFailed, setLoginFailed] = React.useState(false);
   const [isBypassFailed, setBypassFailed] = React.useState(false);
 
@@ -94,6 +97,8 @@ const LoadingScreen = () => {
           PhotoService.generateImage(data.txID, data.frameID)
           .then(
             (response2) => {
+              setCompleted(true);
+              
               response2["txID"] = data.txID;
               response2["frameID"] = data.frameID;
               // if (response2.status_code != 200) {
@@ -289,6 +294,7 @@ const LoadingScreen = () => {
           requestCount--;
           break;
         case 'generate':
+          setGenerateImg(true);
           generateImage(state.data);
           requestCount--;
           break;
@@ -337,53 +343,46 @@ const LoadingScreen = () => {
 
   return (
     <>
-      <div style={{ 
-        height: "100vh",
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-      >
-        {renderPleaseWait ? (
-          <>
-            <h4 className="fw-bold text-center">Please Wait</h4>
-          </>
-        ) : (
-          <>
-          </>
-        )}
-        {isTimeout ? (
-          <>
-            <h4 className="fw-bold text-center">Problem verifying your transaction</h4>
-            <Link 
-              to="/" 
+      {
+        isGenerateImg 
+          ? 
+            <ProgressBarAnimation completed={completed} />
+          : 
+            <div 
+              style={{ 
+                height: "100vh",
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
             >
-              <h3 className="fw-bold text-center">Back to Home</h3>
-            </Link>
-          </>
-        ) : (
-          <>
-          </>
-        )}
-        {isEmailFailed ? (
-          <>
-            <h4 className="fw-bold text-center">Problem Sending Email</h4>
-            <h3 className="fw-bold text-center">Sending Back to Snap Form!</h3>
-          </>
-        ) : (
-          <>
-          </>
-        )}
-        {isPrintFailed ? (
-          <>
-            <h4 className="fw-bold text-center">Problem Printing Photo!</h4>
-            <h3 className="fw-bold text-center">Sending Back to Snap Form!</h3>
-          </>
-        ) : (
-          <>
-          </>
-        )}
+              {renderPleaseWait && (<h4 className="fw-bold text-center">Please Wait</h4>)}
+              {
+                isTimeout && 
+                  (<>
+                    <h4 className="fw-bold text-center">Problem verifying your transaction</h4>
+                    <Link 
+                      to="/" 
+                    >
+                      <h3 className="fw-bold text-center">Back to Home</h3>
+                    </Link>
+                  </>)
+              }
+              {
+                isEmailFailed && (
+                  <>
+                    <h4 className="fw-bold text-center">Problem Sending Email</h4>
+                    <h3 className="fw-bold text-center">Sending Back to Snap Form!</h3>
+                  </>)
+              }
+              {
+                isPrintFailed && (
+                  <>
+                    <h4 className="fw-bold text-center">Problem Printing Photo!</h4>
+                    <h3 className="fw-bold text-center">Sending Back to Snap Form!</h3>
+                  </>)
+              }
         {isLoginFailed ? (
           <>
             <h4 className="fw-bold text-center">Problem Logging in!</h4>
@@ -402,10 +401,11 @@ const LoadingScreen = () => {
           <>
           </>
         )}
-        <div className="text-center py-5">
-          <Spinner animation="border" />
-        </div>
-      </div>
+              <div className="text-center py-5">
+                <Spinner animation="border" />
+              </div>
+            </div>
+      }
     </>
   );
 };
