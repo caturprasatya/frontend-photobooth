@@ -103,12 +103,19 @@ const Login = () => {
                 }
               }}
             >
-              <Button className="btn btn-lg btn-primary mb-2 btn-block btn-email">
+              <Button className="btn btn-lg btn-primary mb-4 btn-block btn-email">
                 Login
               </Button>
             </Link>
           </div>
         </form>
+        <Link 
+          to="/"
+        >
+          <Button className="btn btn-lg btn-danger">
+            {"<< Back"}
+          </Button>
+        </Link>
       <Footer />
     </div>
   );

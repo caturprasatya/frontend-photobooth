@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import { Link,useLocation } from 'react-router-dom';
-import { Image } from 'react-bootstrap';
+import { Button,Image } from 'react-bootstrap';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Background from "../assets/images/bg-home.png";
@@ -31,7 +31,7 @@ const Bypass = () => {
       >
         <Header />
         <div 
-          className='home'
+          className='home text-center'
         >
           <h1 className="fw-bold text-center">
             Click to Generate Manual Payment!
@@ -52,6 +52,13 @@ const Bypass = () => {
           <h2 className='text-center mt-4'>
            IDR 30.000
           </h2>
+          <Link 
+            to="/"
+          >
+          <Button className="btn btn-lg btn-danger">
+            {"<< Back"}
+          </Button>
+        </Link>
         </div>
         <Footer />
       </div>
