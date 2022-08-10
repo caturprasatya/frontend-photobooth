@@ -31,7 +31,7 @@ const Capture = (props) => {
   //------------------------------------Custom snap size----------------------------------//
 
   // Auto configure crop size function
-  const findCropPxl = (cropWidthRatio,cropHeightRatio,videoWidthPxl,videoHeightPxl) => {
+  const findCropPxl = (cropWidthRatio, cropHeightRatio, videoWidthPxl, videoHeightPxl) => {
     let x = 0;
     let y = 0;
     if((cropWidthRatio/cropHeightRatio)>=(videoWidthPxl/videoHeightPxl)){
@@ -75,8 +75,8 @@ const Capture = (props) => {
     OTransform: "scale(-1, 1)",
     transform: "scale(-1, 1)",
     filter: "FlipH",
-    marginLeft: -1*parseInt((videoNativeWidth-objSize.width)/2),
-    marginTop:  -1*parseInt((videoNativeHeight-objSize.height)/2),
+    marginLeft: -1 * parseInt((videoNativeWidth-objSize.width)/2),
+    marginTop:  -1 * parseInt((videoNativeHeight-objSize.height)/2),
   };
 
   useEffect(() => {
@@ -134,7 +134,7 @@ const Capture = (props) => {
       }
     }
 
-    if(imageBlob.length<numberSnap.current){
+    if(imageBlob.length < numberSnap.current){
       setIsVideo('block');
       setIsImage('none');
       setIsNext(true);
@@ -145,12 +145,13 @@ const Capture = (props) => {
       canvas.height = objSize.height;
       isRetake.current.style.display = 'none';
 
-      new Promise(myResolve=>{
+      new Promise(myResolve => {
         let number = countdown;
         setIsOverlayCountdown('block');
         isRetake.current.style.display = 'none';
-        let starting = setInterval(()=>{
-          if(number>1){
+        
+        let starting = setInterval(() => {
+          if(number > 1){
             number--;
             setCountdown(number);
           }else{
@@ -159,20 +160,29 @@ const Capture = (props) => {
             setCountdown(TIMER);
             myResolve("Begin Shot");
           }
-          },1000)
-        }).then(
-        () => {
+        },1000);
+      }).then(() => {
           var ctx = canvas.getContext('2d');
           ctx.scale(-1, 1); 
-          ctx.drawImage(video,                                                                                                                    //drawing source
-                        parseInt((video.videoWidth-objSize.width)/2),parseInt((video.videoHeight-objSize.height)/2),objSize.width,objSize.height,  //source coordinates and sizes
-                        0,0,objSize.width*-1,objSize.height);                                                                                     //destination coordinates and sizes
+          ctx.drawImage(
+            video, //drawing source
+            parseInt((video.videoWidth-objSize.width)/2),
+            parseInt((video.videoHeight-objSize.height)/2),
+            objSize.width,    //source coordinates and sizes
+            objSize.height,   //source coordinates and sizes
+            0,
+            0,
+            objSize.width*-1, //destination coordinates and sizes
+            objSize.height    //destination coordinates and sizes
+          );
+          
           canvas.toBlob(blob=>{
             setRecentSnap(blob);
             setImageBlob(prevImageBlob => {
               return [...prevImageBlob, blob]
             })
           },'image/png');
+          
           flashOn();
           
           isRetake.current.style.display = 'block';
@@ -180,11 +190,12 @@ const Capture = (props) => {
           setIsVideo('none');
           setIsImage('block');
         }
-        ).catch(
-          (err) => console.log(err)
-        )
-      }else{
-        navigate("/load", { state: { 
+      ).catch(
+        (err) => console.log(err)
+      );
+    }else{
+      navigate("/load", { 
+        state: { 
           action: 'generate',
           data:{
             txID : state.txID,
