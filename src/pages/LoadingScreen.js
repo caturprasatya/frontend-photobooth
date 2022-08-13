@@ -10,9 +10,9 @@ import ProgressBarAnimation from '../components/ProgressBar';
 
 const LoadingScreen = () => {
   // payment variables
-  let snapFee = 1;
+  let snapFee = 30000;
   // 1 -> GoPay, 0 -> QRIS
-  let paymentType = 1;  
+  let paymentType = 0;  
 
   // request limiter
   let requestCount = 1;
