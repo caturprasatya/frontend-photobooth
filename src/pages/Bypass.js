@@ -50,7 +50,7 @@ const Bypass = () => {
             </div>
           </Link>
           <h2 className='text-center mt-4'>
-           IDR 35.000
+           IDR 30.000
           </h2>
           <Link 
             to="/"
