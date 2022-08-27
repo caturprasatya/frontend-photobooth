@@ -18,3 +18,10 @@ export const ellipseFrameList = {
 };
 
 export const cameraScale = 1.5;
+
+export const pricePoint = {
+    intFormat : 30000,
+    stringFormat : "30.000"
+};
+
+export const paymentType_conf = 0      // 1 -> GoPay, 0 -> QRIS

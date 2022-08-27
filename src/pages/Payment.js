@@ -1,25 +1,28 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Background from "../assets/images/bg-payment.png";
 import Placeholder from "../assets/images/placeholder.png";
+import Utilities from '../utils/Utils'
+import { pricePoint } from "../conf/conf";
 
 const Payment = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  // console.log(state)
 
-  let image = Placeholder
-  if (state) {
-    image = state.qr_code
-  }
-
+  const [image,setImage] = useState(Placeholder);
+  const [snapFee,setSnapFee] = useState(pricePoint.stringFormat);
+  
   React.useEffect(() => {
     if (!state) {
       navigate('/');
+    }else{
+      setImage(state.qr_code);
+      setSnapFee(Utilities.int2string_price(state.amount));
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -42,7 +45,7 @@ const Payment = () => {
           <span style={{ color: 'red' }}>Scan</span> here to pay!
         </h2>
         <h3 className='fw-bold text-center'>
-         IDR 30.000
+         IDR {snapFee}
         </h3>
         <div className='text-center'>
           <Image className='text-center mb-4' src={image} height={300} width={300} style={{ 

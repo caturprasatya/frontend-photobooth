@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'https://api.snaplab.site/api/v1/transaction/';
 const API_URL_LOGIN = "https://api.snaplab.site/api/v1/admin/login";
+const API_PROMO = "https://api.snaplab.site/api/v1/promo"
 
 class PaymentService {
   createTransaction(amount, paymentType) {
@@ -37,9 +38,6 @@ class PaymentService {
       email : email,
       password: password
       }).then(response => {
-        // if (response.data.accessToken) {
-        //   // localStorage.setItem("login", JSON.stringify(response.data));
-        // }
       return response.data;
     })
   };
@@ -47,7 +45,7 @@ class PaymentService {
   getBypass(token){
     return axios.post(API_URL + "bypass",
     {
-      "amount": 35000,
+      "amount": 30000,
       "status": "pending"
     },{
       headers: {
@@ -57,6 +55,20 @@ class PaymentService {
       return response.data;
     })
   };
+
+  getPromo(code){
+    return axios.get(API_PROMO + "/code/" + code)
+    .then(response => {
+      return response.data;
+    });
+  }
+
+  claimPromo(code){
+    return axios.put(API_PROMO + "/claim/" + code)
+    .then(response => {
+      return response.data;
+    });
+  }
 }
 
 export default new PaymentService();

@@ -12,3 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+class Utilities{
+    //convert price from integer format to string format eg : 1000->"IDR 1.000"
+    int2string_price(price){    //must be int
+        let s_price = price.toString();
+        let output_text = '';
+        for (let i = 0; i < s_price.length; i++) {
+            if((i%3===0)&&(i!==0)){
+                output_text = `.${output_text}`
+            }
+            output_text = `${s_price[s_price.length-1-i]}${output_text}`
+          }
+        return output_text;
+    }
+}
+
+export default new Utilities();

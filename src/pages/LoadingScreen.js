@@ -1,18 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Spinner from "react-bootstrap/Spinner";
-// import Background from "../assets/images/bg-payment.png";
-// import Footer from '../components/Footer';
-// import Header from '../components/Header';
 import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
 import ProgressBarAnimation from '../components/ProgressBar';
+import { pricePoint,paymentType_conf } from "../conf/conf";
 
 const LoadingScreen = () => {
   // payment variables
-  let snapFee = 30000;
+  const snapFee = useRef(pricePoint.intFormat);
   // 1 -> GoPay, 0 -> QRIS
-  let paymentType = 0;  
+  let paymentType = paymentType_conf;  
 
   // request limiter
   let requestCount = 1;
@@ -59,11 +57,9 @@ const LoadingScreen = () => {
       PaymentService.getTransactionByID(ID)
       .then(
         (response) => {
-          // console.log(response.data);
           if (response.data.status === 'paid') {
             getFrame(response.data.trx_id);
           } else {
-            // console.log("else clause");
             return new Promise(function(resolve, reject) { 
               setTimeout(() => {
                   timeoutVerify++;
@@ -88,34 +84,26 @@ const LoadingScreen = () => {
   }
 
   const generateImage = (data) => {
-    // console.log(data);
     PhotoService.uploadImage(data.txID, data.imageBlob)
     .then(
       (response1) => {
-        // console.log(response1);
         if(response1.status_code === 200){
           PhotoService.generateImage(data.txID, data.frameID)
           .then(
             (response2) => {
               setCompleted(true);
-              
               response2["txID"] = data.txID;
               response2["frameID"] = data.frameID;
-              // if (response2.status_code != 200) {
-              //   setGenerateImageFailed(true);
-              // }
-              // setTimeout(() => {
-              //   navigate('/email', {
-              //     state: response
-              //   })
-              // }, 3000)
               navigate('/final-preview', {
                 state: response2
               })
             }
           )
+          .catch(
+            (err) => console.log(err)
+          )
         } else{
-          // console.log("else clause");
+          console.log("else clause");
         }
       }
     ).catch(
@@ -197,7 +185,6 @@ const LoadingScreen = () => {
     PhotoService.printImage(data.txID, data.effect)
     .then(
       (response) => {
-        // console.log("Print success!")
         isPrintSuccess = true
         response["txID"] = data.txID;
         response["effect"] = data.effect;
@@ -239,7 +226,7 @@ const LoadingScreen = () => {
       }
     ).catch(
       (err) => {
-        // console.log(err.response.data.data.errors);
+        console.log(err);
         let selectedResponse = {};
         selectedResponse["errorMessage"] = "Incorrect Email or Password!";
         setRenderPleaseWait(false);
@@ -248,13 +235,12 @@ const LoadingScreen = () => {
           navigate('/login', {
             state: selectedResponse
           })
-        }, 5000)
+        }, 3000)
       }
     )
   };
 
   const getBypass = (token) => {
-    // console.log(token);
     PaymentService.getBypass(token)
     .then(
       (response) => {
@@ -262,7 +248,7 @@ const LoadingScreen = () => {
       }
     ).catch(
       (err) => {
-        // console.log(err);
+        console.log(err);
         let selectedResponse = {};
         selectedResponse["errorMessage"] = err.response.data.data.errors;
         setRenderPleaseWait(false);
@@ -276,6 +262,21 @@ const LoadingScreen = () => {
     )
   };
 
+  const postDataDiscount = (amount,paymentType,code) => {
+    PaymentService.claimPromo(code)
+    .then(
+      (response) => {
+        if(response.meta.code === 200){
+          postData(amount,paymentType);
+        } else{
+          console.log("else clause");
+        }
+      }
+    ).catch(
+      (err) => console.log(err)
+    )
+  }
+
   useEffect(() => {
     if(isMounted.current){
       return
@@ -283,10 +284,14 @@ const LoadingScreen = () => {
 
     isMounted.current = true;
     while (requestCount) {
-      // let temp = state;
       switch(state.action) {
-        case 'payment': 
-          postData(snapFee, paymentType);
+        case 'payment':
+          snapFee.current = state.data.snapFee; //set new snapFee Value from home page
+          if(state.data.isPromoInvalid){
+            postData(snapFee.current, paymentType);
+          }else{
+            postDataDiscount(snapFee.current,paymentType,state.data.code)
+          } 
           requestCount--;
           break;
         case 'verify':
@@ -311,25 +316,16 @@ const LoadingScreen = () => {
           };
           sendEmail(data);
           requestCount--;
-          // temp.isEmailSuccess = true
-          // navigate('/email', {
-          //   state: temp
-          // })
           break;
         case 'print-photo':
           printImage(state);
           requestCount--;
-          // temp.isPrintSuccess = true
-          // navigate('/email', {
-          //   state: temp
-          // })
           break;
         case 'login' :
           login(state.data);
           requestCount--;
           break;
         case 'get-bypass' :
-          // console.log(state);
           getBypass(state.data.token);
           requestCount--;
           break;
