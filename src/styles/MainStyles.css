@@ -6,6 +6,12 @@ body {
 
 .btn-print {
     color: aliceblue;
+    background-color: #a6a09f;
+    width: 100%;
+}
+
+.btn-print-modal {
+    color: aliceblue;
     background-color: #C82826;
     width: 100%;
 }
@@ -16,7 +22,7 @@ body {
 
 .btn-print:hover {
     color: aliceblue;
-    background-color: #B42422;
+    background-color: #bfb9b8;
     width: 100%;
 }
 

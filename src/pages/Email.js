@@ -54,6 +54,7 @@ const Email = (props) => {
         setRecipientName(state.data.recipient_name);
       } 
     }
+    // eslint-disable-next-line
   }, []);
 
   const handleEmailChange = (e) => {
@@ -101,7 +102,7 @@ const Email = (props) => {
                 effect: effect
               }}
             >
-              <button className="btn text-center btn-print" onClick={handleClose}>
+              <button className="btn text-center btn-print-modal" onClick={handleClose}>
                 Print Photo!
               </button>
             </Link>
@@ -155,7 +156,7 @@ const Email = (props) => {
               }}
             >
               <button className="btn btn-lg btn-primary mb-2 btn-block btn-email">
-                Send Email!
+                Send Email
               </button>
             </Link>
           )}
@@ -179,7 +180,7 @@ const Email = (props) => {
                   effect: effect
                 }}
               >
-                <button className="btn btn-lg btn-print mb-2">Print Photo!</button>
+                <button className="btn btn-lg btn-print mb-2">Skip</button>
               </Link>
             </>
           ) : (
@@ -195,7 +196,7 @@ const Email = (props) => {
                 effect: effect
               }}
             >
-              <button className="btn btn-lg btn-print mb-2">Print Photo!</button>
+              <button className="btn btn-lg btn-print mb-2">Skip</button>
             </Link>
           )}
         </div>

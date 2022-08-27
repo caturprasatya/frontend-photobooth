@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Background from "../assets/images/bg-home.png";
 import CTA from "../assets/images/snaphere.png";
+import { pricePoint } from "../conf/conf";
 
 const Bypass = () => {
   const { state } = useLocation();
@@ -50,7 +51,7 @@ const Bypass = () => {
             </div>
           </Link>
           <h2 className='text-center mt-4'>
-           IDR 30.000
+           IDR {pricePoint.stringFormat}
           </h2>
           <Link 
             to="/"
