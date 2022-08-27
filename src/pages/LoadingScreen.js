@@ -262,20 +262,20 @@ const LoadingScreen = () => {
     )
   };
 
-  const postDataDiscount = (amount,paymentType,code) => {
-    PaymentService.claimPromo(code)
-    .then(
-      (response) => {
-        if(response.meta.code === 200){
-          postData(amount,paymentType);
-        } else{
-          console.log("else clause");
-        }
-      }
-    ).catch(
-      (err) => console.log(err)
-    )
-  }
+  // const postDataDiscount = (amount,paymentType,code) => {
+  //   PaymentService.claimPromo(code)
+  //   .then(
+  //     (response) => {
+  //       if(response.meta.code === 200){
+  //         postData(amount,paymentType);
+  //       } else{
+  //         console.log("else clause");
+  //       }
+  //     }
+  //   ).catch(
+  //     (err) => console.log(err)
+  //   )
+  // }
 
   useEffect(() => {
     if(isMounted.current){
@@ -287,11 +287,7 @@ const LoadingScreen = () => {
       switch(state.action) {
         case 'payment':
           snapFee.current = state.data.snapFee; //set new snapFee Value from home page
-          if(state.data.isPromoInvalid){
-            postData(snapFee.current, paymentType);
-          }else{
-            postDataDiscount(snapFee.current,paymentType,state.data.code)
-          } 
+          postData(snapFee.current, paymentType);
           requestCount--;
           break;
         case 'verify':

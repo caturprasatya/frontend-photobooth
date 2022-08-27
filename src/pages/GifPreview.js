@@ -1,4 +1,4 @@
-import React, { useState,useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from 'react-router-dom';
 
 const GifPreview = (props) => {
@@ -13,10 +13,10 @@ const GifPreview = (props) => {
         setCompiledImage(state.compiled);
         setGif(state.GIF);
       }
+      // eslint-disable-next-line
       },[]);
 
     const gifOrImage = () => {
-      console.log(isGif);
       if(isGif){
         setIsGif(false);
       }else{

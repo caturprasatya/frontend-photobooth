@@ -25,7 +25,7 @@ const Home = () => {
 
   const handleVerify = () => {
     setIsLoading(true);
-    PaymentService.getPromo(promo)
+    PaymentService.claimPromo(promo)
     .then(
       (response)=>{
         if(response.data.id===0){
@@ -43,7 +43,7 @@ const Home = () => {
         setIsAlert(true);
       }
     ).catch((err)=>{
-      console.log(err);
+      // console.log(err);
       setIsPromoInvalid(true);
       priceRef.current.style.display = "none";
       setDiscountPrice(pricePoint.stringFormat);
@@ -77,9 +77,7 @@ const Home = () => {
           state={{
             action: 'payment',
             data : {
-              snapFee : finalPrice.current,
-              isPromoInvalid : isPromoInvalid,
-              code : promo
+              snapFee : finalPrice.current
             }
           }}
         >
@@ -98,8 +96,10 @@ const Home = () => {
             name="promo" 
             onChange={handlePromoChange}  
             value={promo}
+            style={{textTransform:"uppercase"}}
+            readOnly={isPromoInvalid?false:true}
           />
-          <button className="btn btn-outline-primary" type="button" onClick={handleVerify}>
+          <button className={`btn btn-outline-primary ${isPromoInvalid?"":"disabled"}`} type="button" onClick={handleVerify}>
             <>
               {
                 isLoading?
