@@ -262,6 +262,19 @@ const LoadingScreen = () => {
     )
   };
 
+  const getLocation = (locationIndex) => {
+    switch (locationIndex) {
+      case 1:
+        return "Onni"
+      case 2:
+        return "Afterwork"
+      case 3:
+        return "Syrcle"
+      default:
+        return "Onni"
+    }
+  }
+
   // const postDataDiscount = (amount,paymentType,code) => {
   //   PaymentService.claimPromo(code)
   //   .then(
@@ -287,7 +300,7 @@ const LoadingScreen = () => {
       switch(state.action) {
         case 'payment':
           snapFee.current = state.data.snapFee; //set new snapFee Value from home page
-          postData(snapFee.current, paymentType);
+          postData(snapFee.current, paymentType, getLocation(1));
           requestCount--;
           break;
         case 'verify':
