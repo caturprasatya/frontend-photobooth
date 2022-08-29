@@ -4,7 +4,7 @@ import Spinner from "react-bootstrap/Spinner";
 import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
 import ProgressBarAnimation from '../components/ProgressBar';
-import { pricePoint,paymentType_conf } from "../conf/conf";
+import { pricePoint,paymentType_conf, getLocation, LOCATION_ID } from "../conf/conf";
 
 const LoadingScreen = () => {
   // payment variables
@@ -262,21 +262,6 @@ const LoadingScreen = () => {
     )
   };
 
-  // const postDataDiscount = (amount,paymentType,code) => {
-  //   PaymentService.claimPromo(code)
-  //   .then(
-  //     (response) => {
-  //       if(response.meta.code === 200){
-  //         postData(amount,paymentType);
-  //       } else{
-  //         console.log("else clause");
-  //       }
-  //     }
-  //   ).catch(
-  //     (err) => console.log(err)
-  //   )
-  // }
-
   useEffect(() => {
     if(isMounted.current){
       return
@@ -287,7 +272,7 @@ const LoadingScreen = () => {
       switch(state.action) {
         case 'payment':
           snapFee.current = state.data.snapFee; //set new snapFee Value from home page
-          postData(snapFee.current, paymentType);
+          postData(snapFee.current, paymentType, getLocation(LOCATION_ID));
           requestCount--;
           break;
         case 'verify':
