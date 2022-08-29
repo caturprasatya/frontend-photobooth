@@ -25,3 +25,18 @@ export const pricePoint = {
 };
 
 export const paymentType_conf = 0      // 1 -> GoPay, 0 -> QRIS
+
+export const getLocation = (locationIndex) => {
+    switch (locationIndex) {
+      case 1:
+        return "Onni"
+      case 2:
+        return "Afterwork"
+      case 3:
+        return "Syrcle"
+      default:
+        return "Onni"
+    }
+  }
+
+export const LOCATION_ID = 1;
