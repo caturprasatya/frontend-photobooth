@@ -5,11 +5,12 @@ const API_URL_LOGIN = "https://api.snaplab.site/api/v1/admin/login";
 const API_PROMO = "https://api.snaplab.site/api/v1/promo"
 
 class PaymentService {
-  createTransaction(amount, paymentType) {
+  createTransaction(amount, paymentType, locationIndex) {
     return axios
       .post(API_URL, {
         amount,
-        payment_type: paymentType
+        payment_type: paymentType,
+        location : locationIndex
       })
       .then(response => {
         if (response.data.accessToken) {

@@ -39,8 +39,8 @@ const LoadingScreen = () => {
   //Check concurrent render on Hooks
   const isMounted = useRef();
 
-  const postData = (amount, paymentType) => {
-    PaymentService.createTransaction(amount, paymentType)
+  const postData = (amount, paymentType, locationIndex) => {
+    PaymentService.createTransaction(amount, paymentType, locationIndex)
     .then(
       (response) => {
         navigate('/payment', {

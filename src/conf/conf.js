@@ -39,4 +39,4 @@ export const getLocation = (locationIndex) => {
     }
   }
 
-export const LOCATION_ID = 1;
+export const LOCATION_ID = 2;
