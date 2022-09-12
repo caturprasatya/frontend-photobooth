@@ -45,7 +45,7 @@ const Capture = (props) => {
   }, [limitRetake])
   
   const handleLimitRetake = () => Swal.fire({
-    html: `<p  style="font-size: 1.2em; color: black"><strong>Whoops , You've used the retake option 3 times, your chance has run out !</strong></p>`,
+    html: `<p  style="font-size: 1.2em; color: black"><strong>Whoops, You've used the retake option 3 times, your chance has run out!</strong></p>`,
     width: '18em',
     confirmButtonColor: '#515151',
     confirmButtonText: '   <strong style="padding: 10px 50px;">Next</strong>    '
