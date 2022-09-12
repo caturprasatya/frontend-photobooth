@@ -176,10 +176,9 @@ const Capture = (props) => {
   const takeSnap = (mode, actionFrom = 'function') => {
     // console.log(mode);
     // console.log(imageBlob.length);
+    if(mode === 'take' && actionFrom === 'layout') setLimitRetake(3); // reset limit, if user press button next
     
     if(mode === 'retake'){
-      if(actionFrom === 'layout' && didUpdateRetake.current) setLimitRetake(3); // reset limit
-
       if (didUpdateRetake.current) return handleLimitRetake();
 
       setLimitRetake((previousLimit) => previousLimit - 1); //will reduce variable standards of LIMIT_RETAKE
