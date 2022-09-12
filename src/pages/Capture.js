@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
+import Swal from 'sweetalert2';
+
 import { frameRatio, ellipseFrameList, cameraScale } from "../conf/conf";
 
 const Capture = (props) => {
   const { state } = useLocation();
   const navigate = useNavigate();
-
+  
   const TIMER = 5;  //Countdown time
   const audio = new Audio('../../static/audio/camera-shutter-click-08.mp3');
-
+  
   const [imageBlob, setImageBlob] = useState([]); //List of captured image
   const [countdown,setCountdown] = useState(TIMER); //Countdown
   const [isOverlayCountdown, setIsOverlayCountdown] = useState('none');  //check if overlay countdown active
@@ -17,6 +19,7 @@ const Capture = (props) => {
   const [isVideo,setIsVideo] = useState('block'); //Check if camera is on
   const [isImage, setIsImage] = useState('none'); //Capture mode or Image preview
   const [recentSnap, setRecentSnap] = useState(); //Recent capture
+  const [limitRetake, setLimitRetake] = useState(3);
   
   const isRetake = useRef('none');  //Retake button active or not
   const numberSnap = useRef(4); //Capture number
@@ -25,13 +28,33 @@ const Capture = (props) => {
   const canvasRef = useRef(null);
   const scrollRef = useRef(null);
   const videoDivWidth = useRef(null);
-
+  const didUpdateRetake = useRef(false); // update when limit value to 0
+  
   const[videoNativeWidth,setVideoNativeWidth] = useState(0);
   const[videoNativeHeight,setVideoNativeHeight] = useState(0);
   const[videoScaledWidth,setVideoScaledWidth] = useState(0);
   const[videoScaledHeight,setVideoScaledHeight] = useState(0);
-
+  
   const imgRef = useRef(null);
+  
+  useEffect(() => {
+    if (limitRetake === 0) {
+      setLimitRetake(3);
+      didUpdateRetake.current = true;
+    };
+  }, [limitRetake])
+  
+  const handleLimitRetake = () => Swal.fire({
+    html: `<p  style="font-size: 1.2em; color: black"><strong>Whoops , You've used the retake option 3 times, your chance has run out !</strong></p>`,
+    width: '18em',
+    confirmButtonColor: '#515151',
+    confirmButtonText: '   <strong style="padding: 10px 50px;">Next</strong>    '
+  }).then((result) => {
+    if (result.isConfirmed) {
+      didUpdateRetake.current = false; // reset, after update to default value
+      takeSnap('take');
+    }
+  });
 
   //------------------------------------Custom snap size----------------------------------//
 
@@ -150,11 +173,18 @@ const Capture = (props) => {
       });
   };
 
-  const takeSnap = (mode) => {
+  const takeSnap = (mode, actionFrom = 'function') => {
     // console.log(mode);
     // console.log(imageBlob.length);
-    if(mode==='retake'){
-      if(imageBlob.length===1){
+    
+    if(mode === 'retake'){
+      if(actionFrom === 'layout' && didUpdateRetake.current) setLimitRetake(3); // reset limit
+
+      if (didUpdateRetake.current) return handleLimitRetake();
+
+      setLimitRetake((previousLimit) => previousLimit - 1); //will reduce variable standards of LIMIT_RETAKE
+
+      if(imageBlob.length === 1){
         setImageBlob([]);
       }else{
         let tmp = imageBlob;
@@ -280,10 +310,10 @@ const Capture = (props) => {
             </div>
             <img ref={imgRef} src={imageBlob.length>0 ? URL.createObjectURL(recentSnap):""} style={imgStyle} className="img-thumbnail" alt="recent snap"/>
             <div className="nextButton">
-              <button ref={isRetake} type="button" className="btn btn-light btn-lg" onClick={()=>takeSnap('retake')} style={{display:'none'}}>
+              <button ref={isRetake} type="button" className="btn btn-light btn-lg" onClick={()=>takeSnap('retake', 'layout')} style={{display:'none'}}>
                 <span>Retake</span>
               </button>
-              <button type="button" className="btn btn-dark btn-lg" disabled={isNext} onClick={()=>takeSnap('take')}>
+              <button type="button" className="btn btn-dark btn-lg" disabled={isNext} onClick={()=>takeSnap('take', 'layout')}>
                 <span>{imageBlob.length===0 ? "Start":"Next >>"}</span>
               </button>
             </div>

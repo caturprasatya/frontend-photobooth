@@ -20,11 +20,11 @@ export const ellipseFrameList = {
 export const cameraScale = 1.5;
 
 export const pricePoint = {
-    intFormat : 30000,
+    intFormat : 1,
     stringFormat : "30.000"
 };
 
-export const paymentType_conf = 0      // 1 -> GoPay, 0 -> QRIS
+export const paymentType_conf = 1      // 1 -> GoPay, 0 -> QRIS
 
 export const getLocation = (locationIndex) => {
     switch (locationIndex) {
