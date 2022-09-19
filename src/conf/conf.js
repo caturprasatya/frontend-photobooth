@@ -24,7 +24,7 @@ export const pricePoint = {
     stringFormat : "30.000"
 };
 
-export const paymentType_conf = 0      // 1 -> GoPay, 0 -> QRIS
+export const paymentType_conf = 1      // 1 -> GoPay, 0 -> QRIS
 
 export const getLocation = (locationIndex) => {
     switch (locationIndex) {
