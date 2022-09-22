@@ -3,7 +3,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Swal from 'sweetalert2';
 
-import { frameRatio, ellipseFrameList, cameraScale } from "../conf/conf";
+import { frameRatio, ellipseFrameList, cameraScale, mixedFrameList } from "../conf/conf";
 
 const Capture = (props) => {
   const { state } = useLocation();
@@ -73,6 +73,7 @@ const Capture = (props) => {
   }
 
   const listOfEllipseFrame = ellipseFrameList.frameID;   //List of EllipseFrame
+  const listOfMixedFrame = mixedFrameList.frameID; //List of MixedFrame
 
   let objSize = {    //Default snap size
     width: 1024,
@@ -92,6 +93,8 @@ const Capture = (props) => {
     // find best crop size automatically
     if (listOfEllipseFrame.includes(state.frameID)){
       objSize = findCropPxl(frameRatio.ellipseFrame.width,frameRatio.ellipseFrame.height,videoScaledWidth,videoScaledHeight);
+    } else if (listOfMixedFrame.includes(state.frameID)){
+      objSize = findCropPxl(frameRatio.mixedFrame.width,frameRatio.mixedFrame.height,videoScaledWidth,videoScaledHeight);
     } else {
       if(numberSnap.current === 4){
         objSize = findCropPxl(frameRatio.eightFrame.width,frameRatio.eightFrame.height,videoScaledWidth,videoScaledHeight);
