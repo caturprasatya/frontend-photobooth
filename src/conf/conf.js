@@ -10,11 +10,19 @@ export const frameRatio = {
     ellipseFrame: {
         width       : 4.5,
         height      : 3.2
+    },
+    mixedFrame: {
+      width : 4.2,
+      height: 3.3
     }
 };
 
 export const ellipseFrameList = {
     frameID : ["8", "9", "10"]
+};
+
+export const mixedFrameList = {
+    frameID: ["13"] //TODO: adjust the frame id accordingly
 };
 
 export const cameraScale = 1.5;
