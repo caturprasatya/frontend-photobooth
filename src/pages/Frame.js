@@ -58,6 +58,13 @@ const Frame = (props) => {
       a.snap = 6;
       frameURI.current.push(a);
     });
+    state.frame_list.four_frame_four_takes_list.forEach(element => {
+      const a = {};
+      a.frameName = element.replace("http://localhost:8080/static/frame_assets/","").match(regex)[0];
+      a.URI = element;
+      a.snap = 4;
+      frameURI.current.push(a);
+    });
   }
 
   const [frameSelected,setFrameSelected] = useState(frameURI.current[0]);
