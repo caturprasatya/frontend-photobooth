@@ -3,7 +3,8 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Swal from 'sweetalert2';
 
-import { frameRatio, ellipseFrameList, cameraScale, mixedFrameList } from "../conf/conf";
+import { frameRatio, ellipseFrameList, cameraScale, mixedFrameList, bareFrameList, fourFrameList, fourFrameMixedList } from "../conf/conf";
+import { ToastBody } from "react-bootstrap";
 
 const Capture = (props) => {
   const { state } = useLocation();
@@ -74,6 +75,9 @@ const Capture = (props) => {
 
   const listOfEllipseFrame = ellipseFrameList.frameID;   //List of EllipseFrame
   const listOfMixedFrame = mixedFrameList.frameID; //List of MixedFrame
+  const listOfBareFrame = bareFrameList.frameID; //List of bareFrame
+  const listOfFourFrame = fourFrameList.frameID; //List of four frame
+  const listOfFourFrameMixed = fourFrameMixedList.frameID; //List of four frame mixed 
 
   let objSize = {    //Default snap size
     width: 1024,
@@ -95,6 +99,12 @@ const Capture = (props) => {
       objSize = findCropPxl(frameRatio.ellipseFrame.width,frameRatio.ellipseFrame.height,videoScaledWidth,videoScaledHeight);
     } else if (listOfMixedFrame.includes(state.frameID)){
       objSize = findCropPxl(frameRatio.mixedFrame.width,frameRatio.mixedFrame.height,videoScaledWidth,videoScaledHeight);
+    } else if (listOfBareFrame.includes(state.frameID)){
+      objSize = findCropPxl(frameRatio.bareFrame.width,frameRatio.bareFrame.height,videoScaledWidth,videoScaledHeight);
+    } else if (listOfFourFrame.includes(state.frameID)){
+      objSize = findCropPxl(frameRatio.fourFrame.width,frameRatio.fourFrame.height,videoScaledWidth,videoScaledHeight);
+    } else if (listOfFourFrameMixed.includes(state.frameID)){
+      objSize = findCropPxl(frameRatio.fourFrameMixed.width,frameRatio.fourFrameMixed.height,videoScaledWidth,videoScaledHeight);
     } else {
       if(numberSnap.current === 4){
         objSize = findCropPxl(frameRatio.eightFrame.width,frameRatio.eightFrame.height,videoScaledWidth,videoScaledHeight);
