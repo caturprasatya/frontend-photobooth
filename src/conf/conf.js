@@ -52,7 +52,7 @@ export const fourFrameMixedList = {
 export const cameraScale = 1.5;
 
 export const pricePoint = {
-    intFormat : 30000,
+    intFormat : 1,
     stringFormat : "30.000"
 };
 
