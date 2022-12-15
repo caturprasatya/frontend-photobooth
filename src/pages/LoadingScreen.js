@@ -48,7 +48,7 @@ const LoadingScreen = () => {
         })
       }   
     ).catch(
-      setTimeout(() => {
+      (err) => setTimeout(() => {
         navigate('/')
       }, 2000)
     )
