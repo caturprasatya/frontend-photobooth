@@ -26,27 +26,30 @@ body {
     width: 100%;
 }
 
-#flash{ 
+#flash {
     opacity: 0;
-    transition: all 10ms ease-in;/* Shutter speed */
+    transition: all 10ms ease-in;
+    /* Shutter speed */
     position: fixed;
     height: 0%;
     width: 0%;
     pointer-events: none;
-    z-index:1;
-  
-    background-color: black;/* Shutter Color */
-    
-    left:50%;
-    top:50%;
+    z-index: 1;
+
+    background-color: black;
+    /* Shutter Color */
+
+    left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%)
-  }
-  
+}
+
 #flash.on {
-opacity: 1;/* Shutter Transparency */
-height: 100%;
-width: 100%;
+    opacity: 1;
+    /* Shutter Transparency */
+    height: 100%;
+    width: 100%;
 }
 
 .fill {
@@ -56,13 +59,30 @@ width: 100%;
 }
 
 .greenBorder {
-    border : 5px solid lime;
+    border : 10px solid lime;
 }
+
+.changeContrast {
+    filter: contrast(30%);
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
 .nextButton{
     position: absolute;
     right: 3%;
     bottom: 4%;
+}
+
+.previousButton{
+    position: absolute;
+    left: 3%;
+    top: 2%;
 }
 
 .styleOverlay{
@@ -92,17 +112,13 @@ width: 100%;
     margin-bottom: 20px;
 }
 
-.nextButton span{
-    font-size: 1.7em;
+.previousButton button{
+    width: 150px;
+    height: 60px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
-/* .containerVideo{
-    width: 320px;
-    overflow:hidden;
-    display:block;
-    height: 240px;
+.nextButton,.previousButton span{
+    font-size: 1.7em;
 }
-#glass{
-    margin-left: -160px;
-    margin-top: -120px
-} */

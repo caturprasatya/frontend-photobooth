@@ -1,8 +1,8 @@
 import React from "react";
 import {
   Box
-} from "../styles/custom/FooterStyles";
-import '../styles/Footer.css';
+} from "./FooterStyles";
+import "../../styles/components/Footer.css";
   
 const Footer = () => {
   return (
@@ -19,21 +19,6 @@ const Footer = () => {
           </div>
         </div>
     </Box>
-    // <Box>
-    //   {/* <Container> */}
-    //     <Row>
-    //       <Column>
-    //         <FooterLink>reach us at:</FooterLink>
-    //       </Column>
-    //       <Column>
-    //         <FooterLink href="#"><i className="fa fa-brands fa-instagram"></i> @its.snaplab</FooterLink>
-    //       </Column>
-    //       <Column>
-    //         <FooterLink href="#"><i className="fa fa-light fa-envelope"></i> its.snaplab@gmail.com</FooterLink>
-    //       </Column>
-    //     </Row>
-    //   {/* </Container> */}
-    // </Box>
   );
 };
 export default Footer;

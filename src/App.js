@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
 import 'font-awesome/css/font-awesome.min.css';
+
+import './App.css';
 import './styles/MainStyles.css';
+
 import Home from "./pages/Home"
 import Payment from "./pages/Payment"
 import Capture from "./pages/Capture"
@@ -14,6 +16,7 @@ import FinalPreview from "./pages/FinalPreview";
 import GifPreview from "./pages/GifPreview";
 import Login from "./pages/Login"
 import Bypass from "./pages/Bypass"
+import PrintStyle from "./pages/PrintStyle"
 
 function App() {
   window.addEventListener("contextmenu", e => e.preventDefault());
@@ -26,6 +29,7 @@ function App() {
       <Route path="/bypass" element={<Bypass />} />
       <Route path="/load" element={<LoadingScreen />} />
       <Route path="/capture" element={<Capture />} />
+      <Route path="/print-style" element={<PrintStyle />} />
       <Route path="/frame" element={<Frame />}/>
       <Route path="/final-preview" element={<FinalPreview />}/>
       <Route path="/gif-preview" element={<GifPreview />}/>

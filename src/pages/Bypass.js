@@ -1,15 +1,18 @@
 import React,{useState,useEffect} from 'react';
 import { Link,useLocation } from 'react-router-dom';
 import { Button,Image } from 'react-bootstrap';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+
+import Footer from '../components/footer/Footer';
+import Header from '../components/header/Header';
 import Background from "../assets/images/bg-home.png";
 import CTA from "../assets/images/snaphere.png";
 import { pricePoint } from "../conf/conf";
+import Utilities from '../utils/Utils'
 
 const Bypass = () => {
   const { state } = useLocation();
   const [token,setToken] = useState();
+  const pricePointString = Utilities.int2string_price(pricePoint)
 
   useEffect(()=>{
       if(state){
@@ -51,7 +54,7 @@ const Bypass = () => {
             </div>
           </Link>
           <h2 className='text-center mt-4'>
-           IDR {pricePoint.stringFormat}
+           IDR {pricePointString}
           </h2>
           <Link 
             to="/"

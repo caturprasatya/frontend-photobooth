@@ -1,8 +1,9 @@
 import React,{useState, useEffect} from 'react';
 import { Link,useLocation } from 'react-router-dom';
 import { Button,Modal } from 'react-bootstrap';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+
+import Footer from '../components/footer/Footer';
+import Header from '../components/header/Header';
 import Background from "../assets/images/bg-home.png";
 
 const Login = () => {
@@ -20,17 +21,16 @@ const Login = () => {
         setShowAlert(false);
         setMessageAlert();
       }
+      // eslint-disable-next-line
     },[]
   );
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    // console.log(email);
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    // console.log(password);
   };
 
   const handleClose = () => setShowAlert(false);

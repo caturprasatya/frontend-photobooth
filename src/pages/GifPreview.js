@@ -34,18 +34,19 @@ const GifPreview = (props) => {
             )}
             <div className="nextButton">
               <button type="button" style={{width:'150px',display:'block'}} className="btn btn-light btn-lg" onClick={gifOrImage}>
-                <span>{isGif ? "Photos" : "GIF"}</span>
+                <h2><b>{isGif ? "Photos" : "GIF"}</b></h2>
               </button>
               <Link
                 to="/email"
                 state={{
                     txID : state.txID,
-                    effect : state.effect
+                    effect : state.effect,
+                    isNoCut : state.isNoCut,
                 }}
                 style={{textDecoration:'none'}}
               >
                 <button type="button" style={{width:'150px',display:'block',color:'white'}} className="btn btn-success btn-lg">
-                  <span>{"Next >>"}</span>
+                  <h2><b>{"Next >>"}</b></h2>
                 </button>
               </Link>
             </div>
