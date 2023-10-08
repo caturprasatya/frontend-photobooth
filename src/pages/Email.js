@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation} from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+
+import Footer from '../components/footer/Footer';
+import Header from '../components/header/Header';
 import Overlay from "../components/Overlay";
 
 const Email = (props) => {
@@ -15,11 +16,17 @@ const Email = (props) => {
 
   let txID = 37;
   let effect;
+  let isNoCut;
+
   let isEmailSuccess = false;
   let isPrintSuccess = false;
+
   if (state) {
     txID = state.txID;
     effect = state.effect;
+    isNoCut = state.isNoCut;
+    console.log(state)
+
     if (state.isEmailSuccess) {
       isEmailSuccess = true
     }
@@ -30,7 +37,6 @@ const Email = (props) => {
   }
   
   useEffect(() => {
-    // console.log(state);
     if (!state) {
       navigate('/')
     } else {
@@ -40,7 +46,6 @@ const Email = (props) => {
         }
     
         if (state.isPrintSuccess) {
-          // console.log("tes");
           setIsOverlay('block');
           setShow(false);
           setTimeout(() => {
@@ -59,12 +64,10 @@ const Email = (props) => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    // console.log(email);
   }
 
   const handleNameChange = (e) => {
     setRecipientName(e.target.value);
-    // console.log(recipient_name);
   }
 
   const handleClose = () => setShow(false);
@@ -99,7 +102,9 @@ const Email = (props) => {
                   recipient_name: recipient_name
                 },
                 txID: txID,
-                effect: effect
+                effect: effect,
+                isNoCut: isNoCut
+
               }}
             >
               <button className="btn text-center btn-print-modal" onClick={handleClose}>
@@ -152,7 +157,8 @@ const Email = (props) => {
                   recipient_name: recipient_name
                 },
                 txID: txID,
-                effect: effect
+                effect: effect,
+                isNoCut: isNoCut
               }}
             >
               <button className="btn btn-lg btn-primary mb-2 btn-block btn-email">
@@ -177,7 +183,8 @@ const Email = (props) => {
                     recipient_name: recipient_name
                   },
                   txID: txID,
-                  effect: effect
+                  effect: effect,
+                  isNoCut: isNoCut
                 }}
               >
                 <button className="btn btn-lg btn-print mb-2">Skip</button>
@@ -193,7 +200,8 @@ const Email = (props) => {
                   recipient_name: recipient_name
                 },
                 txID: txID,
-                effect: effect
+                effect: effect,
+                isNoCut: isNoCut
               }}
             >
               <button className="btn btn-lg btn-print mb-2">Skip</button>

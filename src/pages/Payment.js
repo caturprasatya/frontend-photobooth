@@ -1,8 +1,9 @@
-import React,{useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+
+import Footer from '../components/footer/Footer';
+import Header from '../components/header/Header';
 import Background from "../assets/images/bg-payment.png";
 import Placeholder from "../assets/images/placeholder.png";
 import Utilities from '../utils/Utils'
@@ -13,9 +14,10 @@ const Payment = () => {
   const navigate = useNavigate();
 
   const [image,setImage] = useState(Placeholder);
-  const [snapFee,setSnapFee] = useState(pricePoint.stringFormat);
+  const pricePointString = Utilities.int2string_price(pricePoint)
+  const [snapFee,setSnapFee] = useState(pricePointString);
   
-  React.useEffect(() => {
+  useEffect(() => {
     if (!state) {
       navigate('/');
     }else{

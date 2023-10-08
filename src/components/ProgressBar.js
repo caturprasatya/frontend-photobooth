@@ -26,6 +26,7 @@ function ProgressBarAnimation({ completed }) {
     if (!finished && percentanse > TIMER_OVER) setFinished(true);
 
     return () => clearInterval(interval);
+    // eslint-disable-next-line
   }, [finished, percentanse]);
 
   useEffect(() => {

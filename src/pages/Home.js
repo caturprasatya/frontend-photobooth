@@ -1,23 +1,27 @@
 import React,{useState,useRef} from 'react';
 import { Link } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import Background from "../assets/images/bg-home.png";
-import CTA from "../assets/images/snaphere.png";
-import Check from "../assets/icons/check-circle-fill.svg";
+
+import Footer from '../components/footer/Footer';
+import Header from '../components/header/Header';
 import { pricePoint } from "../conf/conf";
 import PaymentService from '../services/PaymentService';
 import Utilities from '../utils/Utils'
+
+import Background from "../assets/images/bg-home.png";
+import CTA from "../assets/images/snaphere.png";
+import Check from "../assets/icons/check-circle-fill.svg";
 
 const Home = () => {
   const [promo, setPromo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isPromoInvalid, setIsPromoInvalid] = useState(true);
   const [isAlert, setIsAlert] = useState(false);
+  const pricePointString = Utilities.int2string_price(pricePoint)
+  const [discountPrice, setDiscountPrice] = useState(pricePointString);
+
   const priceRef = useRef(null);
-  const [discountPrice, setDiscountPrice] = useState(pricePoint.stringFormat);
-  const finalPrice = useRef(pricePoint.intFormat)
+  const finalPrice = useRef(pricePoint)
 
   const handlePromoChange = (e) => {
     setPromo(e.target.value);
@@ -31,22 +35,21 @@ const Home = () => {
         if(response.data.id===0){
           setIsPromoInvalid(true);
           priceRef.current.style.display = "none";
-          setDiscountPrice(pricePoint.stringFormat);
+          setDiscountPrice(pricePointString);
         }else{
           setIsPromoInvalid(false);
           priceRef.current.style.display = "inline"
-          finalPrice.current = pricePoint.intFormat - response.data.discount_amount;
+          finalPrice.current = pricePoint - response.data.discount_amount;
           let s_finalPrice = Utilities.int2string_price(finalPrice.current);
           setDiscountPrice(s_finalPrice);
         }
         setIsLoading(false);
         setIsAlert(true);
       }
-    ).catch((err)=>{
-      // console.log(err);
+    ).catch(()=>{
       setIsPromoInvalid(true);
       priceRef.current.style.display = "none";
-      setDiscountPrice(pricePoint.stringFormat);
+      setDiscountPrice(pricePointString);
       setIsLoading(false);
       setIsAlert(true);
     }
@@ -86,7 +89,7 @@ const Home = () => {
           </div>
         </Link>
         <h2 className='text-center mt-4'>
-         <p><span>IDR </span><span style={{textDecoration: "line-through",display:"none"}} ref={priceRef}>{pricePoint.stringFormat}</span><span> </span>{discountPrice}</p>
+         <p><span>IDR </span><span style={{textDecoration: "line-through",display:"none"}} ref={priceRef}>{pricePointString}</span><span> </span>{discountPrice}</p>
         </h2>
         <div className="input-group mb-3">
           <input 

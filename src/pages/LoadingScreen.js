@@ -4,11 +4,12 @@ import Spinner from "react-bootstrap/Spinner";
 import PaymentService from '../services/PaymentService';
 import PhotoService from '../services/PhotoService';
 import ProgressBarAnimation from '../components/ProgressBar';
-import { pricePoint,paymentType_conf, getLocation, LOCATION_ID } from "../conf/conf";
+import { pricePoint,paymentType_conf, LOCATION_ID } from "../conf/conf";
 
 const LoadingScreen = () => {
   // payment variables
-  const snapFee = useRef(pricePoint.intFormat);
+  const snapFee = useRef(pricePoint);
+  
   // 1 -> GoPay, 0 -> QRIS
   let paymentType = paymentType_conf;  
 
@@ -17,16 +18,28 @@ const LoadingScreen = () => {
 
   // verify transaction helper variables
   let timeoutVerify = 1;
-  let TIMEOUT_LIMIT = 60 / 5;
+  let TIMEOUT_LIMIT_VERIFY = 60 / 5;
+
+  //get frame helper variables
+  let timeoutGetFrame = 1;
+  let TIMEOUT_GET_FRAME = 600 / 30;
+
+  // verify transaction helper variables
+  let timeoutGenerateImage = 1;
+  let TIMEOUT_GENERATE_IMAGE = 600 / 30;
 
   // email timeout helper variables
   let timeoutEmail = 1;
   let TIMEOUT_EMAIL_LIMIT = 20 / 5;
 
-  const [isTimeout, setTimeoutVerify] = useState(false);
+
+  const [isTimeoutUniversal, setTimeoutUniversal] = useState(false);
+  const [isTimeoutVerify, setTimeoutVerify] = useState(false);
   const [isEmailFailed, setEmailFailed] = useState(false);
   const [isPrintFailed, setPrintFailed] = useState(false);
   const [isGenerateImg, setGenerateImg] = useState(false);
+  const [isTimeoutGetFrame, setTimeoutGetFrame] = useState(false)
+  const [isTimeoutGenerateImage, setTimeoutGenerateImage] = useState(false)
   const [completed, setCompleted] = useState(false);
   const [renderPleaseWait, setRenderPleaseWait] = useState(true);
   const [isLoginFailed, setLoginFailed] = React.useState(false);
@@ -55,7 +68,7 @@ const LoadingScreen = () => {
   }
 
   const verifyTransaction = (ID) => {
-    if (timeoutVerify < TIMEOUT_LIMIT) {
+    if (timeoutVerify < TIMEOUT_LIMIT_VERIFY) {
       PaymentService.getTransactionByID(ID)
       .then(
         (response) => {
@@ -86,45 +99,90 @@ const LoadingScreen = () => {
   }
 
   const generateImage = (data) => {
-    PhotoService.uploadImage(data.txID, data.imageBlob)
-    .then(
-      (response1) => {
-        if(response1.status_code === 200){
+    if (timeoutGenerateImage < TIMEOUT_GENERATE_IMAGE) {
+      PhotoService.uploadImage(data.txID, data.imageBlob)
+      .then(
+        (response1) => {
           PhotoService.generateImage(data.txID, data.frameID)
           .then(
             (response2) => {
               setCompleted(true);
               response2["txID"] = data.txID;
               response2["frameID"] = data.frameID;
+              response2["isNoCut"] = data.isNoCut;
               navigate('/final-preview', {
                 state: response2
               })
             }
           )
           .catch(
-            (err) => console.log(err)
+            (err) => {
+              new Promise(function(resolve, reject) { 
+                setTimeout(() => {
+                    setTimeoutUniversal(true)
+                    timeoutGenerateImage++;
+                    generateImage(data);
+                    resolve();
+                  }, 30000)
+                }
+              ) 
+            }
           )
-        } else{
-          console.log("else clause");
         }
+      ).catch(
+        (err) => {
+          new Promise(function(resolve, reject) { 
+            setTimeout(() => {
+                setTimeoutUniversal(true)
+                timeoutGenerateImage++;
+                generateImage(data);
+                resolve();
+              }, 30000)
+            }
+          ) 
+        }
+      )
+      }else{
+        setRenderPleaseWait(false);
+        setTimeoutGenerateImage(true);
+        setGenerateImg(false);
+        setTimeout(() => {
+          navigate('/')
+        }, 7000)
       }
-    ).catch(
-      (err) => console.log(err)
-    )
   }
 
   const getFrame = (ID) => {
-    PhotoService.getFrame()
-    .then(
-      (response) => {
-        response["txID"] = ID;
-        navigate('/frame', {
-          state: response
-        })
-      }
-    ).catch(
-      (err) => console.log(err)
-    )
+    if(timeoutGetFrame < TIMEOUT_GET_FRAME){
+      PhotoService.getFrame()
+      .then(
+        (response) => {
+          response["txID"] = ID;
+          navigate('/print-style', {
+            state: response
+          })
+        }
+      ).catch(
+        (err) => {
+          new Promise(function(resolve, reject) { 
+            setTimeout(() => {
+                setTimeoutUniversal(true)
+                timeoutGetFrame++;
+                getFrame(ID);
+                resolve();
+              }, 30000)
+            }
+          ) 
+        }
+      )
+    }else{
+      setRenderPleaseWait(false);
+      setTimeoutGetFrame(true);
+      setTimeout(() => {
+        navigate('/')
+      }, 7000)
+    }
+    
   }
 
   const sendEmail = (data) => {
@@ -140,6 +198,7 @@ const LoadingScreen = () => {
             response["isEmailSuccess"] = isEmailSuccess;
             response["email"] = data.email;
             response["recipient_name"] = data.recipient_name;
+            response["isNoCut"] =data.isNoCut;
             setTimeout(() => {
               navigate('/email', {
                 state: response
@@ -153,6 +212,7 @@ const LoadingScreen = () => {
             response["isEmailSuccess"] = isEmailSuccess;
             response["email"] = data.email;
             response["recipient_name"] = data.recipient_name;
+            response["isNoCut"] =data.isNoCut;
             setEmailFailed(true);
             setTimeout(() => {
               navigate('/email', {
@@ -171,6 +231,7 @@ const LoadingScreen = () => {
           response["isEmailSuccess"] = isEmailSuccess;
           response["email"] = data.email;
           response["recipient_name"] = data.recipient_name;
+          response["isNoCut"] =data.isNoCut;
           setEmailFailed(true);
           setTimeout(() => {
             navigate('/email', {
@@ -184,13 +245,14 @@ const LoadingScreen = () => {
 
   const printImage = (data) => {
     let isPrintSuccess = false;
-    PhotoService.printImage(data.txID, data.effect)
+    PhotoService.printImage(data.txID, data.effect, data.isNoCut)
     .then(
       (response) => {
         isPrintSuccess = true
         response["txID"] = data.txID;
         response["effect"] = data.effect;
         response["isPrintSuccess"] = isPrintSuccess;
+        response["isNoCut"] = data.isNoCut;
         navigate('/email', {
           state: response
         })
@@ -205,6 +267,7 @@ const LoadingScreen = () => {
         response["isPrintSuccess"] = isPrintSuccess;
         response["email"] = data.email;
         response["recipient_name"] = data.recipient_name;
+        response["isNoCut"] = data.isNoCut;
         setPrintFailed(true);
         setTimeout(() => {
           navigate('/email', {
@@ -274,7 +337,7 @@ const LoadingScreen = () => {
       switch(state.action) {
         case 'payment':
           snapFee.current = state.data.snapFee; //set new snapFee Value from home page
-          postData(snapFee.current, paymentType, getLocation(LOCATION_ID));
+          postData(snapFee.current, paymentType, LOCATION_ID);
           requestCount--;
           break;
         case 'verify':
@@ -287,7 +350,7 @@ const LoadingScreen = () => {
           requestCount--;
           break;
         case 'get-frame':
-          getFrame();
+          getFrame(state.data.txID);
           requestCount--;
           break;
         case 'send-email':
@@ -295,7 +358,8 @@ const LoadingScreen = () => {
             txID: state.txID,
             effect: state.effect,
             email: state.data.email,
-            recipient_name: state.data.recipient_name
+            recipient_name: state.data.recipient_name,
+            isNoCut: state.isNoCut
           };
           sendEmail(data);
           requestCount--;
@@ -324,8 +388,28 @@ const LoadingScreen = () => {
     <>
       {
         isGenerateImg 
-          ? 
-            <ProgressBarAnimation completed={completed} />
+          ?   
+            <>
+              {
+                isTimeoutUniversal ? 
+                <div 
+                  style={{ 
+                    height: "100vh",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <h4 className="fw-bold text-center">No response, Retrying...</h4>
+                  <div className="text-center py-5">
+                    <Spinner animation="border" />
+                  </div>
+                </div>
+                 :
+                <ProgressBarAnimation completed={completed} />
+              }
+            </>
           : 
             <div 
               style={{ 
@@ -336,11 +420,36 @@ const LoadingScreen = () => {
                 justifyContent: 'center',
               }}
             >
+              {
+              isTimeoutUniversal && (<h4 className="fw-bold text-center">No response, Retrying...</h4>)
+              }
               {renderPleaseWait && (<h4 className="fw-bold text-center">Please Wait</h4>)}
               {
-                isTimeout && 
+                isTimeoutVerify && 
                   (<>
                     <h4 className="fw-bold text-center">Problem verifying your transaction</h4>
+                    <Link 
+                      to="/" 
+                    >
+                      <h3 className="fw-bold text-center">Back to Home</h3>
+                    </Link>
+                  </>)
+              }
+              {
+                isTimeoutGetFrame && 
+                  (<>
+                    <h4 className="fw-bold text-center">Problem Getting Frame List</h4>
+                    <Link 
+                      to="/" 
+                    >
+                      <h3 className="fw-bold text-center">Back to Home</h3>
+                    </Link>
+                  </>)
+              }
+              {
+                isTimeoutGenerateImage && 
+                  (<>
+                    <h4 className="fw-bold text-center">Problem Processing Images</h4>
                     <Link 
                       to="/" 
                     >

@@ -15,7 +15,7 @@ class PhotoService {
   }
 
   getFrame(ID) {
-    return axios.get(API_URL + 'get-frame')
+    return axios.get(API_URL + 'v2/get-frame')
     .then(response => {
         return response.data;
       }
@@ -35,11 +35,12 @@ class PhotoService {
       });
   }
 
-  printImage(txID, effect) {
+  printImage(txID, effect, isNoCut) {
     return axios
       .post(API_URL + 'print-image', {
         tx_id: txID,
-        effect: effect
+        effect: effect,
+        is_no_cut : isNoCut
       })
       .then(response => {
         return response.data;

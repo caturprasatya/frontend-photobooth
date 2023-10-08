@@ -1,6 +1,6 @@
 import React, { useState,useRef } from "react";
 import { Link, useLocation } from 'react-router-dom';
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import { cameraScale } from "../conf/conf";
 
 const FinalPreview = (props) => {
@@ -10,7 +10,6 @@ const FinalPreview = (props) => {
 
   if(state){
     listEffectsURI.current = [];
-    // console.log(state.img_url);
     state.img_url.forEach((element,index) => {
       const a = {};
       a.effectName = element.replace("http://localhost:8080/static/res_image/","").split("/")[1];
@@ -65,6 +64,7 @@ const FinalPreview = (props) => {
             to="/gif-preview"
             state={{
                 txID : state.txID,
+                isNoCut : state.isNoCut,
                 effect : effectSelected.effectName,
                 compiled : effectSelected.compiled,
                 GIF : effectSelected.GIF
@@ -72,7 +72,7 @@ const FinalPreview = (props) => {
           > 
             <div className="nextButton">
               <button type="button" className="btn btn-success btn-lg">
-                <span>Finish</span>
+                <h2><b>Finish</b></h2>
               </button>
             </div>
           </Link>  
