@@ -24,20 +24,20 @@ const Frame = (props) => {
     });
 
   const validatationFrame = () => {
-    if (frameSelected != null) confirmButton();
-    else displayFrameSelectionModal();
+    if (frameSelected != null) confirmationModal();
+    else mandatoryFrameSelectionModal();
   };
 
-  const displayFrameSelectionModal = () => {
+  const mandatoryFrameSelectionModal = () => {
     Swal.fire({
-      icon: "warning", // Change 'info' to 'warning'
+      icon: "warning",
       title: "Select a Frame",
       confirmButtonColor: "#D63030",
       text: "Please select a frame before proceeding.",
     });
   };
 
-  const confirmButton = () =>
+  const confirmationModal = () =>
     Swal.fire({
       html: '<p style="font-size: 1.2em;"><strong>You only have 2 chances to use <span style="color:red;">Retake</span> option in each photos!</strong></p>',
       imageUrl: Logo,

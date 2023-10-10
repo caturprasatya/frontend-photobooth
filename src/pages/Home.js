@@ -131,7 +131,7 @@ const Home = () => {
           </>
         </div>
         <p className='text-center mb-0'>
-          Having trouble with payment?
+          Log in as admin
         </p>
         <Link 
           to="/login"

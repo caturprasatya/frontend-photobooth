@@ -6,6 +6,7 @@ import Footer from '../components/footer/Footer';
 import Header from '../components/header/Header';
 import Background from "../assets/images/bg-payment.png";
 import Placeholder from "../assets/images/placeholder.png";
+import PaymentButton from "../assets/images/payment_button.png";
 import Utilities from '../utils/Utils'
 import { pricePoint } from "../conf/conf";
 
@@ -54,9 +55,6 @@ const Payment = () => {
             boxShadow: '2px 2px 2px 2px rgba(0,0,0,.2)'
           }}/>
         </div>
-        <h5 className='text-center'>
-          Available for all your payment methods!
-        </h5>
         <Link 
           to="/load" 
           state={{
@@ -64,10 +62,14 @@ const Payment = () => {
             trx_id: state.trx_id
           }}
         >
-          <h3 className='fw-bold text-center'>
-            Verify Your Transaction!
-          </h3>
+          <div className='text-center'>
+            <Image className='text-center' src={PaymentButton} height={50} width={300} style={{
+              boxShadow: '2px 2px 2px 2px rgba(0,0,0,.2)'}}/>
+          </div>
         </Link>
+        <h6 className='text-center mt-2'>
+          *Click here after your payment has been completed!
+        </h6>
       </div>
       <Footer />
     </div>
